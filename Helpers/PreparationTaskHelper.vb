@@ -20,7 +20,8 @@ Namespace Helpers
             {"Delete Windows Update Cache Files", New WindowsUpdateTempFileCleanupPT()},
             {"Run Disk Cleanup", New DiskCleanupPT()},
             {"Export and clear event logs", New EventLogPT()},
-            {"Clear Recycle Bin", New RecycleBinCleanupPT()}
+            {"Clear Recycle Bin", New RecycleBinCleanupPT()},
+            {"Generalize the image", New GeneralizePT()}
         }
 
         ''' <summary>
