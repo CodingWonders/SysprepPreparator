@@ -43,19 +43,8 @@ Namespace Helpers.PreparationTasks
                 End Using
 
                 ' Attempt to rearm activation state
-                Dim psi As New ProcessStartInfo("cscript.exe", "//B //Nologo slmgr.vbs /rearm") With {
-                    .UseShellExecute = False,
-                    .CreateNoWindow = True,
-                    .RedirectStandardOutput = True,
-                    .RedirectStandardError = True
-                }
-                Using p As Process = Process.Start(psi)
-                    p.WaitForExit(60000) ' wait up to 60s
-                    Dim out As String = p.StandardOutput.ReadToEnd()
-                    Dim err As String = p.StandardError.ReadToEnd()
-                    If Not String.IsNullOrWhiteSpace(err) Then
-                    End If
-                End Using
+                Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cscript.exe"),
+                              "//B //Nologo slmgr.vbs /rearm") = PROC_SUCCESS
 
                 Return True
 
