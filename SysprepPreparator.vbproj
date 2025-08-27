@@ -94,6 +94,7 @@
     <Compile Include="Helpers\PreparationTasks\DismComponentCleanupPT.vb" />
     <Compile Include="Helpers\PreparationTasks\EventLogPT.vb" />
     <Compile Include="Helpers\PreparationTasks\ExplorerStopperPT.vb" />
+    <Compile Include="Helpers\PreparationTasks\GeneralizePT.vb" />
     <Compile Include="Helpers\PreparationTasks\PreparationTask.vb" />
     <Compile Include="Helpers\PreparationTasks\RecycleBinCleanupPT.vb" />
     <Compile Include="Helpers\PreparationTasks\VssAdminShadowVolumeDeletePT.vb" />
