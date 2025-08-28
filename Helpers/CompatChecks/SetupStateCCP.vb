@@ -80,7 +80,7 @@ Namespace Helpers.CompatChecks
                                                                         "The system is in a compatible setup state.",
                                                                         Classes.StatusMessage.StatusMessageSeverity.Info)
 
-            ElseIf {ImageState.SpecializeResealToOOBE}.Contains(State) Then
+            ElseIf State = ImageState.SpecializeResealToOOBE Then
                 Status.Compatible = False
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
                                                                         "The system is not in a compatible setup state.",
