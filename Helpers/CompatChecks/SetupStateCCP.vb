@@ -86,7 +86,6 @@ Namespace Helpers.CompatChecks
                                                                         "The system is not in a compatible setup state.",
                                                                         "Please launch command prompt as admin and run the following command - ```sysprep /generalize```",
                                                                         Classes.StatusMessage.StatusMessageSeverity.Warning)
-                StateRK.DeleteValue("ImageState")
             Else
                 Status.Compatible = False
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
