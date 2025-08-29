@@ -357,10 +357,6 @@ Public Class MainForm
         AdvSettingsPage_SysprepUnatt_AnswerFileText.Text = AdvSettingsPage_SysprepUnatt_OFD.FileName
     End Sub
 
-    Private Sub FinishPage_CloseBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_CloseBtn.Click
-        Close()
-    End Sub
-
     Private Sub FinishPage_ResysprepBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_ResysprepBtn.Click
         SysprepComputer()
     End Sub
