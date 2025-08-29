@@ -75,7 +75,6 @@ Partial Class MainForm
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.FinishPage_RestartBtn = New System.Windows.Forms.Button()
         Me.FinishPage_ResysprepBtn = New System.Windows.Forms.Button()
-        Me.FinishPage_CloseBtn = New System.Windows.Forms.Button()
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
@@ -670,7 +669,6 @@ Partial Class MainForm
         '
         Me.FinishPanel.Controls.Add(Me.FinishPage_RestartBtn)
         Me.FinishPanel.Controls.Add(Me.FinishPage_ResysprepBtn)
-        Me.FinishPanel.Controls.Add(Me.FinishPage_CloseBtn)
         Me.FinishPanel.Controls.Add(Me.FinishPage_Description)
         Me.FinishPanel.Controls.Add(Me.FinishPage_Header)
         Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -703,18 +701,6 @@ Partial Class MainForm
         Me.FinishPage_ResysprepBtn.TabIndex = 2
         Me.FinishPage_ResysprepBtn.Text = "Relaunch Sysprep"
         Me.FinishPage_ResysprepBtn.UseVisualStyleBackColor = True
-        '
-        'FinishPage_CloseBtn
-        '
-        Me.FinishPage_CloseBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
-        Me.FinishPage_CloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.FinishPage_CloseBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_CloseBtn.Location = New System.Drawing.Point(38, 312)
-        Me.FinishPage_CloseBtn.Name = "FinishPage_CloseBtn"
-        Me.FinishPage_CloseBtn.Size = New System.Drawing.Size(192, 48)
-        Me.FinishPage_CloseBtn.TabIndex = 2
-        Me.FinishPage_CloseBtn.Text = "Close wizard"
-        Me.FinishPage_CloseBtn.UseVisualStyleBackColor = True
         '
         'FinishPage_Description
         '
@@ -838,6 +824,5 @@ Partial Class MainForm
     Friend WithEvents FinishPage_Header As System.Windows.Forms.Label
     Friend WithEvents FinishPage_ResysprepBtn As System.Windows.Forms.Button
     Friend WithEvents FinishPage_RestartBtn As System.Windows.Forms.Button
-    Friend WithEvents FinishPage_CloseBtn As System.Windows.Forms.Button
 
 End Class
