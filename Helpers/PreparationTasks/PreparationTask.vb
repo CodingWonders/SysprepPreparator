@@ -274,7 +274,7 @@ Namespace Helpers.PreparationTasks
             Try
                 Dim fullPath As String = IO.Path.Combine(Path, File)
                 If IO.File.Exists(fullPath) Then
-                    My.Computer.FileSystem.DeleteFile(fullPath)
+                    My.Computer.FileSystem.DeleteFile(fullPath, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
                     Return 0
                 Else
                     Return 1
