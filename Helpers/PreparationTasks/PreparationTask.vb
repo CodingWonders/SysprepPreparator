@@ -12,7 +12,7 @@ Namespace Helpers.PreparationTasks
     ''' and inherit this base class. More information can be found in the documentation
     ''' </remarks>
     Public MustInherit Class PreparationTask
-        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner
+        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor
 
         ''' <summary>
         ''' Runs a preparation task
@@ -262,6 +262,18 @@ Namespace Helpers.PreparationTasks
             Return RunRegProcess(String.Format("unload {0}",
                                                RegMountPath))
         End Function
+
+        Public Function RemoveRecursive(DirectoryToDelete As String) As Boolean Implements IFileProcessor.RemoveRecursive
+            If Directory.Exists(DirectoryToDelete) Then
+                Try
+                    Directory.Delete(DirectoryToDelete, True)
+                Catch ex As Exception
+                    Return False
+                End Try
+            End If
+            Return True
+        End Function
+
     End Class
 
 End Namespace
