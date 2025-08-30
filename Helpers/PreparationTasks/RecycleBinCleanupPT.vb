@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices
 
 Namespace Helpers.PreparationTasks
 
@@ -21,7 +22,7 @@ Namespace Helpers.PreparationTasks
                 Dim drives() As DriveInfo = DriveInfo.GetDrives()
                 For Each drive As DriveInfo In drives
                     If drive.IsReady Then
-                        Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, "$Recycle.Bin/Recycle Bin")
+                        Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, GetUserSid(Environment.GetEnvironmentVariable("USERNAME")))
                         Try
                             RemoveRecursive(recycleBinPath)
                         Catch ex As Exception
