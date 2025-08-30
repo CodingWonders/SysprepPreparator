@@ -1,6 +1,8 @@
 ﻿Imports SysprepPreparator.Helpers
 Imports System.Windows.Forms
 Imports System.IO
+Imports System.Management
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Helpers.PreparationTasks
 
@@ -12,7 +14,7 @@ Namespace Helpers.PreparationTasks
     ''' and inherit this base class. More information can be found in the documentation
     ''' </remarks>
     Public MustInherit Class PreparationTask
-        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor
+        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor, IWmiUserProcessor
 
         ''' <summary>
         ''' Runs a preparation task
@@ -272,6 +274,14 @@ Namespace Helpers.PreparationTasks
                 End Try
             End If
             Return True
+        End Function
+
+        Public Function GetUserSid(UserName As String) As String Implements IWmiUserProcessor.GetUserSid
+            Dim UserSidCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT SID FROM Win32_UserAccount WHERE LocalAccount = True AND Name LIKE " & Quote & UserName & Quote)
+            If UserSidCollection IsNot Nothing Then
+                Return GetObjectValue(UserSidCollection(0), "SID")
+            End If
+            Return ""
         End Function
 
     End Class
