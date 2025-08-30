@@ -98,6 +98,7 @@
     <Compile Include="Helpers\CompatChecks\PendingServicingOperationsCCP.vb" />
     <Compile Include="Helpers\CompatChecks\SetupStateCCP.vb" />
     <Compile Include="Helpers\CompatibilityCheckerHelper.vb" />
+    <Compile Include="Helpers\IFileProcessor.vb" />
     <Compile Include="Helpers\IProcessRunner.vb" />
     <Compile Include="Helpers\IRegistryRunner.vb" />
     <Compile Include="Helpers\IUserInterfaceInterop.vb" />

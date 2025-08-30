@@ -17,21 +17,8 @@ Namespace Helpers.PreparationTasks
         Public Overrides Function RunPreparationTask() As Boolean
             DynaLog.LogMessage("Clearing Windows Update Cache...")
             If IsInTestMode Then Return True
-            ' Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-            '                  "/c del %WINDIR%\SoftwareDistribution\Download\*.* /F /S /Q") = PROC_SUCCESS
             Dim downloadPath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SoftwareDistribution\Download")
-
-            If Directory.Exists(downloadPath) Then
-                For Each file In Directory.GetFiles(downloadPath, "*", SearchOption.AllDirectories)
-                    Try
-                        Delete(downloadPath, file)
-                    Catch ex As Exception
-
-                    End Try
-                Next
-            End If
-
-            Return True
+            Return RemoveRecursive(downloadPath)
         End Function
 
     End Class

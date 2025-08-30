@@ -12,7 +12,7 @@ Namespace Helpers.PreparationTasks
     ''' and inherit this base class. More information can be found in the documentation
     ''' </remarks>
     Public MustInherit Class PreparationTask
-        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner
+        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor
 
         ''' <summary>
         ''' Runs a preparation task
@@ -263,26 +263,17 @@ Namespace Helpers.PreparationTasks
                                                RegMountPath))
         End Function
 
-        ''' <summary>
-        ''' Delete's a file
-        ''' </summary>
-        ''' <param name="Path">The Path to the files</param>
-        ''' <param name="File">The file name</param>
-        ''' <returns>The exit code of the underlying REG process call</returns>
-        ''' <remarks></remarks>
-        Public Function Delete(Path As String, File As String) As Integer
-            Try
-                Dim fullPath As String = IO.Path.Combine(Path, File)
-                If IO.File.Exists(fullPath) Then
-                    My.Computer.FileSystem.DeleteFile(fullPath, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
-                    Return 0
-                Else
-                    Return 1
-                End If
-            Catch ex As Exception
-                Return 2
-            End Try
+        Public Function RemoveRecursive(DirectoryToDelete As String) As Boolean Implements IFileProcessor.RemoveRecursive
+            If Directory.Exists(DirectoryToDelete) Then
+                Try
+                    Directory.Delete(DirectoryToDelete, True)
+                Catch ex As Exception
+                    Return False
+                End Try
+            End If
+            Return True
         End Function
+
     End Class
 
 End Namespace
