@@ -16,7 +16,6 @@ Namespace Helpers.PreparationTasks
         ''' <remarks></remarks>
         Public Overrides Function RunPreparationTask() As Boolean
             DynaLog.LogMessage("Clearing Windows Update Cache...")
-            ' TODO: Implement a more .NET-native version - Done (I think)
             If IsInTestMode Then Return True
             ' Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
             '                  "/c del %WINDIR%\SoftwareDistribution\Download\*.* /F /S /Q") = PROC_SUCCESS
