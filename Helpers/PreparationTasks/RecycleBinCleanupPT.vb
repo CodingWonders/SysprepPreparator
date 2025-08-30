@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports Microsoft.VisualBasic.ApplicationServices
 
 Namespace Helpers.PreparationTasks
 
