@@ -273,7 +273,7 @@ Namespace Helpers.PreparationTasks
         Public Function Delete(Path As String, File As String) As Integer
             Try
                 Dim fullPath As String = IO.Path.Combine(Path, File)
-                If File.Exists(fullPath) Then
+                If IO.File.Exists(fullPath) Then
                     My.Computer.FileSystem.DeleteFile(fullPath, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.DeletePermanently)
                     Return 0
                 Else
