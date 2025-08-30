@@ -31,7 +31,7 @@ Namespace Helpers.PreparationTasks
                 Next
             End If
 
-            Return PROC_SUCCESS
+            Return True
         End Function
 
     End Class
