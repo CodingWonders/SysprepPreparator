@@ -262,27 +262,6 @@ Namespace Helpers.PreparationTasks
             Return RunRegProcess(String.Format("unload {0}",
                                                RegMountPath))
         End Function
-
-        ''' <summary>
-        ''' Delete's a file
-        ''' </summary>
-        ''' <param name="Path">The Path to the files</param>
-        ''' <param name="File">The file name</param>
-        ''' <returns>The exit code of the underlying REG process call</returns>
-        ''' <remarks></remarks>
-        Public Function Delete(Path As String, File As String) As Integer
-            Try
-                Dim fullPath As String = IO.Path.Combine(Path, File)
-                If IO.File.Exists(fullPath) Then
-                    My.Computer.FileSystem.DeleteFile(fullPath)
-                    Return 0
-                Else
-                    Return 1
-                End If
-            Catch ex As Exception
-                Return 2
-            End Try
-        End Function
     End Class
 
 End Namespace
