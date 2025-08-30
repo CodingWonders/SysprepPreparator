@@ -20,7 +20,7 @@ Namespace Helpers.PreparationTasks
             If IsInTestMode Then Return True
             Try
                 For Each drive As DriveInfo In DriveInfo.GetDrives().Where(Function(driveInList) driveInList.IsReady).ToList()
-                    Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, GetUserSid(Environment.GetEnvironmentVariable("USERNAME")))
+                    Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, "$Recycle.Bin", GetUserSid(Environment.GetEnvironmentVariable("USERNAME")))
                     Try
                         RemoveRecursive(recycleBinPath)
                     Catch ex As Exception
