@@ -338,9 +338,10 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetailsTLP.SetColumnSpan(Me.SysCheckPage_CheckDetails_Title, 2)
         Me.SysCheckPage_CheckDetails_Title.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SysCheckPage_CheckDetails_Title.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysCheckPage_CheckDetails_Title.Location = New System.Drawing.Point(3, 0)
+        Me.SysCheckPage_CheckDetails_Title.Location = New System.Drawing.Point(8, 0)
+        Me.SysCheckPage_CheckDetails_Title.Margin = New System.Windows.Forms.Padding(8, 0, 3, 0)
         Me.SysCheckPage_CheckDetails_Title.Name = "SysCheckPage_CheckDetails_Title"
-        Me.SysCheckPage_CheckDetails_Title.Size = New System.Drawing.Size(616, 26)
+        Me.SysCheckPage_CheckDetails_Title.Size = New System.Drawing.Size(611, 26)
         Me.SysCheckPage_CheckDetails_Title.TabIndex = 0
         Me.SysCheckPage_CheckDetails_Title.Text = "Check Title"
         Me.SysCheckPage_CheckDetails_Title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
