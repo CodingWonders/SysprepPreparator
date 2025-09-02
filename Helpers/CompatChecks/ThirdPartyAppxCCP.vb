@@ -14,11 +14,7 @@ Namespace Helpers.CompatChecks
                 Dim Appxs() As String = thirdPartyAppxsRk.GetSubKeyNames()
                 thirdPartyAppxsRk.Close()
                 If Appxs.Count > 0 Then
-                    Dim appxStr As String = ""
-                    For Each Appx In Appxs
-                        appxStr &= String.Format("{0}, ", Appx)
-                    Next
-                    appxStr = appxStr.TrimEnd(", ")
+                    Dim appxStr As String = String.Join(", ", Appxs)
                     Status.Compatible = True
                     Status.StatusMessage = New Classes.StatusMessage("Third-party Microsoft Store app checks",
                                                                      "Some packages that may only be registered to this user account have been detected. Sysprep may fail to run.",
