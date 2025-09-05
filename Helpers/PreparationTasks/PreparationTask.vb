@@ -41,15 +41,21 @@ Namespace Helpers.PreparationTasks
         ''' <summary>
         ''' Shows a file picker to open a file
         ''' </summary>
-        ''' <returns>The path of the chosen file</returns>
+        ''' <param name="MultiSelect">Whether to allow file picker to select multiple files</param>
+        ''' <returns>The path, or paths, of the chosen file</returns>
         ''' <remarks></remarks>
-        Public Function ShowOpenFileDialog() As String Implements IUserInterfaceInterop.ShowOpenFileDialog
+        Public Function ShowOpenFileDialog(Optional MultiSelect As Boolean = False) As Object Implements IUserInterfaceInterop.ShowOpenFileDialog
             Dim ofd As New OpenFileDialog() With {
-                .SupportMultiDottedExtensions = True
+                .SupportMultiDottedExtensions = True,
+                .Multiselect = MultiSelect
             }
 
             If ofd.ShowDialog() = DialogResult.OK Then
-                Return ofd.FileName
+                If MultiSelect Then
+                    Return ofd.FileNames
+                Else
+                    Return ofd.FileName
+                End If
             End If
             Return ""
         End Function

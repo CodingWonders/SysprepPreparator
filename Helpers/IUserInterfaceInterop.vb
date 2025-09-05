@@ -9,9 +9,10 @@
         ''' <summary>
         ''' Shows a file picker to open a file
         ''' </summary>
-        ''' <returns>The path of the chosen file</returns>
+        ''' <param name="MultiSelect">Whether to allow file picker to select multiple files</param>
+        ''' <returns>The path, or paths, of the chosen file</returns>
         ''' <remarks></remarks>
-        Function ShowOpenFileDialog() As String
+        Function ShowOpenFileDialog(Optional MultiSelect As Boolean = False) As Object
 
         ''' <summary>
         ''' Shows a file picker to save a file
