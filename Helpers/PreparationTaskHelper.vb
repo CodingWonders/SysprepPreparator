@@ -20,8 +20,9 @@ Namespace Helpers
             {"DISM Component Store Cleanup", New DismComponentCleanupPT()},
             {"Delete Windows Update Cache Files", New WindowsUpdateTempFileCleanupPT()},
             {"Run Disk Cleanup", New DiskCleanupPT()},
-            {"Export and clear event logs", New EventLogPT()},
-            {"Clear Recycle Bin", New RecycleBinCleanupPT()}
+            {"Provision all AppX Packages", New AppxProvisionPT()},
+            {"Clear Recycle Bin", New RecycleBinCleanupPT()},
+            {"Export and clear event logs", New EventLogPT()}
         }
 
         ''' <summary>

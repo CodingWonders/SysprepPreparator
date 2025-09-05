@@ -107,6 +107,7 @@
     <Compile Include="Helpers\IUserInterfaceInterop.vb" />
     <Compile Include="Helpers\IWmiUserProcessor.vb" />
     <Compile Include="Helpers\PreparationTaskHelper.vb" />
+    <Compile Include="Helpers\PreparationTasks\AppxPT.vb" />
     <Compile Include="Helpers\PreparationTasks\DiskCleanupPT.vb" />
     <Compile Include="Helpers\PreparationTasks\DismComponentCleanupPT.vb" />
     <Compile Include="Helpers\PreparationTasks\EventLogPT.vb" />
