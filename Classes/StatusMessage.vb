@@ -77,6 +77,7 @@
         Public Sub New(title As String, description As String, severity As StatusMessageSeverity)
             StatusTitle = title
             StatusDescription = description
+            StatusPossibleResolution = "No resolution is necessary."
             StatusSeverity = severity
         End Sub
 
