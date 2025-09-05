@@ -31,24 +31,24 @@ Partial Class MainForm
         Me.BannerPanel = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PageContainerPanel = New System.Windows.Forms.Panel()
-        Me.WelcomePage = New System.Windows.Forms.Panel()
-        Me.WelcomePage_Description = New System.Windows.Forms.Label()
-        Me.WelcomePage_Header = New System.Windows.Forms.Label()
         Me.SystemCheckPanel = New System.Windows.Forms.Panel()
         Me.SysCheckPage_CheckAgainBtn = New System.Windows.Forms.Button()
         Me.SysCheckPage_CheckDetailsGB = New System.Windows.Forms.GroupBox()
         Me.SysCheckPage_CheckDetailsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.SysCheckPage_CheckDetails_Resolution = New System.Windows.Forms.Label()
-        Me.SysCheckPage_CheckDetails_ResolutionValue = New System.Windows.Forms.Label()
         Me.SysCheckPage_CheckDetails_DescriptionValue = New System.Windows.Forms.Label()
         Me.SysCheckPage_CheckDetails_Description = New System.Windows.Forms.Label()
         Me.SysCheckPage_CheckDetails_Title = New System.Windows.Forms.Label()
+        Me.SysCheckPage_CheckDetails_ResolutionValue = New System.Windows.Forms.TextBox()
         Me.SysCheckPage_ChecksLv = New System.Windows.Forms.ListView()
         Me.SysCheckPage_CheckCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SysCheckPage_CompatibleCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SysCheckPage_SeverityCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SysCheckPage_Description = New System.Windows.Forms.Label()
         Me.SysCheckPage_Header = New System.Windows.Forms.Label()
+        Me.WelcomePage = New System.Windows.Forms.Panel()
+        Me.WelcomePage_Description = New System.Windows.Forms.Label()
+        Me.WelcomePage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPanel = New System.Windows.Forms.Panel()
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepConfigPanel = New System.Windows.Forms.Panel()
@@ -84,10 +84,10 @@ Partial Class MainForm
         Me.BannerPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PageContainerPanel.SuspendLayout()
-        Me.WelcomePage.SuspendLayout()
         Me.SystemCheckPanel.SuspendLayout()
         Me.SysCheckPage_CheckDetailsGB.SuspendLayout()
         Me.SysCheckPage_CheckDetailsTLP.SuspendLayout()
+        Me.WelcomePage.SuspendLayout()
         Me.AdvSettingsPanel.SuspendLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.SuspendLayout()
         Me.SettingPreparationPanel.SuspendLayout()
@@ -190,41 +190,6 @@ Partial Class MainForm
         Me.PageContainerPanel.Size = New System.Drawing.Size(664, 513)
         Me.PageContainerPanel.TabIndex = 2
         '
-        'WelcomePage
-        '
-        Me.WelcomePage.Controls.Add(Me.WelcomePage_Description)
-        Me.WelcomePage.Controls.Add(Me.WelcomePage_Header)
-        Me.WelcomePage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WelcomePage.Location = New System.Drawing.Point(0, 0)
-        Me.WelcomePage.Name = "WelcomePage"
-        Me.WelcomePage.Size = New System.Drawing.Size(664, 513)
-        Me.WelcomePage.TabIndex = 0
-        '
-        'WelcomePage_Description
-        '
-        Me.WelcomePage_Description.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WelcomePage_Description.AutoEllipsis = True
-        Me.WelcomePage_Description.Location = New System.Drawing.Point(17, 64)
-        Me.WelcomePage_Description.Name = "WelcomePage_Description"
-        Me.WelcomePage_Description.Size = New System.Drawing.Size(633, 269)
-        Me.WelcomePage_Description.TabIndex = 1
-        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" & _
-    "xt."
-        '
-        'WelcomePage_Header
-        '
-        Me.WelcomePage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WelcomePage_Header.AutoEllipsis = True
-        Me.WelcomePage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WelcomePage_Header.Location = New System.Drawing.Point(14, 12)
-        Me.WelcomePage_Header.Name = "WelcomePage_Header"
-        Me.WelcomePage_Header.Size = New System.Drawing.Size(636, 45)
-        Me.WelcomePage_Header.TabIndex = 0
-        Me.WelcomePage_Header.Text = "Welcome to the wizard"
-        '
         'SystemCheckPanel
         '
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CheckAgainBtn)
@@ -268,17 +233,17 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.SysCheckPage_CheckDetailsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666!))
         Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_Resolution, 0, 2)
-        Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_ResolutionValue, 0, 2)
         Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_DescriptionValue, 1, 1)
         Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_Description, 0, 1)
         Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_Title, 0, 0)
+        Me.SysCheckPage_CheckDetailsTLP.Controls.Add(Me.SysCheckPage_CheckDetails_ResolutionValue, 1, 2)
         Me.SysCheckPage_CheckDetailsTLP.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SysCheckPage_CheckDetailsTLP.Location = New System.Drawing.Point(3, 19)
         Me.SysCheckPage_CheckDetailsTLP.Name = "SysCheckPage_CheckDetailsTLP"
         Me.SysCheckPage_CheckDetailsTLP.RowCount = 3
-        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.66667!))
-        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 41.66667!))
+        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.24292!))
+        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.14979!))
+        Me.SysCheckPage_CheckDetailsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.60729!))
         Me.SysCheckPage_CheckDetailsTLP.Size = New System.Drawing.Size(622, 160)
         Me.SysCheckPage_CheckDetailsTLP.TabIndex = 0
         Me.SysCheckPage_CheckDetailsTLP.Visible = False
@@ -288,24 +253,12 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetails_Resolution.AutoSize = True
         Me.SysCheckPage_CheckDetails_Resolution.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SysCheckPage_CheckDetails_Resolution.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysCheckPage_CheckDetails_Resolution.Location = New System.Drawing.Point(3, 92)
+        Me.SysCheckPage_CheckDetails_Resolution.Location = New System.Drawing.Point(3, 78)
         Me.SysCheckPage_CheckDetails_Resolution.Name = "SysCheckPage_CheckDetails_Resolution"
-        Me.SysCheckPage_CheckDetails_Resolution.Size = New System.Drawing.Size(201, 68)
+        Me.SysCheckPage_CheckDetails_Resolution.Size = New System.Drawing.Size(201, 82)
         Me.SysCheckPage_CheckDetails_Resolution.TabIndex = 4
         Me.SysCheckPage_CheckDetails_Resolution.Text = "Possible Resolution:"
         Me.SysCheckPage_CheckDetails_Resolution.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'SysCheckPage_CheckDetails_ResolutionValue
-        '
-        Me.SysCheckPage_CheckDetails_ResolutionValue.AutoEllipsis = True
-        Me.SysCheckPage_CheckDetails_ResolutionValue.AutoSize = True
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Location = New System.Drawing.Point(210, 92)
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Name = "SysCheckPage_CheckDetails_ResolutionValue"
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Size = New System.Drawing.Size(409, 68)
-        Me.SysCheckPage_CheckDetails_ResolutionValue.TabIndex = 3
-        Me.SysCheckPage_CheckDetails_ResolutionValue.Text = "Resolution"
         '
         'SysCheckPage_CheckDetails_DescriptionValue
         '
@@ -313,9 +266,9 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetails_DescriptionValue.AutoSize = True
         Me.SysCheckPage_CheckDetails_DescriptionValue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SysCheckPage_CheckDetails_DescriptionValue.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysCheckPage_CheckDetails_DescriptionValue.Location = New System.Drawing.Point(210, 26)
+        Me.SysCheckPage_CheckDetails_DescriptionValue.Location = New System.Drawing.Point(210, 32)
         Me.SysCheckPage_CheckDetails_DescriptionValue.Name = "SysCheckPage_CheckDetails_DescriptionValue"
-        Me.SysCheckPage_CheckDetails_DescriptionValue.Size = New System.Drawing.Size(409, 66)
+        Me.SysCheckPage_CheckDetails_DescriptionValue.Size = New System.Drawing.Size(409, 46)
         Me.SysCheckPage_CheckDetails_DescriptionValue.TabIndex = 2
         Me.SysCheckPage_CheckDetails_DescriptionValue.Text = "Description"
         '
@@ -324,9 +277,9 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetails_Description.AutoSize = True
         Me.SysCheckPage_CheckDetails_Description.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SysCheckPage_CheckDetails_Description.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysCheckPage_CheckDetails_Description.Location = New System.Drawing.Point(3, 26)
+        Me.SysCheckPage_CheckDetails_Description.Location = New System.Drawing.Point(3, 32)
         Me.SysCheckPage_CheckDetails_Description.Name = "SysCheckPage_CheckDetails_Description"
-        Me.SysCheckPage_CheckDetails_Description.Size = New System.Drawing.Size(201, 66)
+        Me.SysCheckPage_CheckDetails_Description.Size = New System.Drawing.Size(201, 46)
         Me.SysCheckPage_CheckDetails_Description.TabIndex = 1
         Me.SysCheckPage_CheckDetails_Description.Text = "Description:"
         Me.SysCheckPage_CheckDetails_Description.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -341,10 +294,23 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetails_Title.Location = New System.Drawing.Point(8, 0)
         Me.SysCheckPage_CheckDetails_Title.Margin = New System.Windows.Forms.Padding(8, 0, 3, 0)
         Me.SysCheckPage_CheckDetails_Title.Name = "SysCheckPage_CheckDetails_Title"
-        Me.SysCheckPage_CheckDetails_Title.Size = New System.Drawing.Size(611, 26)
+        Me.SysCheckPage_CheckDetails_Title.Size = New System.Drawing.Size(611, 32)
         Me.SysCheckPage_CheckDetails_Title.TabIndex = 0
         Me.SysCheckPage_CheckDetails_Title.Text = "Check Title"
         Me.SysCheckPage_CheckDetails_Title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'SysCheckPage_CheckDetails_ResolutionValue
+        '
+        Me.SysCheckPage_CheckDetails_ResolutionValue.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Location = New System.Drawing.Point(210, 78)
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Multiline = True
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Name = "SysCheckPage_CheckDetails_ResolutionValue"
+        Me.SysCheckPage_CheckDetails_ResolutionValue.ReadOnly = True
+        Me.SysCheckPage_CheckDetails_ResolutionValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.SysCheckPage_CheckDetails_ResolutionValue.Size = New System.Drawing.Size(409, 82)
+        Me.SysCheckPage_CheckDetails_ResolutionValue.TabIndex = 5
         '
         'SysCheckPage_ChecksLv
         '
@@ -402,6 +368,41 @@ Partial Class MainForm
         Me.SysCheckPage_Header.Size = New System.Drawing.Size(636, 45)
         Me.SysCheckPage_Header.TabIndex = 0
         Me.SysCheckPage_Header.Text = "System Checks"
+        '
+        'WelcomePage
+        '
+        Me.WelcomePage.Controls.Add(Me.WelcomePage_Description)
+        Me.WelcomePage.Controls.Add(Me.WelcomePage_Header)
+        Me.WelcomePage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WelcomePage.Location = New System.Drawing.Point(0, 0)
+        Me.WelcomePage.Name = "WelcomePage"
+        Me.WelcomePage.Size = New System.Drawing.Size(664, 513)
+        Me.WelcomePage.TabIndex = 0
+        '
+        'WelcomePage_Description
+        '
+        Me.WelcomePage_Description.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WelcomePage_Description.AutoEllipsis = True
+        Me.WelcomePage_Description.Location = New System.Drawing.Point(17, 64)
+        Me.WelcomePage_Description.Name = "WelcomePage_Description"
+        Me.WelcomePage_Description.Size = New System.Drawing.Size(633, 269)
+        Me.WelcomePage_Description.TabIndex = 1
+        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" & _
+    "xt."
+        '
+        'WelcomePage_Header
+        '
+        Me.WelcomePage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WelcomePage_Header.AutoEllipsis = True
+        Me.WelcomePage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WelcomePage_Header.Location = New System.Drawing.Point(14, 12)
+        Me.WelcomePage_Header.Name = "WelcomePage_Header"
+        Me.WelcomePage_Header.Size = New System.Drawing.Size(636, 45)
+        Me.WelcomePage_Header.TabIndex = 0
+        Me.WelcomePage_Header.Text = "Welcome to the wizard"
         '
         'AdvSettingsPanel
         '
@@ -770,11 +771,11 @@ Partial Class MainForm
         Me.BannerPanel.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PageContainerPanel.ResumeLayout(False)
-        Me.WelcomePage.ResumeLayout(False)
         Me.SystemCheckPanel.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsGB.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsTLP.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsTLP.PerformLayout()
+        Me.WelcomePage.ResumeLayout(False)
         Me.AdvSettingsPanel.ResumeLayout(False)
         Me.AdvSettingsPanel.PerformLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.ResumeLayout(False)
@@ -806,7 +807,6 @@ Partial Class MainForm
     Friend WithEvents SysCheckPage_CompatibleCH As System.Windows.Forms.ColumnHeader
     Friend WithEvents SysCheckPage_CheckDetailsTLP As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents SysCheckPage_CheckDetails_Resolution As System.Windows.Forms.Label
-    Friend WithEvents SysCheckPage_CheckDetails_ResolutionValue As System.Windows.Forms.Label
     Friend WithEvents SysCheckPage_CheckDetails_DescriptionValue As System.Windows.Forms.Label
     Friend WithEvents SysCheckPage_CheckDetails_Description As System.Windows.Forms.Label
     Friend WithEvents SysCheckPage_CheckDetails_Title As System.Windows.Forms.Label
@@ -840,5 +840,6 @@ Partial Class MainForm
     Friend WithEvents FinishPage_ResysprepBtn As System.Windows.Forms.Button
     Friend WithEvents FinishPage_RestartBtn As System.Windows.Forms.Button
     Friend WithEvents FinishPage_CloseBtn As System.Windows.Forms.Button
+    Friend WithEvents SysCheckPage_CheckDetails_ResolutionValue As System.Windows.Forms.TextBox
 
 End Class

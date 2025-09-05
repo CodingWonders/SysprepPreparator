@@ -151,6 +151,8 @@ Public Class MainForm
             SysCheckPage_CheckDetailsGB.ForeColor = currentTheme.ForegroundColor
             SysCheckPage_ChecksLv.BackColor = currentTheme.SectionBackgroundColor
             SysCheckPage_ChecksLv.ForeColor = currentTheme.ForegroundColor
+            SysCheckPage_CheckDetails_ResolutionValue.BackColor = currentTheme.SectionBackgroundColor
+            SysCheckPage_CheckDetails_ResolutionValue.ForeColor = currentTheme.ForegroundColor
             AdvSettingsPage_CleanupActionCBox.BackColor = currentTheme.SectionBackgroundColor
             AdvSettingsPage_CleanupActionCBox.ForeColor = currentTheme.ForegroundColor
             AdvSettingsPage_ShutdownOptionsCBox.BackColor = currentTheme.SectionBackgroundColor
