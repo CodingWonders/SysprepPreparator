@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Dism
+Imports System.IO
 
 Namespace Helpers.CompatChecks
 
@@ -32,9 +33,11 @@ Namespace Helpers.CompatChecks
                     DynaLog.LogMessage("Detecting if there are any third-party drivers...")
                     If driverInfoCollection.Any(Function(driver) driver.InBox = False) Then
                         DynaLog.LogMessage("There are third party drivers. External devices have been detected.")
+                        Dim Drivers() As String = driverInfoCollection.Where(Function(driver) driver.InBox = False).Select(Function(driver) String.Format("{0} ({1})", driver.PublishedName, Path.GetFileName(driver.OriginalFileName))).ToArray()
+                        Dim drvStr As String = ControlChars.CrLf & "- " & String.Join(ControlChars.CrLf & "- ", Drivers) & ControlChars.CrLf
                         Status.StatusMessage = New Classes.StatusMessage("DISM driver checks",
                                                                          "Third-party drivers were detected in this installation. You can continue, but this is not a good system administration practice if you want to install this system on multiple machines.",
-                                                                         "Remove third-party drivers if you want to install this system on multiple machines with different hardware.",
+                                                                         "These were the third-party drivers detected: " & drvStr & "Remove these drivers if you want to install this system on multiple machines with different hardware.",
                                                                          Classes.StatusMessage.StatusMessageSeverity.Warning)
                     Else
                         DynaLog.LogMessage("There aren't any third party drivers. External devices have not been detected.")
