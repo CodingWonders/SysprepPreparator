@@ -317,7 +317,26 @@ Public Class MainForm
         CheckComputer()
     End Sub
 
+    Function GetCopyrightTimespan(ByVal start As Integer, ByVal current As Integer) As String
+        If current <= start Then
+            Return current.ToString()
+        Else
+            Return start.ToString() & "-" & current.ToString()
+        End If
+    End Function
+
+    Sub InitDynaLog()
+        DynaLog.LogMessage("Sysprep Preparation Tool (Sysprep Preparator) - Version " & My.Application.Info.Version.ToString() & ", build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        ' Display copyright/author information for every component
+        DynaLog.LogMessage("Components:")
+        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
+        DynaLog.LogMessage("  Initial expansion and testing also made by Real-MullaC: https://github.com/Real-MullaC")
+        DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
+        DynaLog.BeginLogging()
+    End Sub
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitDynaLog()
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
@@ -404,5 +423,10 @@ Public Class MainForm
             OriginalWindowBounds = Bounds
             Bounds = Screen.FromControl(Me).Bounds
         End If
+    End Sub
+
+    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        DynaLog.LogMessage("We Are Done")
+        DynaLog.EndLogging()
     End Sub
 End Class
