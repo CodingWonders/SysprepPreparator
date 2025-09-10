@@ -88,6 +88,7 @@
     <Compile Include="Classes\RegistryItem.vb" />
     <Compile Include="Classes\StatusMessage.vb" />
     <Compile Include="Classes\SysprepConfig.vb" />
+    <Compile Include="Classes\WindowsServerRole.vb" />
     <Compile Include="ErrorDialog.Designer.vb">
       <DependentUpon>ErrorDialog.vb</DependentUpon>
     </Compile>
@@ -100,6 +101,7 @@
     <Compile Include="Helpers\CompatChecks\PendingServicingOperationsCCP.vb" />
     <Compile Include="Helpers\CompatChecks\SetupStateCCP.vb" />
     <Compile Include="Helpers\CompatChecks\ThirdPartyAppxCCP.vb" />
+    <Compile Include="Helpers\CompatChecks\WindowsServerRoleCCP.vb" />
     <Compile Include="Helpers\CompatibilityCheckerHelper.vb" />
     <Compile Include="Helpers\IFileProcessor.vb" />
     <Compile Include="Helpers\IProcessRunner.vb" />
