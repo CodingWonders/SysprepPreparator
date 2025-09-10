@@ -6,7 +6,7 @@ Imports Microsoft.Win32
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.Serialization
 
-Namespace Helpers
+Namespace Helpers.CompatChecks
 
     Public Class WindowsServerRoleCCP
         Inherits CompatibilityCheckerProvider
