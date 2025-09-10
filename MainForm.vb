@@ -3,6 +3,7 @@ Imports SysprepPreparator.Classes
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports Microsoft.Win32
+Imports System.Runtime.InteropServices
 
 Public Class MainForm
 
@@ -428,5 +429,13 @@ Public Class MainForm
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         DynaLog.LogMessage("We Are Done")
         DynaLog.EndLogging()
+    End Sub
+
+    Private Sub AboutBtn_Click(sender As Object, e As EventArgs) Handles AboutBtn.Click
+        MsgBox(String.Format("Sysprep Preparation Tool, version {0}_{1}" & CrLf & "- Program: {2}. Further expansion and testing made by Real-MullaC" & CrLf & "- DISM API: (c) {3}",
+                             My.Application.Info.Version.ToString(),
+                             RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"),
+                             My.Application.Info.Copyright.Replace("©", "(c)"),
+                             GetCopyrightTimespan(2016, 2016) & " Jeff Kluge"), vbOKOnly + vbInformation, "About")
     End Sub
 End Class
