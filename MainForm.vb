@@ -1,6 +1,4 @@
 ﻿Imports System.IO
-Imports System.Reflection.Emit
-Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 Imports SysprepPreparator.Classes
