@@ -42,7 +42,7 @@ Namespace Helpers.PreparationTasks
         ''' <remarks></remarks>
         Private Sub ExportEventLogs()
             DynaLog.LogMessage("Preparing to export event logs...")
-            Dim targetEvtxPath As String = ShowFolderBrowserDialog("Choose a target path to store event logs. Skipping this step will not export the event logs.")
+            Dim targetEvtxPath As String = ShowFolderBrowserDialog(GetValueFromLanguageData("EventLogPT.FBD_TargetEvtxPath"))
             DynaLog.LogMessage("Target path for EVTXs: " & targetEvtxPath)
             If targetEvtxPath = "" Then
                 DynaLog.LogMessage("No EVTX Path is specified. Aborting procedure!")
@@ -52,7 +52,7 @@ Namespace Helpers.PreparationTasks
             DynaLog.LogMessage("Determining if directory contains files...")
             If Directory.Exists(targetEvtxPath) AndAlso Directory.GetFiles(targetEvtxPath, "*.evtx").Count > 0 Then
                 DynaLog.LogMessage("Directory exists and there are already EVTX files.")
-                ShowMessage("Target EVTX path contains event logs. Any existing logs will be deleted.", "Event Log Cleanup")
+                ShowMessage(GetValueFromLanguageData("EventLogPT.MSG_PathAlreadyExists"), GetValueFromLanguageData("RegisteredPTs.EventLogPT"))
             End If
 
             DynaLog.LogMessage("Getting event logs...")

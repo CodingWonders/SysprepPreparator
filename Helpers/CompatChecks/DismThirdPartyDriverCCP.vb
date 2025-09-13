@@ -35,22 +35,23 @@ Namespace Helpers.CompatChecks
                         DynaLog.LogMessage("There are third party drivers. External devices have been detected.")
                         Dim Drivers() As String = driverInfoCollection.Where(Function(driver) driver.InBox = False).Select(Function(driver) String.Format("{0} ({1})", driver.PublishedName, Path.GetFileName(driver.OriginalFileName))).ToArray()
                         Dim drvStr As String = ControlChars.CrLf & "- " & String.Join(ControlChars.CrLf & "- ", Drivers) & ControlChars.CrLf
-                        Status.StatusMessage = New Classes.StatusMessage("DISM driver checks",
-                                                                         "Third-party drivers were detected in this installation. You can continue, but this is not a good system administration practice if you want to install this system on multiple machines.",
-                                                                         "These were the third-party drivers detected: " & drvStr & "Remove these drivers if you want to install this system on multiple machines with different hardware.",
+                        Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("DismThirdPartyDriverCCP.CCPTitle"),
+                                                                         GetValueFromLanguageData("DismThirdPartyDriverCCP.CCP_NotOK"),
+                                                                         String.Format(GetValueFromLanguageData("DismThirdPartyDriverCCP.CCP_NotOK_Resolution_Generic"), drvStr),
                                                                          Classes.StatusMessage.StatusMessageSeverity.Warning)
                     Else
                         DynaLog.LogMessage("There aren't any third party drivers. External devices have not been detected.")
-                        Status.StatusMessage = New Classes.StatusMessage("DISM driver checks",
-                                                                         "Third-party drivers were not detected in this installation.",
+                        Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("DismThirdPartyDriverCCP.CCPTitle"),
+                                                                         GetValueFromLanguageData("DismThirdPartyDriverCCP.CCP_OK"),
                                                                          Classes.StatusMessage.StatusMessageSeverity.Info)
                     End If
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get driver information. Error: " & ex.Message)
                 Status.Compatible = False
-                Status.StatusMessage = New Classes.StatusMessage("DISM driver checks",
-                                                                 "An internal error occurred: " & ex.Message,
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("DismThirdPartyDriverCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("DismThirdPartyDriverCCP.CCP_Error"),
+                                                                 GetValueFromLanguageData("DismThirdPartyDriverCCP.CCP_Error_Resolution"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Critical)
             Finally
                 DynaLog.LogMessage("Shutting down API...")

@@ -27,9 +27,9 @@ Namespace Helpers.CompatChecks
             If File.Exists(SystemPendingServicingFile) Then
                 DynaLog.LogMessage("Pending XML exists. The Windows installation needs a reboot for updates")
                 Status.Compatible = False
-                Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                 "The system needs to perform some servicing operations before continuing.",
-                                                                 "Please restart your computer for these operations to be done.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("PendingServicingOperationsCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("CCP_NotOK_SysServ"),
+                                                                 GetValueFromLanguageData("CCP_NotOK_Resolution_SysServ"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Warning)
                 Return Status
             End If
@@ -51,9 +51,9 @@ Namespace Helpers.CompatChecks
                     DynaLog.LogMessage("There are some files in there.")
                     ' A reboot is required to rename files that were in use
                     Status.Compatible = True
-                    Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                     "Some applications need you to restart your computer to clear up temporary files. You can continue, but it is best that you restart.",
-                                                                     "Please restart your computer for these operations to be done.",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("PendingServicingOperationsCCP.CCPTitle"),
+                                                                     GetValueFromLanguageData("PendingServicingOperationsCCP.CCP_NotOK_NtSmPfro"),
+                                                                     GetValueFromLanguageData("PendingServicingOperationsCCP.CCP_NotOK_Resolution_NtSmPfro"),
                                                                      Classes.StatusMessage.StatusMessageSeverity.Info)
                     Return Status
                 End If
@@ -74,9 +74,9 @@ Namespace Helpers.CompatChecks
                     ' Windows Updates are still pending
                     DynaLog.LogMessage("Value is not 0.")
                     Status.Compatible = False
-                    Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                     "The system needs to perform some servicing operations before continuing.",
-                                                                     "Please restart your computer for these operations to be done.",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("PendingServicingOperationsCCP.CCPTitle"),
+                                                                     GetValueFromLanguageData("PendingServicingOperationsCCP.CCP_NotOK_SysServ"),
+                                                                     GetValueFromLanguageData("PendingServicingOperationsCCP.CCP_NotOK_Resolution_SysServ"),
                                                                      Classes.StatusMessage.StatusMessageSeverity.Warning)
                     Return Status
                 End If
@@ -86,8 +86,8 @@ Namespace Helpers.CompatChecks
 
                 ' None of our checks failed. We're good to go here!
                 Status.Compatible = True
-                Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                 "The system does not need to perform any servicing operations.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("PendingServicingOperationsCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("PendingServicingOperationsCCP.CCP_OK"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Info)
             Catch ex As Exception
                 DynaLog.LogMessage("An error occurred. Message: " & ex.Message)

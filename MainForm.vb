@@ -1,9 +1,10 @@
-﻿Imports SysprepPreparator.Helpers
-Imports SysprepPreparator.Classes
-Imports Microsoft.VisualBasic.ControlChars
-Imports System.IO
-Imports Microsoft.Win32
+﻿Imports System.IO
+Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Win32
+Imports SysprepPreparator.Classes
+Imports SysprepPreparator.Helpers
 
 Public Class MainForm
 
@@ -57,7 +58,7 @@ Public Class MainForm
     ''' <param name="taskName">The name of the task</param>
     ''' <remarks></remarks>
     Private Sub OnTaskStarted(taskName As String) Handles Me.TaskStarted
-        SettingPreparationPage_ProgressLabel.Text = String.Format("Performing Task " & Quote & "{0}" & Quote & "...", taskName)
+        SettingPreparationPage_ProgressLabel.Text = String.Format(GetValueFromLanguageData("MainForm.PreparationPanel_CurrentTaskField"), taskName)
         Refresh()
     End Sub
 
@@ -68,7 +69,7 @@ Public Class MainForm
     ''' <remarks></remarks>
     Private Sub OnTaskReported(Task As Dictionary(Of String, Boolean)) Handles Me.TaskReported
         Dim taskName As String = Task.Keys(0)
-        SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, Task(taskName)}))
+        SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, If(Task(taskName), GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No"))}))
         Refresh()
     End Sub
 
@@ -124,7 +125,7 @@ Public Class MainForm
         Cancel_Button.Enabled = Not (NewPage = WizardPage.Page.FinishPage)
         Back_Button.Enabled = Not (NewPage = WizardPage.Page.WelcomePage) And Not (NewPage = WizardPage.Page.FinishPage)
 
-        Next_Button.Text = If(NewPage = WizardPage.Page.FinishPage, "Close", "Next")
+        Next_Button.Text = If(NewPage = WizardPage.Page.FinishPage, GetValueFromLanguageData("Common.Common_Close"), GetValueFromLanguageData("Common.Common_Next"))
 
         ButtonPanel.Visible = Not (NewPage > WizardPage.Page.AdvSettingsPage)
 
@@ -165,6 +166,51 @@ Public Class MainForm
         End If
     End Sub
 
+    Sub ChangeLanguage(LanguageCode As String)
+        If Not File.Exists(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini")) Then
+            LanguageCode = "en"
+        End If
+        LoadLanguageFile(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini"))
+
+        AboutBtn.Text = GetValueFromLanguageData("Common.Common_About")
+        Back_Button.Text = GetValueFromLanguageData("Common.Common_Back")
+        Next_Button.Text = GetValueFromLanguageData("Common.Common_Next")
+        Cancel_Button.Text = GetValueFromLanguageData("Common.Common_Cancel")
+        WelcomePage_Header.Text = GetValueFromLanguageData("MainForm.WelcomePanel_Header")
+        WelcomePage_Description.Text = GetValueFromLanguageData("MainForm.WelcomePanel_Description")
+        SysCheckPage_Header.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_Header")
+        SysCheckPage_Description.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_Description")
+        SysCheckPage_CheckCH.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckField")
+        SysCheckPage_CompatibleCH.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CompatibleField")
+        SysCheckPage_SeverityCH.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_SeverityField")
+        SysCheckPage_CheckDetailsGB.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckDetailsField")
+        SysCheckPage_CheckDetails_Description.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckDescField")
+        SysCheckPage_CheckDetails_Resolution.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckResField")
+        SysCheckPage_CheckAgainBtn.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckAgainBtn")
+        AdvSettingsPage_Header.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Header")
+        AdvSettingsPage_Description.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Description")
+        AdvSettingsPage_ConfigSysprepSettings.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ConfigCheck")
+        AdvSettingsPage_CleanupActionLabel.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_CleanupActionField")
+        AdvSettingsPage_CleanupActionCBox.Items.AddRange(New String() {GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_EnterOOBE_CA"), GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_EnterAudit_CA")})
+        AdvSettingsPage_ShutdownOptionLabel.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ShutdownOptionField")
+        AdvSettingsPage_ShutdownOptionsCBox.Items.AddRange(New String() {GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_RebootSO"), GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ShutdownSO"), GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_QuitSO")})
+        AdvSettingsPage_CleanupAction_Generalize.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_GeneralizeField")
+        AdvSettingsPage_SysprepUnattLabel.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_AnswerFileField")
+        AdvSettingsPage_SysprepUnatt_Btn.Text = GetValueFromLanguageData("Common.Common_Browse")
+        AdvSettingsPage_VMMode.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_VMModeField")
+        AdvSettingsPage_VMModeExplanationLink.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_VMModeLink")
+        AdvSettingsPage_SysprepPrepToolDeploySteps.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ExplanationField")
+        SettingPreparationPage_Header.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Header")
+        SettingPreparationPage_Description.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Description")
+        SettingPreparationPage_TaskCH.Text = GetValueFromLanguageData("MainForm.PreparationPanel_TaskField")
+        SettingPreparationPage_SuccessfulCH.Text = GetValueFromLanguageData("MainForm.PreparationPanel_TaskSuccessField")
+        FinishPage_Header.Text = GetValueFromLanguageData("MainForm.FinishPanel_Header")
+        FinishPage_Description.Text = GetValueFromLanguageData("MainForm.FinishPanel_Description")
+        FinishPage_CloseBtn.Text = GetValueFromLanguageData("MainForm.FinishPanel_CloseBtn")
+        FinishPage_ResysprepBtn.Text = GetValueFromLanguageData("MainForm.FinishPanel_RelaunchBtn")
+        FinishPage_RestartBtn.Text = GetValueFromLanguageData("MainForm.FinishPanel_RestartBtn")
+    End Sub
+
     ''' <summary>
     ''' Verifies user-specified settings in the specified wizard page
     ''' </summary>
@@ -177,7 +223,7 @@ Public Class MainForm
         Select Case WizardPage
             Case SysprepPreparator.WizardPage.Page.SysCheckPage
                 If Not Environment.GetCommandLineArgs().Contains("/test") AndAlso PerformedChecks.Any(Function(PerformedCheck) PerformedCheck.Compatible = False) Then
-                    MessageBox.Show("Please resolve checks that failed and try again.")
+                    MessageBox.Show(GetValueFromLanguageData("MainForm.IncompatibleCCPMessage"))
                     Return False
                 End If
         End Select
@@ -198,7 +244,7 @@ Public Class MainForm
         PerformedChecks = CompatibilityCheckerHelper.RunChecks()
         Cursor = Cursors.Arrow
         For Each PerformedCheck In PerformedChecks
-            SysCheckPage_ChecksLv.Items.Add(New ListViewItem(New String() {PerformedCheck.StatusMessage.StatusTitle, PerformedCheck.Compatible, PerformedCheck.StatusMessage.SeverityToString(PerformedCheck.StatusMessage.StatusSeverity)}))
+            SysCheckPage_ChecksLv.Items.Add(New ListViewItem(New String() {PerformedCheck.StatusMessage.StatusTitle, If(PerformedCheck.Compatible, GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No")), PerformedCheck.StatusMessage.SeverityToString(PerformedCheck.StatusMessage.StatusSeverity)}))
         Next
         IsComputerChecked = True
     End Sub
@@ -338,16 +384,17 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
+        ChangeLanguage(My.Computer.Info.InstalledUICulture.TwoLetterISOLanguageName)
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
-            MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "Sysprep Preparation Wizard")
+            MsgBox(GetValueFromLanguageData("MainForm.Win7Message"), vbOKOnly + vbCritical, GetValueFromLanguageData("MainForm.WndTitle"))
             Environment.Exit(1)
         End If
         ' I once tested this on a computer which didn't require me to ask for admin privileges. This is a requirement of DISM. Check this
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
             DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
-            MsgBox("This program must be run as an administrator." & CrLf & "There are certain software configurations in which Windows will run this program without admin privileges, so you must ask for them manually." & CrLf & CrLf & "Right-click the executable, and select " & Quote & "Run as administrator" & Quote, vbOKOnly + vbCritical, "Sysprep Preparation Wizard")
+            MsgBox(GetValueFromLanguageData("MainForm.RunAsAdminMessage"), vbOKOnly + vbCritical, GetValueFromLanguageData("MainForm.WndTitle"))
             Environment.Exit(1)
         End If
         OriginalWindowState = WindowState
@@ -432,10 +479,10 @@ Public Class MainForm
     End Sub
 
     Private Sub AboutBtn_Click(sender As Object, e As EventArgs) Handles AboutBtn.Click
-        MsgBox(String.Format("Sysprep Preparation Tool, version {0}_{1}" & CrLf & "- Program: {2}. Further expansion and testing made by Real-MullaC" & CrLf & "- DISM API: (c) {3}",
+        MsgBox(String.Format(GetValueFromLanguageData("MainForm.AboutMessage"),
                              My.Application.Info.Version.ToString(),
                              RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"),
                              My.Application.Info.Copyright.Replace("©", "(c)"),
-                             GetCopyrightTimespan(2016, 2016) & " Jeff Kluge"), vbOKOnly + vbInformation, "About")
+                             GetCopyrightTimespan(2016, 2016) & " Jeff Kluge"), vbOKOnly + vbInformation, GetValueFromLanguageData("Common.Common_About"))
     End Sub
 End Class

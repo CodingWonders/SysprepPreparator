@@ -83,31 +83,31 @@ Namespace Helpers.CompatChecks
                 If {ImageState.GeneralizeResealToAudit, ImageState.SpecializeResealToAudit}.Contains(State) Then
                     DynaLog.LogMessage("Reseals to audits were detected. We are in a good setup state.")
                     Status.Compatible = True
-                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                            "The system is in a compatible setup state.",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("SetupStateCCP.CCPTitle"),
+                                                                            GetValueFromLanguageData("SetupStateCCP.CCP_OK"),
                                                                             Classes.StatusMessage.StatusMessageSeverity.Info)
 
                 ElseIf State = ImageState.SpecializeResealToOOBE Then
                     DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
                     Status.Compatible = False
-                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                            "The system is not in a compatible setup state.",
-                                                                            "Please launch command prompt as admin and run the following command - ```sysprep /generalize```",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("SetupStateCCP.CCPTitle"),
+                                                                            GetValueFromLanguageData("SetupStateCCP.CCP_NotOK"),
+                                                                            GetValueFromLanguageData("SetupStateCCP.CCP_NotOK_Resolution_SpecReseal"),
                                                                             Classes.StatusMessage.StatusMessageSeverity.Warning)
                 Else
                     DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
                     Status.Compatible = False
-                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                            "The system is not in a compatible setup state.",
-                                                                            "Please restart your computer in Audit mode. You may need to reinstall Windows if you finished the OOBE.",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("SetupStateCCP.CCPTitle"),
+                                                                            GetValueFromLanguageData("SetupStateCCP.CCP_NotOK"),
+                                                                            GetValueFromLanguageData("SetupStateCCP.CCP_NotOK_Resolution_Generic"),
                                                                             Classes.StatusMessage.StatusMessageSeverity.Critical)
                 End If
             Catch ex As Exception
                 DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
                 Status.Compatible = False
-                Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                        "An error occurred when getting information about setup states: " & ex.Message,
-                                                                        "Please report this issue to the developers.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("SetupStateCCP.CCPTitle"),
+                                                                        String.Format(GetValueFromLanguageData("SetupStateCCP.CCP_Error"), ex.Message),
+                                                                        GetValueFromLanguageData("CCP_Error_Resolution"),
                                                                         Classes.StatusMessage.StatusMessageSeverity.Critical)
             End Try
 

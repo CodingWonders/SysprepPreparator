@@ -46,13 +46,13 @@ Namespace Helpers.CompatChecks
             {"DNS", New WindowsServerRole("DNS-Server-Full-Role", "Domain Name System (DNS) Server", OSVER_NONE)},
             {"Fax", New WindowsServerRole("FaxServiceRole", "Fax Server", OSVER_NONE)},
             {"FileAndStorage-Services", New WindowsServerRole("FileAndStorage-Services", "File and Storage Services", OSVER_WINSERVER2008R2)},
-            {"Hyper-V", New WindowsServerRole("Microsoft-Hyper-V", "Hyper-V", OSVER_WINSERVER2008R2, "Not supported for a virtual network on Hyper-V™. You must delete any virtual networks before you run the Sysprep tool.")},
+            {"Hyper-V", New WindowsServerRole("Microsoft-Hyper-V", "Hyper-V", OSVER_WINSERVER2008R2, GetValueFromLanguageData("WindowsServerRoleCCP.HyperV_Role_Caveat"))},
             {"NPAS", New WindowsServerRole("NPAS-Role", "Network Policy and Access Services", OSVER_NONE)},
             {"Print-Services", New WindowsServerRole("Printing-Server-Foundation-Features", "Printing and Document Services", OSVER_WINSERVER2008R2)},
             {"Remote-Desktop-Services", New WindowsServerRole("Remote-Desktop-Services", "Remote Desktop Services", OSVER_WINSERVER2008)},
             {"VolumeActivation", New WindowsServerRole("VolumeActivation-Full-Role", "Volume Activation Services", OSVER_NONE)},
-            {"Web-Server", New WindowsServerRole("IIS-WebServerRole", "Web Server (Internet Information Services)", OSVER_WINSERVER2008, "Not supported with encrypted credentials in the Applicationhost.config file.")},
-            {"WDS", New WindowsServerRole("Microsoft-Windows-Deployment-Services", "Windows Deployment Services (WDS)", OSVER_WINSERVER2012, "Not supported if Windows Deployment Services is initialized. You need to uninitialize the server by running wdsutil /uninitialize-server.")},
+            {"Web-Server", New WindowsServerRole("IIS-WebServerRole", "Web Server (Internet Information Services)", OSVER_WINSERVER2008, GetValueFromLanguageData("WindowsServerRoleCCP.IIS_Role_Caveat"))},
+            {"WDS", New WindowsServerRole("Microsoft-Windows-Deployment-Services", "Windows Deployment Services (WDS)", OSVER_WINSERVER2012, GetValueFromLanguageData("WindowsServerRoleCCP.WDS_Role_Caveat"))},
             {"UpdateServices", New WindowsServerRole("UpdateServices", "Windows Server Update Services (WSUS)", OSVER_NONE)}
         }
 
@@ -86,8 +86,8 @@ Namespace Helpers.CompatChecks
                     DynaLog.LogMessage("This is not a server install, we don't need to do any of this...")
                     ' This is not a server edition, so we skip this CCP
                     Status = New Classes.CompatibilityCheckerProviderStatus(True,
-                                                                            New StatusMessage("Windows Server Role Compatibility Check",
-                                                                                              "This check was skipped because this system is not running Windows Server",
+                                                                            New StatusMessage(GetValueFromLanguageData("WindowsServerRoleCCP.CCPTitle"),
+                                                                                              GetValueFromLanguageData("WindowsServerRoleCCP.CCP_NotOK_IncompatibleSystem"),
                                                                                               StatusMessage.StatusMessageSeverity.Info))
                     Return Status
                 End If
@@ -135,8 +135,8 @@ Namespace Helpers.CompatChecks
                                 DynaLog.LogMessage("OS Version is lower than baseline version. The role is not supported.")
                                 Select Case RoleInfo.BaselineVersion
                                     Case OSVER_NONE
-                                        roleMessage &= String.Format("- {0} is not supported by Sysprep in any version of Windows Server{1}",
-                                                                     RoleInfo.DisplayName, Environment.NewLine)
+                                        roleMessage &= String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Role_NeverSupported"),
+                                                                     RoleInfo.DisplayName)
                                     Case Else
                                         Dim serverVersionString As String = ""
                                         Select Case RoleInfo.BaselineVersion
@@ -149,8 +149,8 @@ Namespace Helpers.CompatChecks
                                             Case Else
                                                 serverVersionString = String.Format("v{0}", RoleInfo.BaselineVersion.ToString())
                                         End Select
-                                        roleMessage &= String.Format("- {0} is not supported by Sysprep and requires at least Windows Server {1}{2}",
-                                                                     RoleInfo.DisplayName, serverVersionString, Environment.NewLine)
+                                        roleMessage &= String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Role_LowerThanTarget"),
+                                                                     RoleInfo.DisplayName, serverVersionString)
                                 End Select
                                 IncompatibleRoles += 1
                             ElseIf osVersion > RoleInfo.MaximumVersion Then
@@ -166,18 +166,18 @@ Namespace Helpers.CompatChecks
                                     Case Else
                                         serverVersionString = String.Format("v{0}", RoleInfo.MaximumVersion.ToString())
                                 End Select
-                                roleMessage &= String.Format("- {0} is not supported by Sysprep and is only supported up to Windows Server {1}{2}",
-                                                             RoleInfo.DisplayName, serverVersionString, Environment.NewLine)
+                                roleMessage &= String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Role_GreaterThanTarget"),
+                                                             RoleInfo.DisplayName, serverVersionString)
                                 IncompatibleRoles += 1
                             Else
                                 DynaLog.LogMessage("OS Version is between baseline and maximum versions. The role is supported.")
-                                roleMessage &= String.Format("- {0} is installed and supported. Possible caveat: {1}{2}",
-                                                             RoleInfo.DisplayName, RoleInfo.CompatibilityCaveat, Environment.NewLine)
+                                roleMessage &= String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Role_Supported"),
+                                                             RoleInfo.DisplayName, RoleInfo.CompatibilityCaveat)
                                 CompatibleRoles += 1
                             End If
                         Else
                             DynaLog.LogMessage("The feature is not enabled.")
-                            roleMessage &= String.Format("- {0} is not installed.{1}", RoleInfo.DisplayName, Environment.NewLine)
+                            roleMessage &= String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Role_NotInstalled"), RoleInfo.DisplayName)
                             CompatibleRoles += 1
                         End If
                     Next
@@ -186,9 +186,9 @@ Namespace Helpers.CompatChecks
             Catch ex As Exception
                 DynaLog.LogMessage("An error occurred. Error message: " & ex.Message)
                 Status = New Classes.CompatibilityCheckerProviderStatus(True,
-                                                                        New StatusMessage("Windows Server Role Compatibility Checks",
-                                                                                          "We could not check role compatibility.",
-                                                                                          "The following error occurred: " & ex.Message & ". You can continue, but proceed with care.",
+                                                                        New StatusMessage(GetValueFromLanguageData("WindowsServerRoleCCP.CCPTitle"),
+                                                                                          String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Error"), ex.Message),
+                                                                                          GetValueFromLanguageData("WindowsServerRoleCCP.CCP_Error_Resolution"),
                                                                                           StatusMessage.StatusMessageSeverity.Warning))
             Finally
                 Try
@@ -200,9 +200,9 @@ Namespace Helpers.CompatChecks
             End Try
 
             Status = New Classes.CompatibilityCheckerProviderStatus((CompatibleRoles >= IncompatibleRoles),
-                                                                    New StatusMessage("Windows Server Role Compatibility Check",
-                                                                                      If(IncompatibleRoles > 0, "This installation contains roles that may not be supported by Sysprep", "This installation does not contain roles that may not be supported by Sysprep"),
-                                                                                      String.Format("The following information was obtained from roles: " & Environment.NewLine & "{0}" & Environment.NewLine & "Verify these roles and any caveats associated to them.", roleMessage),
+                                                                    New StatusMessage(GetValueFromLanguageData("WindowsServerRoleCCP.CCPTitle"),
+                                                                                      If(IncompatibleRoles > 0, GetValueFromLanguageData("WindowsServerRoleCCP.CCP_NotOK_IncompatibleServerRoles"), GetValueFromLanguageData("WindowsServerRoleCCP.CCP_OK")),
+                                                                                      String.Format(GetValueFromLanguageData("WindowsServerRoleCCP.CCP_NotOK_Resolution_Generic"), roleMessage),
                                                                                       If(CompatibleRoles >= IncompatibleRoles, StatusMessage.StatusMessageSeverity.Info, StatusMessage.StatusMessageSeverity.Warning)))
 
             Return Status

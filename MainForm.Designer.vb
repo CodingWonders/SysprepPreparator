@@ -24,6 +24,7 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.ButtonPanel = New System.Windows.Forms.Panel()
+        Me.AboutBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Back_Button = New System.Windows.Forms.Button()
         Me.Next_Button = New System.Windows.Forms.Button()
@@ -60,7 +61,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_CleanupAction_Generalize = New System.Windows.Forms.CheckBox()
         Me.AdvSettingsPage_ShutdownOptionsCBox = New System.Windows.Forms.ComboBox()
         Me.AdvSettingsPage_CleanupActionCBox = New System.Windows.Forms.ComboBox()
-        Me.AdvSettings_ShutdownOptionLabel = New System.Windows.Forms.Label()
+        Me.AdvSettingsPage_ShutdownOptionLabel = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_CleanupActionLabel = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_ConfigSysprepSettings = New System.Windows.Forms.CheckBox()
         Me.AdvSettingsPage_Description = New System.Windows.Forms.Label()
@@ -79,7 +80,6 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
-        Me.AboutBtn = New System.Windows.Forms.Button()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -105,6 +105,16 @@ Partial Class MainForm
         Me.ButtonPanel.Name = "ButtonPanel"
         Me.ButtonPanel.Size = New System.Drawing.Size(1008, 48)
         Me.ButtonPanel.TabIndex = 0
+        '
+        'AboutBtn
+        '
+        Me.AboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.AboutBtn.Location = New System.Drawing.Point(12, 13)
+        Me.AboutBtn.Name = "AboutBtn"
+        Me.AboutBtn.Size = New System.Drawing.Size(75, 23)
+        Me.AboutBtn.TabIndex = 3
+        Me.AboutBtn.Text = "About..."
+        Me.AboutBtn.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel1
         '
@@ -245,9 +255,9 @@ Partial Class MainForm
         '
         Me.SysCheckPage_CheckAgainBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SysCheckPage_CheckAgainBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SysCheckPage_CheckAgainBtn.Location = New System.Drawing.Point(753, 650)
+        Me.SysCheckPage_CheckAgainBtn.Location = New System.Drawing.Point(664, 650)
         Me.SysCheckPage_CheckAgainBtn.Name = "SysCheckPage_CheckAgainBtn"
-        Me.SysCheckPage_CheckAgainBtn.Size = New System.Drawing.Size(118, 23)
+        Me.SysCheckPage_CheckAgainBtn.Size = New System.Drawing.Size(207, 23)
         Me.SysCheckPage_CheckAgainBtn.TabIndex = 4
         Me.SysCheckPage_CheckAgainBtn.Text = "Check again"
         Me.SysCheckPage_CheckAgainBtn.UseVisualStyleBackColor = True
@@ -444,7 +454,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_CleanupAction_Generalize)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_ShutdownOptionsCBox)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_CleanupActionCBox)
-        Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettings_ShutdownOptionLabel)
+        Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_ShutdownOptionLabel)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_CleanupActionLabel)
         Me.AdvSettingsPage_SysprepConfigPanel.Enabled = False
         Me.AdvSettingsPage_SysprepConfigPanel.Location = New System.Drawing.Point(39, 149)
@@ -492,9 +502,9 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Location = New System.Drawing.Point(130, 72)
+        Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Location = New System.Drawing.Point(180, 72)
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Name = "AdvSettingsPage_SysprepUnatt_AnswerFileText"
-        Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Size = New System.Drawing.Size(559, 23)
+        Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Size = New System.Drawing.Size(509, 23)
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.TabIndex = 4
         '
         'AdvSettingsPage_SysprepUnattLabel
@@ -524,10 +534,9 @@ Partial Class MainForm
         Me.AdvSettingsPage_ShutdownOptionsCBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_ShutdownOptionsCBox.FormattingEnabled = True
-        Me.AdvSettingsPage_ShutdownOptionsCBox.Items.AddRange(New Object() {"Restart", "Shut Down", "Exit"})
-        Me.AdvSettingsPage_ShutdownOptionsCBox.Location = New System.Drawing.Point(130, 43)
+        Me.AdvSettingsPage_ShutdownOptionsCBox.Location = New System.Drawing.Point(180, 43)
         Me.AdvSettingsPage_ShutdownOptionsCBox.Name = "AdvSettingsPage_ShutdownOptionsCBox"
-        Me.AdvSettingsPage_ShutdownOptionsCBox.Size = New System.Drawing.Size(559, 23)
+        Me.AdvSettingsPage_ShutdownOptionsCBox.Size = New System.Drawing.Size(509, 23)
         Me.AdvSettingsPage_ShutdownOptionsCBox.TabIndex = 1
         '
         'AdvSettingsPage_CleanupActionCBox
@@ -535,20 +544,19 @@ Partial Class MainForm
         Me.AdvSettingsPage_CleanupActionCBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_CleanupActionCBox.FormattingEnabled = True
-        Me.AdvSettingsPage_CleanupActionCBox.Items.AddRange(New Object() {"Enter System OOBE", "Enter System Audit Mode"})
-        Me.AdvSettingsPage_CleanupActionCBox.Location = New System.Drawing.Point(130, 14)
+        Me.AdvSettingsPage_CleanupActionCBox.Location = New System.Drawing.Point(180, 14)
         Me.AdvSettingsPage_CleanupActionCBox.Name = "AdvSettingsPage_CleanupActionCBox"
-        Me.AdvSettingsPage_CleanupActionCBox.Size = New System.Drawing.Size(559, 23)
+        Me.AdvSettingsPage_CleanupActionCBox.Size = New System.Drawing.Size(509, 23)
         Me.AdvSettingsPage_CleanupActionCBox.TabIndex = 1
         '
-        'AdvSettings_ShutdownOptionLabel
+        'AdvSettingsPage_ShutdownOptionLabel
         '
-        Me.AdvSettings_ShutdownOptionLabel.AutoSize = True
-        Me.AdvSettings_ShutdownOptionLabel.Location = New System.Drawing.Point(20, 46)
-        Me.AdvSettings_ShutdownOptionLabel.Name = "AdvSettings_ShutdownOptionLabel"
-        Me.AdvSettings_ShutdownOptionLabel.Size = New System.Drawing.Size(104, 15)
-        Me.AdvSettings_ShutdownOptionLabel.TabIndex = 0
-        Me.AdvSettings_ShutdownOptionLabel.Text = "Shutdown Option:"
+        Me.AdvSettingsPage_ShutdownOptionLabel.AutoSize = True
+        Me.AdvSettingsPage_ShutdownOptionLabel.Location = New System.Drawing.Point(20, 46)
+        Me.AdvSettingsPage_ShutdownOptionLabel.Name = "AdvSettingsPage_ShutdownOptionLabel"
+        Me.AdvSettingsPage_ShutdownOptionLabel.Size = New System.Drawing.Size(104, 15)
+        Me.AdvSettingsPage_ShutdownOptionLabel.TabIndex = 0
+        Me.AdvSettingsPage_ShutdownOptionLabel.Text = "Shutdown Option:"
         '
         'AdvSettingsPage_CleanupActionLabel
         '
@@ -748,16 +756,6 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
         '
-        'AboutBtn
-        '
-        Me.AboutBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.AboutBtn.Location = New System.Drawing.Point(12, 13)
-        Me.AboutBtn.Name = "AboutBtn"
-        Me.AboutBtn.Size = New System.Drawing.Size(75, 23)
-        Me.AboutBtn.TabIndex = 3
-        Me.AboutBtn.Text = "About..."
-        Me.AboutBtn.UseVisualStyleBackColor = True
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -833,7 +831,7 @@ Partial Class MainForm
     Friend WithEvents AdvSettingsPage_CleanupAction_Generalize As System.Windows.Forms.CheckBox
     Friend WithEvents AdvSettingsPage_ShutdownOptionsCBox As System.Windows.Forms.ComboBox
     Friend WithEvents AdvSettingsPage_CleanupActionCBox As System.Windows.Forms.ComboBox
-    Friend WithEvents AdvSettings_ShutdownOptionLabel As System.Windows.Forms.Label
+    Friend WithEvents AdvSettingsPage_ShutdownOptionLabel As System.Windows.Forms.Label
     Friend WithEvents AdvSettingsPage_CleanupActionLabel As System.Windows.Forms.Label
     Friend WithEvents AdvSettingsPage_ConfigSysprepSettings As System.Windows.Forms.CheckBox
     Friend WithEvents AdvSettingsPage_SysprepPrepToolDeploySteps As System.Windows.Forms.Label

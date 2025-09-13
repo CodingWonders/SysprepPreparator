@@ -77,7 +77,7 @@
         Public Sub New(title As String, description As String, severity As StatusMessageSeverity)
             StatusTitle = title
             StatusDescription = description
-            StatusPossibleResolution = "No resolution is necessary."
+            StatusPossibleResolution = GetValueFromLanguageData("CCPBase.STMSG_NoResolution")
             StatusSeverity = severity
         End Sub
 
@@ -109,13 +109,13 @@
         Public Function SeverityToString(Severity As StatusMessageSeverity) As String
             Select Case Severity
                 Case StatusMessageSeverity.Info
-                    Return "Information"
+                    Return GetValueFromLanguageData("CCPBase.STMSG_Severity_Info")
                 Case StatusMessageSeverity.Warning
-                    Return "Warning"
+                    Return GetValueFromLanguageData("CCPBase.STMSG_Severity_Warning")
                 Case StatusMessageSeverity.Critical
-                    Return "Critical"
+                    Return GetValueFromLanguageData("CCPBase.STMSG_Severity_Critical")
                 Case Else
-                    Return "Unknown"
+                    Return GetValueFromLanguageData("CCPBase.STMSG_Severity_Unknown")
             End Select
         End Function
 

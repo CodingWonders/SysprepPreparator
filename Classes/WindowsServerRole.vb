@@ -45,7 +45,7 @@
             DisplayName = dispName
             MaximumVersion = OSVER_MAXIMUM
             BaselineVersion = baseline
-            CompatibilityCaveat = "none"
+            CompatibilityCaveat = GetValueFromLanguageData("Common.Common_None")
         End Sub
 
         ''' <summary>
@@ -75,7 +75,7 @@
             DisplayName = dispName
             BaselineVersion = baseline
             MaximumVersion = maximum
-            CompatibilityCaveat = "none"
+            CompatibilityCaveat = GetValueFromLanguageData("Common.Common_None")
         End Sub
 
         ''' <summary>

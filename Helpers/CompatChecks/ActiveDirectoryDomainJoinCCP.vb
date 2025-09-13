@@ -13,17 +13,17 @@ Namespace Helpers.CompatChecks
                 If currentDomain IsNot Nothing Then
                     DynaLog.LogMessage("Current domain info is not nothing. This device is well likely part of a domain.")
                     Status.Compatible = True
-                    Status.StatusMessage = New Classes.StatusMessage("Active Directory Domain Join",
-                                                                     "This device is joined to a domain. While you can continue, Sysprep will remove this device from the domain.",
-                                                                     "Either remove the device from the domain now, or let Sysprep do it for you. You can re-add it later if you want.",
+                    Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCPTitle"),
+                                                                     GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCP_NotOK"),
+                                                                     GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCP_NotOK_Resolution_Generic"),
                                                                      Classes.StatusMessage.StatusMessageSeverity.Info)
                 End If
             Catch ex As Exception
                 DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
                 DynaLog.LogMessage("This is expected to happen when the device is not part of a domain.")
                 Status.Compatible = True
-                Status.StatusMessage = New Classes.StatusMessage("Active Directory Domain Join",
-                                                                 "This device is either not joined to a domain or domain information is not available.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCP_OK"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Info)
             End Try
             Return Status

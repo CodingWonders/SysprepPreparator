@@ -14,14 +14,14 @@ Namespace Helpers
         ''' </summary>
         ''' <remarks>To develop and register a PT, read the documentation</remarks>
         Private PreparationTaskModules As New Dictionary(Of String, PreparationTask) From {
-            {"Stop Running Sysprep processes", New SysprepStopperPT()},
-            {"Stop Windows Explorer", New ExplorerStopperPT()},
-            {"Delete Shadow Volumes", New VssAdminShadowVolumeDeletePT()},
-            {"DISM Component Store Cleanup", New DismComponentCleanupPT()},
-            {"Delete Windows Update Cache Files", New WindowsUpdateTempFileCleanupPT()},
-            {"Run Disk Cleanup", New DiskCleanupPT()},
-            {"Export and clear event logs", New EventLogPT()},
-            {"Clear Recycle Bin", New RecycleBinCleanupPT()}
+            {GetValueFromLanguageData("RegisteredPTs.SysprepStopperPT"), New SysprepStopperPT()},
+            {GetValueFromLanguageData("RegisteredPTs.ExplorerStopperPT"), New ExplorerStopperPT()},
+            {GetValueFromLanguageData("RegisteredPTs.VssAdminShadowVolumeDeletePT"), New VssAdminShadowVolumeDeletePT()},
+            {GetValueFromLanguageData("RegisteredPTs.DismComponentCleanupPT"), New DismComponentCleanupPT()},
+            {GetValueFromLanguageData("RegisteredPTs.WindowsUpdateTempFileCleanupPT"), New WindowsUpdateTempFileCleanupPT()},
+            {GetValueFromLanguageData("RegisteredPTs.DiskCleanupPT"), New DiskCleanupPT()},
+            {GetValueFromLanguageData("RegisteredPTs.EventLogPT"), New EventLogPT()},
+            {GetValueFromLanguageData("RegisteredPTs.RecycleBinCleanupPT"), New RecycleBinCleanupPT()}
         }
 
         ''' <summary>
