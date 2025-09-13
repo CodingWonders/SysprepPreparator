@@ -212,4 +212,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -command "cd '$(ProjectDir)' ; iex '$(ProjectDir)PackRelease.ps1'"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
