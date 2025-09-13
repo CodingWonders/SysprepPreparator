@@ -43,7 +43,7 @@ Namespace Helpers.CompatChecks
             {"ADRMS", New WindowsServerRole("RightsManagementServices-Role", "Active Directory Rights Management Services (AD RMS)", OSVER_NONE)},
             {"Application-Server", New WindowsServerRole("Application-Server", "Application Server", OSVER_WINSERVER2008)},
             {"DHCP", New WindowsServerRole("DHCPServer", "Dynamic Host Configuration Protocol (DHCP) Server", OSVER_WINSERVER2008, OSVER_WINSERVER2008)},
-            {"DNS", New WindowsServerRole("DNS-Server-Full-Role", "Domain Name System (DNS) Server", OSVER_NONE, "Not Applicable")},
+            {"DNS", New WindowsServerRole("DNS-Server-Full-Role", "Domain Name System (DNS) Server", OSVER_NONE)},
             {"Fax", New WindowsServerRole("FaxServiceRole", "Fax Server", OSVER_NONE)},
             {"FileAndStorage-Services", New WindowsServerRole("FileAndStorage-Services", "File and Storage Services", OSVER_WINSERVER2008R2)},
             {"Hyper-V", New WindowsServerRole("Microsoft-Hyper-V", "Hyper-V", OSVER_WINSERVER2008R2, "Not supported for a virtual network on Hyper-V™. You must delete any virtual networks before you run the Sysprep tool.")},
