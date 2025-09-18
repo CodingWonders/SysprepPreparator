@@ -1,10 +1,7 @@
-﻿Imports SysprepPreparator.Helpers.CompatChecks
-Imports Microsoft.Dism
+﻿Imports Microsoft.Dism
 Imports System.IO
 Imports SysprepPreparator.Classes
 Imports Microsoft.Win32
-Imports System.Runtime.CompilerServices
-Imports System.Runtime.Serialization
 
 Namespace Helpers.CompatChecks
 
