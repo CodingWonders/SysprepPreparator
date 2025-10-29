@@ -481,6 +481,7 @@ Public Class MainForm
                              My.Application.Info.Version.ToString(),
                              RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"),
                              My.Application.Info.Copyright.Replace("©", "(c)"),
-                             GetCopyrightTimespan(2016, 2016) & " Jeff Kluge"), vbOKOnly + vbInformation, GetValueFromLanguageData("Common.Common_About"))
+                             GetCopyrightTimespan(2016, 2016) & " Jeff Kluge",
+                             GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández"), vbOKOnly + vbInformation, GetValueFromLanguageData("Common.Common_About"))
     End Sub
 End Class
