@@ -51,11 +51,6 @@ Public Class DynaLog
         End If
         Debug.WriteLine(message)
         Try
-            ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.
-            If Not Directory.Exists(Application.StartupPath & "\logs") Then
-                Debug.WriteLine("Creating log directory...")
-                Directory.CreateDirectory(Application.StartupPath & "\logs")
-            End If
             Dim FileLength As Long = 0
             If File.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SP_DynaLog.log") Then
                 FileLength = New FileInfo(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SP_DynaLog.log").Length
