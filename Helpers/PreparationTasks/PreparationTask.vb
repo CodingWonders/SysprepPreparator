@@ -83,16 +83,25 @@ Namespace Helpers.PreparationTasks
         ''' <returns>The selected path in the folder picker</returns>
         ''' <remarks></remarks>
         Public Function ShowFolderBrowserDialog(Description As String) As String Implements IUserInterfaceInterop.ShowFolderBrowserDialog
-            Dim fbd As New FolderBrowserDialog() With {
-                .RootFolder = Environment.SpecialFolder.MyComputer,
-                .ShowNewFolderButton = True,
-                .Description = Description
-            }
+            Dim selectedPath As String = ""
+            ' The FBD will not show in multi-threaded apartment threads, therefore making end-users think tasks that call this function
+            ' will never complete. So we create a separate, single-threaded apartment, thread and we wait for it to finish instead.
+            ' That DOES work
+            Dim thread As New Threading.Thread(Sub()
+                                                   Dim fbd As New FolderBrowserDialog() With {
+                                                       .RootFolder = Environment.SpecialFolder.MyComputer,
+                                                       .ShowNewFolderButton = True,
+                                                       .Description = Description
+                                                   }
 
-            If fbd.ShowDialog() = DialogResult.OK Then
-                Return fbd.SelectedPath
-            End If
-            Return ""
+                                                   If fbd.ShowDialog() = DialogResult.OK Then
+                                                       selectedPath = fbd.SelectedPath
+                                                   End If
+                                               End Sub)
+            thread.SetApartmentState(Threading.ApartmentState.STA)
+            thread.Start()
+            thread.Join()
+            Return selectedPath
         End Function
 
         ''' <summary>
@@ -299,7 +308,6 @@ Namespace Helpers.PreparationTasks
             End If
             Return ""
         End Function
-
     End Class
 
 End Namespace

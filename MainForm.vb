@@ -251,11 +251,16 @@ Public Class MainForm
     ''' Starts the PT Helper
     ''' </summary>
     ''' <remarks></remarks>
-    Sub PrepareComputer()
+    Async Sub PrepareComputer()
         Refresh()
-        Cursor = Cursors.WaitCursor
-        PreparationTaskHelper.RunTasks()
-        Cursor = Cursors.Arrow
+        Await Task.Run(Function()
+                           Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)
+                                                                                            ReportTaskStart(task)
+                                                                                        End Sub,
+                                                                 ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, Boolean))
+                                                                                               ReportTaskSuccess(taskStatus)
+                                                                                           End Sub)
+                       End Function)
         ButtonPanel.Visible = True
         Next_Button.PerformClick()
     End Sub
