@@ -24,8 +24,12 @@ Namespace Helpers.PreparationTasks
                 If EventLogs.Count > 0 Then
                     Using session As New EventLogSession()
                         For Each EventLogEntry In EventLogs
-                            DynaLog.LogMessage("Clearing event log " & EventLogEntry & "...")
-                            session.ClearLog(EventLogEntry)
+                            Try
+                                DynaLog.LogMessage("Clearing event log " & EventLogEntry & "...")
+                                session.ClearLog(EventLogEntry)
+                            Catch ex As Exception
+                                DynaLog.LogMessage("Could not clear event log " & EventLogEntry & ". Message: " & ex.Message)
+                            End Try
                         Next
                     End Using
                 End If
