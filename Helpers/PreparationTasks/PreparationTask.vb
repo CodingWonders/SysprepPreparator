@@ -39,6 +39,11 @@ Namespace Helpers.PreparationTasks
         Protected Friend IsInTestMode As Boolean = Environment.GetCommandLineArgs().Contains("/test")
 
         ''' <summary>
+        ''' Determines whether the Sysprep Preparation Tool is in Automatic mode
+        ''' </summary>
+        Protected Friend IsInAutoMode As Boolean = Environment.GetCommandLineArgs().Contains("/auto")
+
+        ''' <summary>
         ''' Shows a file picker to open a file
         ''' </summary>
         ''' <param name="MultiSelect">Whether to allow file picker to select multiple files</param>

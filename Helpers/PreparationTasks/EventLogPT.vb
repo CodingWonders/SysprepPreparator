@@ -86,7 +86,7 @@ Namespace Helpers.PreparationTasks
         ''' <returns>Whether the cleanup process succeeded</returns>
         ''' <remarks>Event log cleanup will not be performed when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
-            ExportEventLogs()
+            If Not IsInAutoMode Then ExportEventLogs()              ' exporting event logs will not be done in auto mode for now
             If IsInTestMode Then Return True
             Return ClearEventLogs()
         End Function

@@ -94,6 +94,20 @@ Public Class MainForm
 
     Dim currentTheme As Theme
 
+    Sub RunAutoMode()
+        DynaLog.LogMessage("Auto Mode enabled -- performing steps automatically...")
+
+        Do Until SettingPreparationPanel.Visible
+            If SystemCheckPanel.Visible AndAlso Not Environment.GetCommandLineArgs().Contains("/test") Then
+                If PerformedChecks.Any(Function(check) Not check.Compatible) Then
+                    Exit Do
+                End If
+            End If
+
+            Next_Button.PerformClick()
+        Loop
+    End Sub
+
     ''' <summary>
     ''' Changes the wizard page
     ''' </summary>
@@ -413,6 +427,10 @@ Public Class MainForm
         AddHandler AdvSettingsPage_VMMode.CheckedChanged, AddressOf ChangeSysprepConfiguration
         ChangeTheme()
         FinishPage_CloseBtn.Enabled = Environment.GetCommandLineArgs().Contains("/test")
+
+        If Environment.GetCommandLineArgs().Contains("/auto") Then
+            RunAutoMode()
+        End If
     End Sub
 
     Private Sub SysCheckPage_ChecksLv_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SysCheckPage_ChecksLv.SelectedIndexChanged
