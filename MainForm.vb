@@ -96,11 +96,26 @@ Public Class MainForm
 
     Sub RunAutoMode()
         DynaLog.LogMessage("Auto Mode enabled -- performing steps automatically...")
+        WindowHelper.DisableCloseCapability(Handle)
 
         Do Until SettingPreparationPanel.Visible
             If SystemCheckPanel.Visible AndAlso Not Environment.GetCommandLineArgs().Contains("/test") Then
                 If PerformedChecks.Any(Function(check) Not check.Compatible) Then
                     Exit Do
+                End If
+
+                ' Checks we have reported warnings on may be important to read
+                If PerformedChecks.Any(Function(check) check.StatusMessage.StatusSeverity = StatusMessage.StatusMessageSeverity.Warning) Then
+                    Dim compatWarningStr As String = ""
+
+                    For Each compatWarning In PerformedChecks.Where(Function(check) check.StatusMessage.StatusSeverity = StatusMessage.StatusMessageSeverity.Warning)
+                        compatWarningStr &= String.Format("- {0}: {1}{2}", compatWarning.StatusMessage.StatusTitle, compatWarning.StatusMessage.StatusDescription, Environment.NewLine)
+                    Next
+
+                    If MessageBox.Show(String.Format(GetValueFromLanguageData("MainForm.AutoMode_WarningsDetected"), compatWarningStr),
+                                       Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.No Then
+                        Exit Do
+                    End If
                 End If
             End If
 
@@ -142,6 +157,7 @@ Public Class MainForm
         ButtonPanel.Visible = Not (NewPage > WizardPage.Page.AdvSettingsPage)
 
         If NewPage = WizardPage.Page.SettingPreparationPage Then
+            WindowHelper.DisableCloseCapability(Handle)
             PrepareComputer()
         ElseIf NewPage = WizardPage.Page.FinishPage Then
             SysprepComputer()
@@ -235,7 +251,7 @@ Public Class MainForm
         Select Case WizardPage
             Case SysprepPreparator.WizardPage.Page.SysCheckPage
                 If Not Environment.GetCommandLineArgs().Contains("/test") AndAlso PerformedChecks.Any(Function(PerformedCheck) PerformedCheck.Compatible = False) Then
-                    MessageBox.Show(GetValueFromLanguageData("MainForm.IncompatibleCCPMessage"))
+                    MessageBox.Show(GetValueFromLanguageData("MainForm.IncompatibleCCPMessage"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
         End Select
@@ -300,6 +316,8 @@ Public Class MainForm
 
             MsgBox("Sysprep exited with code " & sysprepProcess.ExitCode, vbOKOnly + vbInformation)
         End If
+
+        If Environment.GetCommandLineArgs().Contains("/auto") Then Close()
     End Sub
 
     ''' <summary>
@@ -495,6 +513,11 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        If SettingPreparationPanel.Visible Then
+            e.Cancel = True
+            Exit Sub
+        End If
+
         DynaLog.LogMessage("We Are Done")
         DynaLog.EndLogging()
     End Sub

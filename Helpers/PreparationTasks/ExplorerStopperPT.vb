@@ -16,7 +16,7 @@ Namespace Helpers.PreparationTasks
         ''' <remarks>This will not launch when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
             DynaLog.LogMessage("Stopping Windows Explorer...")
-            If IsInTestMode Then Return True
+            If IsInTestMode Or IsInAutoMode Then Return True
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "taskkill.exe"),
                               "/f /im explorer.exe", HideWindow:=True) = PROC_SUCCESS
         End Function
