@@ -18,8 +18,8 @@ Namespace Helpers.CompatChecks
                                                                      GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCP_NotOK_Resolution_Generic"),
                                                                      Classes.StatusMessage.StatusMessageSeverity.Info)
                 End If
-            Catch ex As Exception
-                DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
+            Catch addsEx As ActiveDirectoryObjectNotFoundException
+                DynaLog.LogMessage("A connection could not be established with the Domain Controller due to an error. Message: " & addsEx.Message)
                 DynaLog.LogMessage("This is expected to happen when the device is not part of a domain.")
                 Status.Compatible = True
                 Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("ActiveDirectoryDomainJoinCCP.CCPTitle"),
