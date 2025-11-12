@@ -3,6 +3,7 @@ Imports System.Windows.Forms
 Imports System.IO
 Imports System.Management
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Threading
 
 Namespace Helpers.PreparationTasks
 
@@ -92,17 +93,17 @@ Namespace Helpers.PreparationTasks
             ' The FBD will not show in multi-threaded apartment threads, therefore making end-users think tasks that call this function
             ' will never complete. So we create a separate, single-threaded apartment, thread and we wait for it to finish instead.
             ' That DOES work
-            Dim thread As New Threading.Thread(Sub()
-                                                   Dim fbd As New FolderBrowserDialog() With {
+            Dim thread As New Thread(Sub()
+                                         Dim fbd As New FolderBrowserDialog() With {
                                                        .RootFolder = Environment.SpecialFolder.MyComputer,
                                                        .ShowNewFolderButton = True,
                                                        .Description = Description
                                                    }
 
-                                                   If fbd.ShowDialog() = DialogResult.OK Then
-                                                       selectedPath = fbd.SelectedPath
-                                                   End If
-                                               End Sub)
+                                         If fbd.ShowDialog() = DialogResult.OK Then
+                                             selectedPath = fbd.SelectedPath
+                                         End If
+                                     End Sub)
             thread.SetApartmentState(Threading.ApartmentState.STA)
             thread.Start()
             thread.Join()
