@@ -120,7 +120,13 @@ Namespace Helpers.PreparationTasks
             MessageBox.Show(Message, Caption, MessageBoxButtons.OK)
         End Sub
 
+        ''' <summary>
+        ''' The REG application is not found on the system
+        ''' </summary>
         Const DTERR_RegNotFound As Integer = 2
+        ''' <summary>
+        ''' A required argument object for REG operations is either null or empty
+        ''' </summary>
         Const DTERR_RegItemObjectNull As Integer = 1
 
         ''' <summary>
@@ -290,23 +296,39 @@ Namespace Helpers.PreparationTasks
                                                RegMountPath))
         End Function
 
+        ''' <summary>
+        ''' Determines whether a given folder path is a root path
+        ''' </summary>
+        ''' <param name="FolderPath">The path to a folder</param>
+        ''' <returns>Whether the folder is a root path</returns>
         Private Function IsRootPath(FolderPath As String) As Boolean
             Return Path.GetPathRoot(FolderPath) = FolderPath
         End Function
 
-        Public Function RemoveRecursive(DirectoryToDelete As String) As Boolean Implements IFileProcessor.RemoveRecursive
-            If IsRootPath(DirectoryToDelete) Then Return False
-            If Directory.Exists(DirectoryToDelete) Then
+        ''' <summary>
+        ''' Removes the contents of a directory, and any subdirectories within the directory, automatically
+        ''' and, then, removes the directory
+        ''' </summary>
+        ''' <param name="DirectoryToRemove">The directory to remove</param>
+        ''' <returns>Whether removal succeeded</returns>
+        Public Function RemoveRecursive(DirectoryToRemove As String) As Boolean Implements IFileProcessor.RemoveRecursive
+            If IsRootPath(DirectoryToRemove) Then Return False
+            If Directory.Exists(DirectoryToRemove) Then
                 Try
-                    Directory.Delete(DirectoryToDelete, True)
+                    Directory.Delete(DirectoryToRemove, True)
                 Catch ex As Exception
                     Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                                      "/c del " & Quote & DirectoryToDelete & Quote & " /F /S /Q", HideWindow:=True, Inconditional:=True) = PROC_SUCCESS
+                                      "/c del " & Quote & DirectoryToRemove & Quote & " /F /S /Q", HideWindow:=True, Inconditional:=True) = PROC_SUCCESS
                 End Try
             End If
             Return True
         End Function
 
+        ''' <summary>
+        ''' Gets the Security Identifier, or SID, of a user given its name.
+        ''' </summary>
+        ''' <param name="UserName">The user name to get the SID of</param>
+        ''' <returns>The SID of the user</returns>
         Public Function GetUserSid(UserName As String) As String Implements IWmiUserProcessor.GetUserSid
             Dim UserSidCollection As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT SID FROM Win32_UserAccount WHERE LocalAccount = True AND Name LIKE " & Quote & UserName & Quote)
             If UserSidCollection IsNot Nothing Then
