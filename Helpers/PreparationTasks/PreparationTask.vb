@@ -324,6 +324,13 @@ Namespace Helpers.PreparationTasks
             Return True
         End Function
 
+        ''' <summary>
+        ''' Copies the contents of a directory, and any subdirectories within the directory,
+        ''' to a given destination.
+        ''' </summary>
+        ''' <param name="SourceDirectory">The directory to copy</param>
+        ''' <param name="DestinationDirectory">The destination of the copied files</param>
+        ''' <returns>Whether the copy succeeded</returns>
         Public Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean Implements IFileProcessor.CopyRecursive
             ' We make sure the directory exists, if it doesn't exist, we stop.
             If Not Directory.Exists(SourceDirectory) Then Return False
