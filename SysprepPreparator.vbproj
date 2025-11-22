@@ -114,6 +114,7 @@
     <Compile Include="Helpers\PreparationTaskHelper.vb" />
     <Compile Include="Helpers\PreparationTasks\DiskCleanupPT.vb" />
     <Compile Include="Helpers\PreparationTasks\DismComponentCleanupPT.vb" />
+    <Compile Include="Helpers\PreparationTasks\DTImageCapturePT.vb" />
     <Compile Include="Helpers\PreparationTasks\EventLogPT.vb" />
     <Compile Include="Helpers\PreparationTasks\ExplorerStopperPT.vb" />
     <Compile Include="Helpers\PreparationTasks\PreparationTask.vb" />

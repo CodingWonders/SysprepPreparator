@@ -10,6 +10,8 @@
         ''' <returns>Whether removal succeeded</returns>
         Function RemoveRecursive(DirectoryToRemove As String) As Boolean
 
+        Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean
+
     End Interface
 
 End Namespace

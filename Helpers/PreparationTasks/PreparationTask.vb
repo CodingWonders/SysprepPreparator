@@ -324,6 +324,46 @@ Namespace Helpers.PreparationTasks
             Return True
         End Function
 
+        Public Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean Implements IFileProcessor.CopyRecursive
+            ' We make sure the directory exists, if it doesn't exist, we stop.
+            If Not Directory.Exists(SourceDirectory) Then Return False
+
+            ' If the destination folder does not exist, then we try creating it. If we couldn't,
+            ' we simply give up.
+            If Not Directory.Exists(DestinationDirectory) Then
+                Try
+                    Directory.CreateDirectory(DestinationDirectory)
+                Catch ex As Exception
+                    Return False
+                End Try
+            End If
+
+            Try
+                ' Now, we create all the directories of the source folder to the destination
+                Dim dirsInSource As String() = Directory.GetDirectories(SourceDirectory, "*", SearchOption.AllDirectories)
+                For Each dirInSource In dirsInSource
+                    Dim sourcePath As String = dirInSource.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                    If Not Directory.Exists(destinationPath) Then
+                        Directory.CreateDirectory(destinationPath)
+                    End If
+                Next
+
+                ' Next, we copy all the files in the source directory to the destination
+                For Each FileToCopy In Directory.GetFiles(SourceDirectory, "*", SearchOption.AllDirectories)
+                    Dim sourcePath As String = FileToCopy.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                    File.Copy(FileToCopy, destinationPath, True)
+                Next
+            Catch ex As Exception
+                Return False
+            End Try
+
+            Return True
+        End Function
+
         ''' <summary>
         ''' Gets the Security Identifier, or SID, of a user given its name.
         ''' </summary>
