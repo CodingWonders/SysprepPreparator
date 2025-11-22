@@ -205,7 +205,7 @@ Namespace Helpers.PreparationTasks
 
         Private Sub CleanupOnFailure(folder As String)
             Try
-                Directory.Delete(folder, True)
+                RemoveRecursive(folder)
             Catch ex As Exception
 
             End Try
