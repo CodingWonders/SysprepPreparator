@@ -28,20 +28,26 @@ Namespace Helpers
         ''' <summary>
         ''' Performs the tasks of all the registered Preparation Tasks (PTs)
         ''' </summary>
+        ''' <param name="ProgressStartReporter">(Optional) An event handler for PT start events</param>
+        ''' <param name="ProgressFinishedReporter">(Optional) An event handler for PT finish events</param>
+        ''' <param name="ProgressSubProcessReporter">(Optional) An event handler for PT subprocess status change events</param>
         ''' <returns>All the success events</returns>
         ''' <remarks></remarks>
         Public Function RunTasks(Optional ProgressStartReporter As Action(Of String) = Nothing,
-                                 Optional ProgressFinishedReporter As Action(Of Dictionary(Of String, Boolean)) = Nothing) As List(Of Boolean)
+                                 Optional ProgressFinishedReporter As Action(Of Dictionary(Of String, Boolean)) = Nothing,
+                                 Optional ProgressSubProcessReporter As Action(Of String) = Nothing) As List(Of Boolean)
             DynaLog.LogMessage("Preparing to run Preparation Tasks (PTs)...")
             Dim StatusList As New List(Of Boolean)
 
             For Each PreparationTaskModule In PreparationTaskModules.Keys
                 If ProgressStartReporter IsNot Nothing Then ProgressStartReporter.Invoke(PreparationTaskModule)
                 DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name)
+                PreparationTaskModules(PreparationTaskModule).SubProcessReporter = ProgressSubProcessReporter
                 Dim result As Boolean = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
                 DynaLog.LogMessage("PT Succeeded? " & result)
                 StatusList.Add(result)
                 If ProgressFinishedReporter IsNot Nothing Then ProgressFinishedReporter.Invoke(New Dictionary(Of String, Boolean) From {{PreparationTaskModule, result}})
+                If ProgressSubProcessReporter IsNot Nothing Then ProgressSubProcessReporter.Invoke("")      ' clear subprocess status when finished
                 Threading.Thread.Sleep(100)
             Next
 

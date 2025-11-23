@@ -51,13 +51,19 @@ Public Class MainForm
     Public Event TaskReported(Task As Dictionary(Of String, Boolean))
 
     ''' <summary>
+    ''' This event is raised when a Preparation Task updates a subprocess status
+    ''' </summary>
+    ''' <param name="Status">The reported status</param>
+    ''' <remarks></remarks>
+    Public Event SubProcessStatusUpdated(Status As String)
+
+    ''' <summary>
     ''' Handles the TaskStarted event
     ''' </summary>
     ''' <param name="taskName">The name of the task</param>
     ''' <remarks></remarks>
     Private Sub OnTaskStarted(taskName As String) Handles Me.TaskStarted
         SettingPreparationPage_ProgressLabel.Text = String.Format(GetValueFromLanguageData("MainForm.PreparationPanel_CurrentTaskField"), taskName)
-        Refresh()
     End Sub
 
     ''' <summary>
@@ -68,7 +74,14 @@ Public Class MainForm
     Private Sub OnTaskReported(Task As Dictionary(Of String, Boolean)) Handles Me.TaskReported
         Dim taskName As String = Task.Keys(0)
         SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, If(Task(taskName), GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No"))}))
-        Refresh()
+    End Sub
+
+    ''' <summary>
+    ''' Handles the SubProcessStatusUpdated event
+    ''' </summary>
+    ''' <param name="Status">The reported status</param>
+    Private Sub OnSubProcessStatusUpdated(Status As String) Handles Me.SubProcessStatusUpdated
+        SettingPreparationPage_SubProcessProgressLabel.Text = Status
     End Sub
 
     ''' <summary>
@@ -87,6 +100,15 @@ Public Class MainForm
     ''' <remarks></remarks>
     Sub ReportTaskSuccess(task As Dictionary(Of String, Boolean))
         RaiseEvent TaskReported(task)
+    End Sub
+
+    ''' <summary>
+    ''' A public method for the PT Helper to report task subprocess status updates
+    ''' </summary>
+    ''' <param name="Status">The reported status</param>
+    ''' <remarks></remarks>
+    Sub ReportSubProcessStatusUpdate(Status As String)
+        RaiseEvent SubProcessStatusUpdated(Status)
     End Sub
 
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
@@ -289,7 +311,10 @@ Public Class MainForm
                                                                                         End Sub,
                                                                  ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, Boolean))
                                                                                                ReportTaskSuccess(taskStatus)
-                                                                                           End Sub)
+                                                                                           End Sub,
+                                                                 ProgressSubProcessReporter:=Sub(Status As String)
+                                                                                                 ReportSubProcessStatusUpdate(Status)
+                                                                                             End Sub)
                        End Function)
         ButtonPanel.Visible = True
         Next_Button.PerformClick()

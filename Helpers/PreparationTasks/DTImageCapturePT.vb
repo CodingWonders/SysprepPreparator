@@ -354,6 +354,7 @@ Namespace Helpers.PreparationTasks
             End If
 
             Try
+                ReportSubProcessStatus("Copying image and boot files...")
                 DynaLog.LogMessage("Copying boot image to destination...")
                 File.Copy(sourceFile, destinationFile, True)
                 ' To make sure we can make changes we'll get file attributes and remove the readonly attribute
@@ -371,26 +372,30 @@ Namespace Helpers.PreparationTasks
                 CopyRecursive(bootSourceFolder, bootFileDestinationFolder)
 
                 If Not IsInTestMode Then
+                    ReportSubProcessStatus("Updating boot configuration data...")
                     DynaLog.LogMessage("Sysprep Preparator is not in test mode. Proceeding with BCD update...")
                     ' Update BCD only when we AREN'T in test mode.
                     UpdateBcd(Path.Combine(bootFileDestinationFolder, "boot.sdi"), destinationFile)
                 End If
 
                 DynaLog.LogMessage("Mounting DT PE image...")
+                ReportSubProcessStatus("Mounting Windows image...")
                 MountImage(destinationFile, 1, destinationMountDir, False, Sub(progress As DismProgress)
                                                                                If progress.Current > 100 Then Exit Sub
                                                                                DynaLog.LogMessage("Mount operation progress: " & progress.Current & "%")
-                                                                               ' TODO  sub-reporter impl
+                                                                               ReportSubProcessStatus(String.Format("Mounting Windows image... ({0}%)", progress.Current))
                                                                            End Sub)
                 ' Perform modifications to image
                 DynaLog.LogMessage("Allowing the DT PE to load the image capture script automatically...")
+                DynaLog.LogMessage("Modifying boot image to load capture script...")
                 ModifyImage(destinationMountDir)
                 ' Unmount the image
-                DynaLog.LogMessage("Unounting DT PE image...")
+                DynaLog.LogMessage("Unmounting DT PE image...")
+                ReportSubProcessStatus("Unmounting Windows image...")
                 UnmountImage(destinationMountDir, True, Sub(progress As DismProgress)
                                                             If (progress.Current / 2) > 100 Then Exit Sub
                                                             DynaLog.LogMessage("Unmount operation progress - reported by API: " & progress.Current & "% - actual progress: " & (progress.Current / 2) & "%")
-                                                            ' TODO  sub-reporter impl
+                                                            ReportSubProcessStatus(String.Format("Unmounting Windows image... ({0}%)", Math.Round((progress.Current / 2), 0)))
                                                         End Sub)
 
 

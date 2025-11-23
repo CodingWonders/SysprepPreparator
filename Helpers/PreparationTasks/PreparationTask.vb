@@ -45,6 +45,25 @@ Namespace Helpers.PreparationTasks
         Protected Friend IsInAutoMode As Boolean = Environment.GetCommandLineArgs().Contains("/auto")
 
         ''' <summary>
+        ''' An event sender for subprocess status changes
+        ''' </summary>
+        Protected Friend SubProcessReporter As Action(Of String) = Nothing
+
+        ''' <summary>
+        ''' Reports a subprocess status change with a given status message.
+        ''' </summary>
+        ''' <param name="Status">The status message to report</param>
+        Public Sub ReportSubProcessStatus(Status As String)
+            ' null propagation is not used here to enable backcompat with vs2012
+
+#Disable Warning IDE0031 ' Usar propagación de null
+            If SubProcessReporter IsNot Nothing Then
+#Enable Warning IDE0031 ' Usar propagación de null
+                SubProcessReporter.Invoke(Status)
+            End If
+        End Sub
+
+        ''' <summary>
         ''' Shows a file picker to open a file
         ''' </summary>
         ''' <param name="MultiSelect">Whether to allow file picker to select multiple files</param>
