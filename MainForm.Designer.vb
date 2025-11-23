@@ -80,6 +80,7 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
+        Me.SettingPreparationPage_SubProcessProgressLabel = New System.Windows.Forms.Label()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -605,6 +606,7 @@ Partial Class MainForm
         'SettingPreparationPanel
         '
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPanel_TaskLv)
+        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_SubProcessProgressLabel)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_ProgressLabel)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Description)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Header)
@@ -661,7 +663,7 @@ Partial Class MainForm
         Me.SettingPreparationPage_Description.AutoEllipsis = True
         Me.SettingPreparationPage_Description.Location = New System.Drawing.Point(17, 64)
         Me.SettingPreparationPage_Description.Name = "SettingPreparationPage_Description"
-        Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(857, 212)
+        Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(857, 45)
         Me.SettingPreparationPage_Description.TabIndex = 1
         Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." &
     ""
@@ -755,6 +757,16 @@ Partial Class MainForm
         'AdvSettingsPage_SysprepUnatt_OFD
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
+        '
+        'SettingPreparationPage_SubProcessProgressLabel
+        '
+        Me.SettingPreparationPage_SubProcessProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPage_SubProcessProgressLabel.AutoEllipsis = True
+        Me.SettingPreparationPage_SubProcessProgressLabel.Location = New System.Drawing.Point(39, 150)
+        Me.SettingPreparationPage_SubProcessProgressLabel.Name = "SettingPreparationPage_SubProcessProgressLabel"
+        Me.SettingPreparationPage_SubProcessProgressLabel.Size = New System.Drawing.Size(831, 26)
+        Me.SettingPreparationPage_SubProcessProgressLabel.TabIndex = 4
         '
         'MainForm
         '
@@ -852,4 +864,5 @@ Partial Class MainForm
     Friend WithEvents FinishPage_CloseBtn As System.Windows.Forms.Button
     Friend WithEvents SysCheckPage_CheckDetails_ResolutionValue As System.Windows.Forms.TextBox
     Friend WithEvents AboutBtn As Button
+    Friend WithEvents SettingPreparationPage_SubProcessProgressLabel As Label
 End Class

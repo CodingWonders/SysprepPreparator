@@ -45,6 +45,25 @@ Namespace Helpers.PreparationTasks
         Protected Friend IsInAutoMode As Boolean = Environment.GetCommandLineArgs().Contains("/auto")
 
         ''' <summary>
+        ''' An event sender for subprocess status changes
+        ''' </summary>
+        Protected Friend SubProcessReporter As Action(Of String) = Nothing
+
+        ''' <summary>
+        ''' Reports a subprocess status change with a given status message.
+        ''' </summary>
+        ''' <param name="Status">The status message to report</param>
+        Public Sub ReportSubProcessStatus(Status As String)
+            ' null propagation is not used here to enable backcompat with vs2012
+
+#Disable Warning IDE0031 ' Usar propagación de null
+            If SubProcessReporter IsNot Nothing Then
+#Enable Warning IDE0031 ' Usar propagación de null
+                SubProcessReporter.Invoke(Status)
+            End If
+        End Sub
+
+        ''' <summary>
         ''' Shows a file picker to open a file
         ''' </summary>
         ''' <param name="MultiSelect">Whether to allow file picker to select multiple files</param>
@@ -321,6 +340,53 @@ Namespace Helpers.PreparationTasks
                                       "/c del " & Quote & DirectoryToRemove & Quote & " /F /S /Q", HideWindow:=True, Inconditional:=True) = PROC_SUCCESS
                 End Try
             End If
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Copies the contents of a directory, and any subdirectories within the directory,
+        ''' to a given destination.
+        ''' </summary>
+        ''' <param name="SourceDirectory">The directory to copy</param>
+        ''' <param name="DestinationDirectory">The destination of the copied files</param>
+        ''' <returns>Whether the copy succeeded</returns>
+        Public Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean Implements IFileProcessor.CopyRecursive
+            ' We make sure the directory exists, if it doesn't exist, we stop.
+            If Not Directory.Exists(SourceDirectory) Then Return False
+
+            ' If the destination folder does not exist, then we try creating it. If we couldn't,
+            ' we simply give up.
+            If Not Directory.Exists(DestinationDirectory) Then
+                Try
+                    Directory.CreateDirectory(DestinationDirectory)
+                Catch ex As Exception
+                    Return False
+                End Try
+            End If
+
+            Try
+                ' Now, we create all the directories of the source folder to the destination
+                Dim dirsInSource As String() = Directory.GetDirectories(SourceDirectory, "*", SearchOption.AllDirectories)
+                For Each dirInSource In dirsInSource
+                    Dim sourcePath As String = dirInSource.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                    If Not Directory.Exists(destinationPath) Then
+                        Directory.CreateDirectory(destinationPath)
+                    End If
+                Next
+
+                ' Next, we copy all the files in the source directory to the destination
+                For Each FileToCopy In Directory.GetFiles(SourceDirectory, "*", SearchOption.AllDirectories)
+                    Dim sourcePath As String = FileToCopy.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                    File.Copy(FileToCopy, destinationPath, True)
+                Next
+            Catch ex As Exception
+                Return False
+            End Try
+
             Return True
         End Function
 
