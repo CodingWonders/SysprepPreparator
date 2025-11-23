@@ -217,7 +217,7 @@ Namespace Helpers.PreparationTasks
                 endIndex As Integer = targetGuidOutput.LastIndexOf("}")
 
             targetGuid = targetGuidOutput.Substring(startIndex, endIndex - startIndex + 1)
-            ' TODO  dynalog log target guid
+            DynaLog.LogMessage("Obtained BCD GUID: " & targetGuid)
 
             ' Update our BCD entry
             Dim osloaderPath As String = If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI",
@@ -417,7 +417,7 @@ Namespace Helpers.PreparationTasks
             Try
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
             Catch ex As Exception
-                ' TODO  implement dynalog
+                DynaLog.LogMessage("Could not modify image. Error message: " & ex.Message)
             End Try
         End Sub
     End Class
