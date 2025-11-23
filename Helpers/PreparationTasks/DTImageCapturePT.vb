@@ -1,6 +1,5 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
-Imports System.Reflection
 Imports Microsoft.Dism
 
 Namespace Helpers.PreparationTasks
