@@ -257,7 +257,7 @@ Namespace Helpers.PreparationTasks
 
                 If Not IsInTestMode Then
                     ' Update BCD only when we AREN'T in test mode.
-                    UpdateBcd("", "")
+                    UpdateBcd(Path.Combine(bootFileDestinationFolder, "boot.sdi"), destinationFile)
                 End If
 
                 MountImage(destinationFile, 1, destinationMountDir, False, Sub(progress As DismProgress)
