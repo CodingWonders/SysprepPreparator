@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Reflection
 Imports Microsoft.Dism
 
 Namespace Helpers.PreparationTasks
@@ -9,37 +10,61 @@ Namespace Helpers.PreparationTasks
 
         Private WillPrepareBootImage As Boolean = Environment.GetCommandLineArgs().Contains("/dt_capture")
 
+        ''' <summary>
+        ''' Gets the information of a given Windows image.
+        ''' </summary>
+        ''' <param name="ImageFile">The path of the Windows image to get information about</param>
+        ''' <returns>A DismImageInfoCollection object containing information about the Windows image</returns>
         Private Function GetImageFileInformation(ImageFile As String) As DismImageInfoCollection
+            DynaLog.LogMessage("Getting information about this image file...")
+            DynaLog.LogMessage("- Image file: " & ImageFile)
+
             Dim ImageCollection As DismImageInfoCollection = Nothing
 
-            If Not File.Exists(ImageFile) Then Return Nothing
+            If Not File.Exists(ImageFile) Then
+                DynaLog.LogMessage("Specified image file does not exist. Stopping...")
+                Return Nothing
+            End If
 
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Getting image information...")
                 ImageCollection = DismApi.GetImageInfo(ImageFile)
             Catch ex As Exception
-
+                DynaLog.LogMessage("Could not grab image information. Error message: " & ex.Message)
             Finally
                 Try
+                    DynaLog.LogMessage("Attempting to shut down API...")
                     DismApi.Shutdown()
                 Catch ex As Exception
                     ' ignore exceptions
                 End Try
             End Try
 
+            If ImageCollection IsNot Nothing Then DynaLog.LogMessage("Amount of images obtained: " & ImageCollection.Count)     ' report this info
+
             Return ImageCollection
         End Function
 
+        ''' <summary>
+        ''' Gets the mounted images in the system.
+        ''' </summary>
+        ''' <returns>A DismMountedImageInfoCollection object containing mounted images</returns>
         Private Function GetMountedImages() As DismMountedImageInfoCollection
+            DynaLog.LogMessage("Getting mounted images...")
             Dim MountedImageCollection As DismMountedImageInfoCollection = Nothing
 
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Getting mounted image information...")
                 MountedImageCollection = DismApi.GetMountedImages()
             Catch ex As Exception
-
+                DynaLog.LogMessage("Could not grab mounted image information. Error message: " & ex.Message)
             Finally
                 Try
+                    DynaLog.LogMessage("Attempting to shut down API...")
                     DismApi.Shutdown()
                 Catch ex As Exception
                     ' ignore exceptions
@@ -49,33 +74,69 @@ Namespace Helpers.PreparationTasks
             Return MountedImageCollection
         End Function
 
+        ''' <summary>
+        ''' Mounts a specified Windows image to a specified directory.
+        ''' </summary>
+        ''' <param name="ImageFile">The path of the Windows image to mount</param>
+        ''' <param name="Index">The index of the Windows image to mount</param>
+        ''' <param name="MountDir">The directory to mount the Windows image to</param>
+        ''' <param name="ReadOnlyMount">(Optional) Whether to perform a read-only mount. Changes will not be saved if readonly is used</param>
+        ''' <param name="ProgressOutput">(Optional) A callback for the mount operation</param>
+        ''' <returns>True if the mount operation succeeded, False otherwise.</returns>
+        ''' <remarks>
+        ''' This function will return False:
+        ''' <list type="bullet">
+        '''     <item>
+        '''         If the Windows image does not exist
+        '''     </item>
+        '''     <item>
+        '''         <term>If a bad index is used</term>
+        '''         <description>Indexes lower than 1 and those that exceed the total amount of image(s) of <paramref name="ImageFile"/> are treated as bad</description>
+        '''     </item>
+        '''     <item>
+        '''         If the mount directory does not exist and it could not be created
+        '''     </item>
+        ''' </list>
+        ''' </remarks>
         Private Function MountImage(ImageFile As String, Index As Integer, MountDir As String, Optional ReadOnlyMount As Boolean = False, Optional ProgressOutput As DismProgressCallback = Nothing) As Boolean
+            DynaLog.LogMessage("Preparing to mount Windows image...")
+            DynaLog.LogMessage("- Image file to mount: " & ImageFile)
+            DynaLog.LogMessage("- Image index: " & Index)
+            DynaLog.LogMessage("- Mount Directory: " & MountDir)
+            DynaLog.LogMessage("- Perform read-only mount? " & If(ReadOnlyMount, "Yes", "No"))
+            DynaLog.LogMessage("- Is a progress callback defined? " & If(ProgressOutput IsNot Nothing, "Yes", "No"))
+
             If Not File.Exists(ImageFile) Then
-                ' TODO  DynaLog call
+                DynaLog.LogMessage("Image file does not exist. Stopping...")
                 Return False
             End If
             If Index < 1 Then Return False      ' For now we'll only check that. Then we can check index count
 
             If Not Directory.Exists(MountDir) Then
+                DynaLog.LogMessage("Mount directory does not exist. Attempting to create it...")
                 ' If the mount directory does not exist, we'll try creating it. If we couldn't,
                 ' we simply give up.
                 Try
                     Directory.CreateDirectory(MountDir)
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not create the directory. Error message: " & ex.Message)
                     Return False
                 End Try
             End If
 
+            DynaLog.LogMessage("Getting information about this image file...")
             Dim infoCollection As DismImageInfoCollection = GetImageFileInformation(ImageFile)
             If infoCollection Is Nothing OrElse Index > infoCollection.Count Then
-
+                DynaLog.LogMessage("Either we could not grab image information or specified index exceeds image count. Stopping...")
                 Return False
             End If
 
             Dim mounted As Boolean = False
 
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Mounting Windows image...")
                 ' If we haven't defined a callback object for the operation progress, we call
                 ' the API without passing it anything. Otherwise, we pass it.
                 If ProgressOutput IsNot Nothing Then
@@ -86,9 +147,10 @@ Namespace Helpers.PreparationTasks
 
                 mounted = True
             Catch ex As Exception
-                ' TODO  implement dynalog
+                DynaLog.LogMessage("Could not mount Windows image. Error message: " & ex.Message)
             Finally
                 Try
+                    DynaLog.LogMessage("Attempting to shut down API...")
                     DismApi.Shutdown()
                 Catch ex As Exception
                     ' Ignore exceptions
@@ -117,6 +179,11 @@ Namespace Helpers.PreparationTasks
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Updates the Boot Configuration Data to boot to the DT PE image.
+        ''' </summary>
+        ''' <param name="sdiPath">The path of a boot.sdi file used by Windows PE</param>
+        ''' <param name="bootImagePath">The path of a Windows PE image</param>
         Private Sub UpdateBcd(sdiPath As String, bootImagePath As String)
             Dim targetGuidOutput As String = "",
                 targetGuid As String = ""
@@ -169,19 +236,49 @@ Namespace Helpers.PreparationTasks
             RunBCDConfigurator(String.Format("/default {0}", targetGuid))
         End Sub
 
+        ''' <summary>
+        ''' Unmounts a specified Windows image.
+        ''' </summary>
+        ''' <param name="MountDir">The directory the Windows image is mounted on</param>
+        ''' <param name="Commit">Whether to save the changes of the Windows image that has been mounted</param>
+        ''' <param name="ProgressOutput">(Optional) A callback for the unmount operation</param>
+        ''' <returns>True if the unmount operation succeeded, False otherwise.</returns>
+        ''' <remarks>
+        ''' This function will return False:
+        ''' <list type="bullet">
+        '''     <item>
+        '''         If the mount directory does not exist
+        '''     </item>
+        '''     <item>
+        '''         If the specified mount directory is not in the list of mounted images
+        '''     </item>
+        ''' </list>
+        ''' </remarks>
         Private Function UnmountImage(MountDir As String, Commit As Boolean, Optional ProgressOutput As DismProgressCallback = Nothing) As Boolean
-            If Not Directory.Exists(MountDir) Then Return False
+            DynaLog.LogMessage("Preparing to unmount Windows image...")
+            DynaLog.LogMessage("- Mount Directory: " & MountDir)
+            DynaLog.LogMessage("- Commit changes? " & If(Commit, "Yes", "No"))
+            DynaLog.LogMessage("- Is a progress callback defined? " & If(ProgressOutput IsNot Nothing, "Yes", "No"))
 
+            If Not Directory.Exists(MountDir) Then
+                DynaLog.LogMessage("Mount directory does not exist. Stopping...")
+                Return False
+            End If
+
+            DynaLog.LogMessage("Getting mounted images to see if the mount directory is there...")
             Dim mountedImages As DismMountedImageInfoCollection = GetMountedImages()
             If mountedImages Is Nothing OrElse mountedImages.FirstOrDefault(Function(mountedImage) mountedImage.MountPath = MountDir) Is Nothing Then
                 ' Our image is not in the mounted images list. Don't do anything else
+                DynaLog.LogMessage("Either we could not get mounted image information or the mount directory is not in the list. Stopping...")
                 Return False
             End If
 
             Dim unmounted As Boolean = False
 
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Unmounting Windows image...")
                 ' If we haven't defined a callback object for the operation progress, we call
                 ' the API without passing it anything. Otherwise, we pass it.
                 If ProgressOutput IsNot Nothing Then
@@ -191,9 +288,10 @@ Namespace Helpers.PreparationTasks
                 End If
                 unmounted = True
             Catch ex As Exception
-                ' TODO  implement dynalog
+                DynaLog.LogMessage("Could not unmount Windows image. Error message: " & ex.Message)
             Finally
                 Try
+                    DynaLog.LogMessage("Attempting to shut down API...")
                     DismApi.Shutdown()
                 Catch ex As Exception
                     ' ignore exceptions
@@ -203,6 +301,10 @@ Namespace Helpers.PreparationTasks
             Return unmounted
         End Function
 
+        ''' <summary>
+        ''' Performs cleanup operations for a specified folder if this Preparation Task fails.
+        ''' </summary>
+        ''' <param name="folder">The folder to clean up</param>
         Private Sub CleanupOnFailure(folder As String)
             Try
                 RemoveRecursive(folder)
@@ -211,8 +313,13 @@ Namespace Helpers.PreparationTasks
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Prepares a DISMTools PE image to load the image capture script on startup.
+        ''' </summary>
+        ''' <returns>Whether the operation succeeded</returns>
         Public Overrides Function RunPreparationTask() As Boolean
             If Not WillPrepareBootImage Then
+                DynaLog.LogMessage("The boot image will not be prepared. Stopping...")
                 Return True
             End If
 
@@ -232,50 +339,64 @@ Namespace Helpers.PreparationTasks
             Dim bootFileDestinationFolder As String = String.Format("{0}\Boot", destinationFolder)
             Dim destinationMountDir As String = String.Format("{0}\$DISMTOOLS.~WS", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
 
-            If Not File.Exists(sourceFile) Then Return False
+            If Not File.Exists(sourceFile) Then
+                DynaLog.LogMessage("Source file " & sourceFile & " does not exist. Stopping...")
+                Return False
+            End If
             If Not Directory.Exists(destinationFolder) Then
+                DynaLog.LogMessage("Destination folder does not exist. Attempting to create it...")
                 Try
                     Directory.CreateDirectory(destinationFolder)
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not create destination folder. Error message: " & ex.Message)
                     Return False
                 End Try
             End If
 
             Try
+                DynaLog.LogMessage("Copying boot image to destination...")
                 File.Copy(sourceFile, destinationFile, True)
                 ' To make sure we can make changes we'll get file attributes and remove the readonly attribute
                 ' in the destination, if present.
+                DynaLog.LogMessage("Getting attributes and removing readonly attribute (if present)...")
                 Dim attrs As FileAttributes = File.GetAttributes(destinationFile)
                 If (attrs And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
                     File.SetAttributes(destinationFile, attrs And Not FileAttributes.ReadOnly)
                 End If
 
+                DynaLog.LogMessage("Copying boot files to destination...")
                 ' To modify the BCD to allow the system to boot to the DT PE, we need to copy the boot files
                 ' over to the local disk. Then we call bcdedit as usual. Since we do a recursive copy, we'll
                 ' simply call an external method.
                 CopyRecursive(bootSourceFolder, bootFileDestinationFolder)
 
                 If Not IsInTestMode Then
+                    DynaLog.LogMessage("Sysprep Preparator is not in test mode. Proceeding with BCD update...")
                     ' Update BCD only when we AREN'T in test mode.
                     UpdateBcd(Path.Combine(bootFileDestinationFolder, "boot.sdi"), destinationFile)
                 End If
 
+                DynaLog.LogMessage("Mounting DT PE image...")
                 MountImage(destinationFile, 1, destinationMountDir, False, Sub(progress As DismProgress)
                                                                                If progress.Current > 100 Then Exit Sub
-
-                                                                               ' TODO  dynalog logger for mount process
+                                                                               DynaLog.LogMessage("Mount operation progress: " & progress.Current & "%")
+                                                                               ' TODO  sub-reporter impl
                                                                            End Sub)
                 ' Perform modifications to image
+                DynaLog.LogMessage("Allowing the DT PE to load the image capture script automatically...")
                 ModifyImage(destinationMountDir)
                 ' Unmount the image
+                DynaLog.LogMessage("Unounting DT PE image...")
                 UnmountImage(destinationMountDir, True, Sub(progress As DismProgress)
                                                             If (progress.Current / 2) > 100 Then Exit Sub
-
-                                                            ' TODO  dynalog logger for unmount process
+                                                            DynaLog.LogMessage("Unmount operation progress - reported by API: " & progress.Current & "% - actual progress: " & (progress.Current / 2) & "%")
+                                                            ' TODO  sub-reporter impl
                                                         End Sub)
 
 
             Catch ex As Exception
+                DynaLog.LogMessage("An error occurred while preparing the Windows image. Error message: " & ex.Message)
+                DynaLog.LogMessage("Cleaning up files...")
                 CleanupOnFailure(destinationFolder)
                 Return False
             End Try
@@ -283,6 +404,10 @@ Namespace Helpers.PreparationTasks
             Return True
         End Function
 
+        ''' <summary>
+        ''' Modifies the Windows image mounted to a given mount directory to prepare it for image capture
+        ''' </summary>
+        ''' <param name="mountDir">The location of the mounted Windows image</param>
         Private Sub ModifyImage(mountDir As String)
             Try
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
