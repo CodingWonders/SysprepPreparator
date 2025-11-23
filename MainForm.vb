@@ -325,6 +325,11 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub SysprepComputer()
+        If Environment.GetCommandLineArgs().Contains("/dt_capture") Then
+            ' we are more interested in rebooting the system than shutting it down, in order
+            ' to capture the image
+            SysprepConfiguration.Shutdown = SysprepConfig.ShutdownMode.Reboot
+        End If
         Dim CmdLine As String = ParseSysprepSettings()
         If Environment.GetCommandLineArgs().Contains("/test") Then
             MsgBox("Sysprep would be launched with flags " & Quote & CmdLine & Quote, vbOKOnly + vbInformation)
