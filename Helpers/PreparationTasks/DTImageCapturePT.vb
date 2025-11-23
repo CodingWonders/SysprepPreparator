@@ -171,7 +171,7 @@ Namespace Helpers.PreparationTasks
             DynaLog.LogMessage("- Arguments: " & Arguments)
             DynaLog.LogMessage("- Ignore error messages? " & If(DontWorryBeHappy, "Yes", "No"))
             Try
-                Dim bcdEditExitCode As Integer = RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "bcdedit.exe"), Arguments, HideWindow:=Debugger.IsAttached, Inconditional:=DontWorryBeHappy)
+                Dim bcdEditExitCode As Integer = RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "bcdedit.exe"), Arguments, HideWindow:=Not Debugger.IsAttached, Inconditional:=DontWorryBeHappy)
 
                 If bcdEditExitCode <> PROC_SUCCESS Then Throw New Win32Exception(bcdEditExitCode)
             Catch ex As Exception
@@ -204,7 +204,10 @@ Namespace Helpers.PreparationTasks
                     .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "bcdedit.exe"),
                     .Arguments = String.Format("/create /d {0} /application osloader", ControlChars.Quote & "Sysprep Preparation Tool -- DISMTools Image Capture" & ControlChars.Quote),
                     .RedirectStandardOutput = True,
-                    .RedirectStandardError = True
+                    .RedirectStandardError = True,
+                    .UseShellExecute = False,
+                    .CreateNoWindow = Not Debugger.IsAttached,
+                    .WindowStyle = If(Debugger.IsAttached, ProcessWindowStyle.Normal, ProcessWindowStyle.Hidden)
                 }
             }
             bcdeditCreateBcdEntryProc.Start()
@@ -223,8 +226,8 @@ Namespace Helpers.PreparationTasks
             Dim osloaderPath As String = If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI",
                 "\Windows\system32\Boot\winload.efi",
                 "\Windows\system32\winload.exe")
-            RunBCDConfigurator(String.Format("/set {0} device ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath))
-            RunBCDConfigurator(String.Format("/set {0} osdevice ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath))
+            RunBCDConfigurator(String.Format("/set {0} device ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath.Replace(Path.GetPathRoot(bootImagePath), "")))
+            RunBCDConfigurator(String.Format("/set {0} osdevice ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath.Replace(Path.GetPathRoot(bootImagePath), "")))
             RunBCDConfigurator(String.Format("/set {0} path {1}", targetGuid, osloaderPath))
             RunBCDConfigurator(String.Format("/set {0} locale en-US", targetGuid))
             RunBCDConfigurator(String.Format("/set {0} systemroot \Windows", targetGuid))
