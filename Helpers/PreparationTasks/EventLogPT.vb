@@ -59,10 +59,7 @@ Namespace Helpers.PreparationTasks
             End If
 
             DynaLog.LogMessage("Determining if directory contains files...")
-            If Directory.Exists(targetEvtxPath) AndAlso Directory.GetFiles(targetEvtxPath, "*.evtx").Count > 0 Then
-                DynaLog.LogMessage("Directory exists and there are already EVTX files.")
-                ShowMessage(GetValueFromLanguageData("EventLogPT.MSG_PathAlreadyExists"), GetValueFromLanguageData("RegisteredPTs.EventLogPT"))
-            End If
+            If Directory.Exists(targetEvtxPath) AndAlso Directory.GetFiles(targetEvtxPath, "*.evtx").Count > 0 Then DynaLog.LogMessage("Directory exists and there are already EVTX files.")
 
             DynaLog.LogMessage("Getting event logs...")
             Dim EventLogs() As String = GetSystemEventLogs()
