@@ -53,12 +53,10 @@ Namespace Helpers.PreparationTasks
         ''' Reports a subprocess status change with a given status message.
         ''' </summary>
         ''' <param name="Status">The status message to report</param>
+        <CodeAnalysis.SuppressMessage("Style", "IDE0031:Usar propagación de null", Justification:="<pendiente>")>
         Public Sub ReportSubProcessStatus(Status As String)
             ' null propagation is not used here to enable backcompat with vs2012
-
-#Disable Warning IDE0031 ' Usar propagación de null
             If SubProcessReporter IsNot Nothing Then
-#Enable Warning IDE0031 ' Usar propagación de null
                 SubProcessReporter.Invoke(Status)
             End If
         End Sub
