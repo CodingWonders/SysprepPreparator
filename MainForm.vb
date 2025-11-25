@@ -444,6 +444,7 @@ Public Class MainForm
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
         DynaLog.LogMessage("  Initial expansion and testing also made by Real-MullaC: https://github.com/Real-MullaC")
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
+        DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.BeginLogging()
     End Sub
 
