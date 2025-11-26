@@ -16,7 +16,7 @@ Namespace Helpers.PreparationTasks
         ''' <remarks></remarks>
         Public Overrides Function RunPreparationTask() As Boolean
             DynaLog.LogMessage("Running Disk Cleanup...")
-            ReportSubProcessStatus("Cleaning up system drive...")
+            ReportSubProcessStatus(GetValueFromLanguageData("DiskCleanupPT_SubProcessReporting.SPR_Message1"))
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cleanmgr.exe"),
                               "/sagerun:1") = PROC_SUCCESS
         End Function

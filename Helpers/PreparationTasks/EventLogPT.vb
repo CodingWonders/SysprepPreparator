@@ -24,7 +24,7 @@ Namespace Helpers.PreparationTasks
                 If EventLogs.Count > 0 Then
                     Using session As New EventLogSession()
                         For Each EventLogEntry In EventLogs
-                            ReportSubProcessStatus(String.Format("({0}/{1} - {2}%) Clearing event log {3}...",
+                            ReportSubProcessStatus(String.Format(GetValueFromLanguageData("EventLogPT_SubProcessReporting.SPR_Message4"),
                                                                  Array.IndexOf(EventLogs, EventLogEntry) + 1,
                                                                  EventLogs.Count,
                                                                  Math.Round((Array.IndexOf(EventLogs, EventLogEntry) / EventLogs.Count) * 100, 0),
@@ -67,7 +67,7 @@ Namespace Helpers.PreparationTasks
             If EventLogs.Count > 0 Then
                 Using session As New EventLogSession()
                     For Each EventLogEntry In EventLogs
-                        ReportSubProcessStatus(String.Format("({0}/{1} - {2}%) Exporting event log {3}...",
+                        ReportSubProcessStatus(String.Format(GetValueFromLanguageData("EventLogPT_SubProcessReporting.SPR_Message3"),
                                                              Array.IndexOf(EventLogs, EventLogEntry) + 1,
                                                              EventLogs.Count,
                                                              Math.Round((Array.IndexOf(EventLogs, EventLogEntry) / EventLogs.Count) * 100, 0),
@@ -98,10 +98,10 @@ Namespace Helpers.PreparationTasks
         ''' <returns>Whether the cleanup process succeeded</returns>
         ''' <remarks>Event log cleanup will not be performed when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
-            ReportSubProcessStatus("Exporting system event logs...")
+            ReportSubProcessStatus(GetValueFromLanguageData("EventLogPT_SubProcessReporting.SPR_Message1"))
             If Not IsInAutoMode Then ExportEventLogs()              ' exporting event logs will not be done in auto mode for now
             If IsInTestMode Then Return True
-            ReportSubProcessStatus("Clearing event logs...")
+            ReportSubProcessStatus(GetValueFromLanguageData("EventLogPT_SubProcessReporting.SPR_Message2"))
             Return ClearEventLogs()
         End Function
 
@@ -111,7 +111,6 @@ Namespace Helpers.PreparationTasks
         ''' <returns>The event log names</returns>
         ''' <remarks></remarks>
         Private Function GetSystemEventLogs() As String()
-            ReportSubProcessStatus("Getting system event logs...")
             Return New EventLogSession().GetLogNames().ToArray()
         End Function
     End Class

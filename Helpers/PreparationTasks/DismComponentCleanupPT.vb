@@ -17,7 +17,7 @@ Namespace Helpers.PreparationTasks
         Public Overrides Function RunPreparationTask() As Boolean
             If IsInTestMode Then Return True
             DynaLog.LogMessage("Running DISM Component Cleanup...")
-            ReportSubProcessStatus("Cleaning up system component store...")
+            ReportSubProcessStatus(GetValueFromLanguageData("DismComponentCleanupPT_SubProcessReporting.SPR_Message1"))
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "dism.exe"),
                               "/online /cleanup-image /startcomponentcleanup /resetbase") = PROC_SUCCESS
         End Function
