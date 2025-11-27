@@ -70,6 +70,7 @@ Partial Class MainForm
         Me.SettingPreparationPanel_TaskLv = New System.Windows.Forms.ListView()
         Me.SettingPreparationPage_TaskCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SettingPreparationPage_SuccessfulCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.SettingPreparationPage_SubProcessProgressLabel = New System.Windows.Forms.Label()
         Me.SettingPreparationPage_ProgressLabel = New System.Windows.Forms.Label()
         Me.SettingPreparationPage_Description = New System.Windows.Forms.Label()
         Me.SettingPreparationPage_Header = New System.Windows.Forms.Label()
@@ -80,7 +81,6 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
-        Me.SettingPreparationPage_SubProcessProgressLabel = New System.Windows.Forms.Label()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -480,10 +480,10 @@ Partial Class MainForm
         Me.AdvSettingsPage_VMMode.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_VMMode.AutoCheck = False
-        Me.AdvSettingsPage_VMMode.AutoEllipsis = True
+        Me.AdvSettingsPage_VMMode.AutoSize = True
         Me.AdvSettingsPage_VMMode.Location = New System.Drawing.Point(23, 105)
         Me.AdvSettingsPage_VMMode.Name = "AdvSettingsPage_VMMode"
-        Me.AdvSettingsPage_VMMode.Size = New System.Drawing.Size(788, 19)
+        Me.AdvSettingsPage_VMMode.Size = New System.Drawing.Size(465, 19)
         Me.AdvSettingsPage_VMMode.TabIndex = 6
         Me.AdvSettingsPage_VMMode.Text = "VM Mode: Generalize the system to be deployed as a VHD on the same VM solution"
         Me.AdvSettingsPage_VMMode.UseVisualStyleBackColor = True
@@ -644,6 +644,16 @@ Partial Class MainForm
         Me.SettingPreparationPage_SuccessfulCH.Text = "Successful?"
         Me.SettingPreparationPage_SuccessfulCH.Width = 128
         '
+        'SettingPreparationPage_SubProcessProgressLabel
+        '
+        Me.SettingPreparationPage_SubProcessProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPage_SubProcessProgressLabel.AutoEllipsis = True
+        Me.SettingPreparationPage_SubProcessProgressLabel.Location = New System.Drawing.Point(39, 150)
+        Me.SettingPreparationPage_SubProcessProgressLabel.Name = "SettingPreparationPage_SubProcessProgressLabel"
+        Me.SettingPreparationPage_SubProcessProgressLabel.Size = New System.Drawing.Size(831, 26)
+        Me.SettingPreparationPage_SubProcessProgressLabel.TabIndex = 4
+        '
         'SettingPreparationPage_ProgressLabel
         '
         Me.SettingPreparationPage_ProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -699,9 +709,9 @@ Partial Class MainForm
         Me.FinishPage_RestartBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_RestartBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_RestartBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_RestartBtn.Location = New System.Drawing.Point(546, 312)
+        Me.FinishPage_RestartBtn.Location = New System.Drawing.Point(578, 312)
         Me.FinishPage_RestartBtn.Name = "FinishPage_RestartBtn"
-        Me.FinishPage_RestartBtn.Size = New System.Drawing.Size(192, 48)
+        Me.FinishPage_RestartBtn.Size = New System.Drawing.Size(256, 48)
         Me.FinishPage_RestartBtn.TabIndex = 2
         Me.FinishPage_RestartBtn.Text = "Restart PC"
         Me.FinishPage_RestartBtn.UseVisualStyleBackColor = True
@@ -711,9 +721,9 @@ Partial Class MainForm
         Me.FinishPage_ResysprepBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_ResysprepBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_ResysprepBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_ResysprepBtn.Location = New System.Drawing.Point(348, 312)
+        Me.FinishPage_ResysprepBtn.Location = New System.Drawing.Point(316, 312)
         Me.FinishPage_ResysprepBtn.Name = "FinishPage_ResysprepBtn"
-        Me.FinishPage_ResysprepBtn.Size = New System.Drawing.Size(192, 48)
+        Me.FinishPage_ResysprepBtn.Size = New System.Drawing.Size(256, 48)
         Me.FinishPage_ResysprepBtn.TabIndex = 2
         Me.FinishPage_ResysprepBtn.Text = "Relaunch Sysprep"
         Me.FinishPage_ResysprepBtn.UseVisualStyleBackColor = True
@@ -723,9 +733,9 @@ Partial Class MainForm
         Me.FinishPage_CloseBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_CloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_CloseBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_CloseBtn.Location = New System.Drawing.Point(150, 312)
+        Me.FinishPage_CloseBtn.Location = New System.Drawing.Point(54, 312)
         Me.FinishPage_CloseBtn.Name = "FinishPage_CloseBtn"
-        Me.FinishPage_CloseBtn.Size = New System.Drawing.Size(192, 48)
+        Me.FinishPage_CloseBtn.Size = New System.Drawing.Size(256, 48)
         Me.FinishPage_CloseBtn.TabIndex = 2
         Me.FinishPage_CloseBtn.Text = "Close wizard"
         Me.FinishPage_CloseBtn.UseVisualStyleBackColor = True
@@ -757,16 +767,6 @@ Partial Class MainForm
         'AdvSettingsPage_SysprepUnatt_OFD
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
-        '
-        'SettingPreparationPage_SubProcessProgressLabel
-        '
-        Me.SettingPreparationPage_SubProcessProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPage_SubProcessProgressLabel.AutoEllipsis = True
-        Me.SettingPreparationPage_SubProcessProgressLabel.Location = New System.Drawing.Point(39, 150)
-        Me.SettingPreparationPage_SubProcessProgressLabel.Name = "SettingPreparationPage_SubProcessProgressLabel"
-        Me.SettingPreparationPage_SubProcessProgressLabel.Size = New System.Drawing.Size(831, 26)
-        Me.SettingPreparationPage_SubProcessProgressLabel.TabIndex = 4
         '
         'MainForm
         '
