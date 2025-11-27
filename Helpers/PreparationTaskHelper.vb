@@ -41,10 +41,10 @@ Namespace Helpers
 
             For Each PreparationTaskModule In PreparationTaskModules.Keys
                 If ProgressStartReporter IsNot Nothing Then ProgressStartReporter.Invoke(PreparationTaskModule)
-                DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name)
+                DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name, False)
                 PreparationTaskModules(PreparationTaskModule).SubProcessReporter = ProgressSubProcessReporter
                 Dim result As Boolean = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
-                DynaLog.LogMessage("PT Succeeded? " & result)
+                DynaLog.LogMessage("PT Succeeded? " & result, False)
                 StatusList.Add(result)
                 If ProgressFinishedReporter IsNot Nothing Then ProgressFinishedReporter.Invoke(New Dictionary(Of String, Boolean) From {{PreparationTaskModule, result}})
                 If ProgressSubProcessReporter IsNot Nothing Then ProgressSubProcessReporter.Invoke("")      ' clear subprocess status when finished
