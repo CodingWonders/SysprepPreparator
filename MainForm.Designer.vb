@@ -81,6 +81,7 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
+        Me.SettingPreparationPanel_TaskProgressBar = New System.Windows.Forms.ProgressBar()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -605,6 +606,7 @@ Partial Class MainForm
         '
         'SettingPreparationPanel
         '
+        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPanel_TaskProgressBar)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPanel_TaskLv)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_SubProcessProgressLabel)
         Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_ProgressLabel)
@@ -626,7 +628,7 @@ Partial Class MainForm
         Me.SettingPreparationPanel_TaskLv.FullRowSelect = True
         Me.SettingPreparationPanel_TaskLv.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.SettingPreparationPanel_TaskLv.HideSelection = False
-        Me.SettingPreparationPanel_TaskLv.Location = New System.Drawing.Point(18, 187)
+        Me.SettingPreparationPanel_TaskLv.Location = New System.Drawing.Point(18, 216)
         Me.SettingPreparationPanel_TaskLv.MultiSelect = False
         Me.SettingPreparationPanel_TaskLv.Name = "SettingPreparationPanel_TaskLv"
         Me.SettingPreparationPanel_TaskLv.Size = New System.Drawing.Size(852, 343)
@@ -768,6 +770,15 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
         '
+        'SettingPreparationPanel_TaskProgressBar
+        '
+        Me.SettingPreparationPanel_TaskProgressBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPanel_TaskProgressBar.Location = New System.Drawing.Point(18, 187)
+        Me.SettingPreparationPanel_TaskProgressBar.Name = "SettingPreparationPanel_TaskProgressBar"
+        Me.SettingPreparationPanel_TaskProgressBar.Size = New System.Drawing.Size(852, 23)
+        Me.SettingPreparationPanel_TaskProgressBar.TabIndex = 6
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -865,4 +876,5 @@ Partial Class MainForm
     Friend WithEvents SysCheckPage_CheckDetails_ResolutionValue As System.Windows.Forms.TextBox
     Friend WithEvents AboutBtn As Button
     Friend WithEvents SettingPreparationPage_SubProcessProgressLabel As Label
+    Friend WithEvents SettingPreparationPanel_TaskProgressBar As ProgressBar
 End Class

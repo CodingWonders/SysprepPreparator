@@ -46,9 +46,8 @@ Public Class MainForm
     ''' <summary>
     ''' This event is raised when a Preparation Task has finished and reporting will occur
     ''' </summary>
-    ''' <param name="Task">The reported item featuring the task name and whether the PT succeeded</param>
     ''' <remarks></remarks>
-    Public Event TaskReported(Task As Dictionary(Of String, Boolean))
+    Public Event TaskReported(Task As Dictionary(Of String, Boolean), progressPercentage As Double)
 
     ''' <summary>
     ''' This event is raised when a Preparation Task updates a subprocess status
@@ -70,10 +69,16 @@ Public Class MainForm
     ''' Handles the TaskReported event
     ''' </summary>
     ''' <param name="Task">The reported item featuring the task name and whether the PT succeeded</param>
+    ''' <param name="progressPercentage">The percentage to report to progress bars</param>
     ''' <remarks></remarks>
-    Private Sub OnTaskReported(Task As Dictionary(Of String, Boolean)) Handles Me.TaskReported
+    Private Sub OnTaskReported(Task As Dictionary(Of String, Boolean), progressPercentage As Double) Handles Me.TaskReported
         Dim taskName As String = Task.Keys(0)
         SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, If(Task(taskName), GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No"))}))
+        ' do some value checking
+        If progressPercentage < SettingPreparationPanel_TaskProgressBar.Minimum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Minimum
+        If progressPercentage > SettingPreparationPanel_TaskProgressBar.Maximum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Maximum
+
+        SettingPreparationPanel_TaskProgressBar.Value = progressPercentage
     End Sub
 
     ''' <summary>
@@ -97,9 +102,10 @@ Public Class MainForm
     ''' A public method for the PT Helper to report task status
     ''' </summary>
     ''' <param name="task">The reported item featuring the task name and whether the PT succeeded</param>
+    ''' <param name="progressPercentage">The percentage to report to progress bars</param>
     ''' <remarks></remarks>
-    Sub ReportTaskSuccess(task As Dictionary(Of String, Boolean))
-        RaiseEvent TaskReported(task)
+    Sub ReportTaskSuccess(task As Dictionary(Of String, Boolean), progressPercentage As Double)
+        RaiseEvent TaskReported(task, progressPercentage)
     End Sub
 
     ''' <summary>
@@ -309,8 +315,8 @@ Public Class MainForm
                            Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)
                                                                                             ReportTaskStart(task)
                                                                                         End Sub,
-                                                                 ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, Boolean))
-                                                                                               ReportTaskSuccess(taskStatus)
+                                                                 ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, Boolean), progressPercentage As Double)
+                                                                                               ReportTaskSuccess(taskStatus, progressPercentage)
                                                                                            End Sub,
                                                                  ProgressSubProcessReporter:=Sub(Status As String)
                                                                                                  ReportSubProcessStatusUpdate(Status)
