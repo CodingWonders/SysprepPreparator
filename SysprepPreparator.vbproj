@@ -170,6 +170,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="docs\CCP_PT\Helpers.CompatChecks.CompatibilityCheckerProvider.md" />
+    <None Include="docs\CCP_PT\Helpers.PreparationTasks.PreparationTask.md" />
+    <None Include="docs\CCP_PT\index.md" />
     <None Include="Languages\lang_en.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -205,6 +208,7 @@
     <None Include="Resources\preparator_image_full.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="docs\res\ccpdoc_newclass.png" />
     <Content Include="logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
