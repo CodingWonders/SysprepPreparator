@@ -51,7 +51,7 @@ Namespace Helpers.PreparationTasks
         ''' <remarks></remarks>
         Private Sub ExportEventLogs()
             DynaLog.LogMessage("Preparing to export event logs...")
-            Dim targetEvtxPath As String = ShowFolderBrowserDialog(GetValueFromLanguageData("EventLogPT.FBD_TargetEvtxPath"))
+            Dim targetEvtxPath As String = ShowFolderBrowserDialog(GetValueFromLanguageData("EventLogPT.FBD_TargetEvtxPath"), True)
             DynaLog.LogMessage("Target path for EVTXs: " & targetEvtxPath)
             If targetEvtxPath = "" Then
                 DynaLog.LogMessage("No EVTX Path is specified. Aborting procedure!")

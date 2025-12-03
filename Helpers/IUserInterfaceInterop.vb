@@ -25,9 +25,10 @@
         ''' Shows a folder picker
         ''' </summary>
         ''' <param name="Description">The description to show in the folder picker</param>
+        ''' <param name="ShowNewFolderButton">Determines whether to show a &quot;New folder&quot; button in the dialog</param>
         ''' <returns>The selected path in the folder picker</returns>
         ''' <remarks></remarks>
-        Function ShowFolderBrowserDialog(Description As String) As String
+        Function ShowFolderBrowserDialog(Description As String, ShowNewFolderButton As Boolean) As String
 
         ''' <summary>
         ''' Shows a message box

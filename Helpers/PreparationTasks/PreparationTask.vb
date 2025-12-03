@@ -103,9 +103,10 @@ Namespace Helpers.PreparationTasks
         ''' Shows a folder picker
         ''' </summary>
         ''' <param name="Description">The description to show in the folder picker</param>
+        ''' <param name="ShowNewFolderButton">Determines whether to show a &quot;New folder&quot; button in the dialog</param>
         ''' <returns>The selected path in the folder picker</returns>
         ''' <remarks></remarks>
-        Public Function ShowFolderBrowserDialog(Description As String) As String Implements IUserInterfaceInterop.ShowFolderBrowserDialog
+        Public Function ShowFolderBrowserDialog(Description As String, ShowNewFolderButton As Boolean) As String Implements IUserInterfaceInterop.ShowFolderBrowserDialog
             Dim selectedPath As String = ""
             ' The FBD will not show in multi-threaded apartment threads, therefore making end-users think tasks that call this function
             ' will never complete. So we create a separate, single-threaded apartment, thread and we wait for it to finish instead.
@@ -113,7 +114,7 @@ Namespace Helpers.PreparationTasks
             Dim thread As New Thread(Sub()
                                          Dim fbd As New FolderBrowserDialog() With {
                                                        .RootFolder = Environment.SpecialFolder.MyComputer,
-                                                       .ShowNewFolderButton = True,
+                                                       .ShowNewFolderButton = ShowNewFolderButton,
                                                        .Description = Description
                                                    }
 
