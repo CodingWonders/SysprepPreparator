@@ -37,4 +37,4 @@ Additional documentation for registering Compatibility Checker Providers and Pre
 
 ## Adding Compatibility Checker Providers and Preparation Tasks
 
-Refer to [this documentation](./docs/index.md) for more information.
+Refer to [this documentation](./docs/CCP_PT/index.md) for more information.
