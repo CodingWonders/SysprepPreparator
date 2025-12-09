@@ -173,6 +173,7 @@
     <None Include="docs\CCP_PT\Helpers.CompatChecks.CompatibilityCheckerProvider.md" />
     <None Include="docs\CCP_PT\Helpers.PreparationTasks.PreparationTask.md" />
     <None Include="docs\CCP_PT\index.md" />
+    <None Include="docs\TestingOnSysprepSystems\index.md" />
     <None Include="Languages\lang_en.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -209,6 +210,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="docs\res\ccpdoc_newclass.png" />
+    <Content Include="docs\res\ptdoc_newclass.png" />
+    <Content Include="docs\res\sptest_oobe.png" />
+    <Content Include="docs\res\sptest_snapshot.png" />
+    <Content Include="docs\res\sptest_sysprep.png" />
     <Content Include="logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
