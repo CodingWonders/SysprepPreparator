@@ -31,9 +31,11 @@ Namespace Helpers.CompatChecks
             ''' </summary>
             ''' <remarks>
             ''' If a process queries the IMAGE_STATE value and IMG_UNDEPLOYABLE is returned, the image is in one of the following states:
-            ''' 1. Setup is currently running and has not fully completed the phase. Once a given phase is complete, the IMAGE_STATE will be set to an appropriate completion value;
-            ''' 2. If queried online when Setup is not running, there was a failure when completing a Setup phase. This image must be reinstalled;
-            ''' 3. If queried offline, the image did not finish a phase and will never be deployable.
+            ''' <list type="number">
+            '''     <item>Setup is currently running and has not fully completed the phase. Once a given phase is complete, the IMAGE_STATE will be set to an appropriate completion value</item>
+            '''     <item>If queried online when Setup is not running, there was a failure when completing a Setup phase. This image must be reinstalled</item>
+            '''     <item>If queried offline, the image did not finish a phase and will never be deployable.</item>
+            ''' </list>
             ''' </remarks>
             Undeployable
             ''' <summary>
