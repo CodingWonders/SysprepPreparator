@@ -74,12 +74,13 @@ Namespace Helpers.CompatChecks
             ' The way we'll check for roles is by listing the features with DISM API. We'll also grab
             ' the current version of our OS because compatibility also depends on the OS version.
             Try
-                DynaLog.LogMessage("Getting current system edition ID...")
-                Dim EditionRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion")
-                Dim EditionId As String = EditionRk.GetValue("EditionID").ToString()
-                DynaLog.LogMessage("Edition ID: " & EditionId)
-                EditionRk.Close()
-                If Not EditionId.Contains("Server") Then
+                ' We don't really need to check if we are not on a server version of Windows.
+                DynaLog.LogMessage("Getting current system installation type...")
+                Dim InstallationTypeRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+                Dim InstallationType As String = InstallationTypeRk.GetValue("InstallationType").ToString()
+                DynaLog.LogMessage("Installation Type: " & InstallationType)
+                InstallationTypeRk.Close()
+                If Not InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase) Then
                     DynaLog.LogMessage("This is not a server install, we don't need to do any of this...")
                     ' This is not a server edition, so we skip this CCP
                     Status = New Classes.CompatibilityCheckerProviderStatus(True,
