@@ -1,3 +1,4 @@
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge)](https://discord.gg/hJJTrMNP5p)
 # SysprepPreparator
 The Sysprep preparation tool prepares computers for Sysprep generalization and for image capture.
 
