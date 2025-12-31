@@ -8,6 +8,7 @@ Namespace Helpers.PreparationTasks
         Inherits PreparationTask
 
         Private WillPrepareBootImage As Boolean = Environment.GetCommandLineArgs().Contains("/dt_capture")
+        Private Const DISM_ERR_CANT_UNMOUNT_OPEN_FILE_HANDLES As Integer = -1052638953
 
         ''' <summary>
         ''' Gets the information of a given Windows image.
@@ -244,6 +245,7 @@ Namespace Helpers.PreparationTasks
         ''' <param name="MountDir">The directory the Windows image is mounted on</param>
         ''' <param name="Commit">Whether to save the changes of the Windows image that has been mounted</param>
         ''' <param name="ProgressOutput">(Optional) A callback for the unmount operation</param>
+        ''' <param name="RetryUnmountOnFailure">(Optional) Retries an unmount operation on unmount failure if there are open handles of the files in the Windows image</param>
         ''' <returns>True if the unmount operation succeeded, False otherwise.</returns>
         ''' <remarks>
         ''' This function will return False:
@@ -256,7 +258,7 @@ Namespace Helpers.PreparationTasks
         '''     </item>
         ''' </list>
         ''' </remarks>
-        Private Function UnmountImage(MountDir As String, Commit As Boolean, Optional ProgressOutput As DismProgressCallback = Nothing) As Boolean
+        Private Function UnmountImage(MountDir As String, Commit As Boolean, Optional ProgressOutput As DismProgressCallback = Nothing, Optional RetryUnmountOnFailure As Boolean = False) As Boolean
             DynaLog.LogMessage("Preparing to unmount Windows image...")
             DynaLog.LogMessage("- Mount Directory: " & MountDir)
             DynaLog.LogMessage("- Commit changes? " & If(Commit, "Yes", "No"))
@@ -289,6 +291,22 @@ Namespace Helpers.PreparationTasks
                     DismApi.UnmountImage(MountDir, Commit)
                 End If
                 unmounted = True
+            Catch OpenHandleOnUnmountException As DismException When RetryUnmountOnFailure AndAlso OpenHandleOnUnmountException.HResult = DISM_ERR_CANT_UNMOUNT_OPEN_FILE_HANDLES
+                ' We keep unmounting the image until it succeeds. The changes have already been committed at this point,
+                ' so unmount discarding changes.
+                DynaLog.LogMessage("Could not unmount Windows image because there are open handles. Retrying operation until it succeeds...")
+                Dim unmountAttempt As Integer = 2       ' it is the second time we do this
+                Do Until unmounted
+                    ReportSubProcessStatus(String.Format("Retrying unmount operation... (attempt {0})", unmountAttempt))
+                    Try
+                        DismApi.UnmountImage(MountDir, False)
+                        unmounted = True
+                        DynaLog.LogMessage("The image was unmounted successfully on attempt " & unmountAttempt)
+                    Catch ex As Exception
+                        DynaLog.LogMessage("Attempt " & unmountAttempt & " failed. Trying again...")
+                    End Try
+                    unmountAttempt += 1
+                Loop
             Catch ex As Exception
                 DynaLog.LogMessage("Could not unmount Windows image. Error message: " & ex.Message)
             Finally
@@ -398,7 +416,7 @@ Namespace Helpers.PreparationTasks
                                                             If (progress.Current / 2) > 100 Then Exit Sub
                                                             DynaLog.LogMessage("Unmount operation progress - reported by API: " & progress.Current & "% - actual progress: " & (progress.Current / 2) & "%")
                                                             ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message6"), Math.Round((progress.Current / 2), 0)))
-                                                        End Sub)
+                                                        End Sub, True)
 
 
             Catch ex As Exception
