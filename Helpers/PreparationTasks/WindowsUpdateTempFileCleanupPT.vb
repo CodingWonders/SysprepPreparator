@@ -14,11 +14,11 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks></remarks>
-        Public Overrides Function RunPreparationTask() As Boolean
+        Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             DynaLog.LogMessage("Clearing Windows Update Cache...")
-            If IsInTestMode Then Return True
+            If IsInTestMode Then Return PreparationTaskStatus.Skipped
             Dim downloadPath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SoftwareDistribution\Download")
-            Return RemoveRecursive(downloadPath)
+            Return If(RemoveRecursive(downloadPath), PreparationTaskStatus.Succeeded, PreparationTaskStatus.Failed)
         End Function
 
     End Class

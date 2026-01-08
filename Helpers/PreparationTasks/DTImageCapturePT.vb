@@ -337,10 +337,10 @@ Namespace Helpers.PreparationTasks
         ''' Prepares a DISMTools PE image to load the image capture script on startup.
         ''' </summary>
         ''' <returns>Whether the operation succeeded</returns>
-        Public Overrides Function RunPreparationTask() As Boolean
+        Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             If Not WillPrepareBootImage Then
                 DynaLog.LogMessage("The boot image will not be prepared. Stopping...")
-                Return True
+                Return PreparationTaskStatus.Skipped
             End If
 
             ' We'll adapt the HotInstall code:
@@ -369,7 +369,7 @@ Namespace Helpers.PreparationTasks
                     Directory.CreateDirectory(destinationFolder)
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not create destination folder. Error message: " & ex.Message)
-                    Return False
+                    Return PreparationTaskStatus.Failed
                 End Try
             End If
 
@@ -426,7 +426,7 @@ Namespace Helpers.PreparationTasks
                 Return False
             End Try
 
-            Return True
+            Return PreparationTaskStatus.Succeeded
         End Function
 
         ''' <summary>

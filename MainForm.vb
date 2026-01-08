@@ -47,7 +47,7 @@ Public Class MainForm
     ''' This event is raised when a Preparation Task has finished and reporting will occur
     ''' </summary>
     ''' <remarks></remarks>
-    Public Event TaskReported(Task As Dictionary(Of String, Boolean), progressPercentage As Double)
+    Public Event TaskReported(Task As Dictionary(Of String, PreparationTasks.PreparationTask.PreparationTaskStatus), progressPercentage As Double)
 
     ''' <summary>
     ''' This event is raised when a Preparation Task updates a subprocess status
@@ -71,9 +71,18 @@ Public Class MainForm
     ''' <param name="Task">The reported item featuring the task name and whether the PT succeeded</param>
     ''' <param name="progressPercentage">The percentage to report to progress bars</param>
     ''' <remarks></remarks>
-    Private Sub OnTaskReported(Task As Dictionary(Of String, Boolean), progressPercentage As Double) Handles Me.TaskReported
+    Private Sub OnTaskReported(Task As Dictionary(Of String, PreparationTasks.PreparationTask.PreparationTaskStatus), progressPercentage As Double) Handles Me.TaskReported
         Dim taskName As String = Task.Keys(0)
-        SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, If(Task(taskName), GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No"))}))
+        Dim translatedTaskStatus As String = ""
+        Select Case Task(taskName)
+            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Succeeded
+                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Yes")
+            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Failed
+                translatedTaskStatus = GetValueFromLanguageData("Common.Common_No")
+            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Skipped
+                translatedTaskStatus = "Skipped"
+        End Select
+        SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, translatedTaskStatus}))
         ' do some value checking
         If progressPercentage < SettingPreparationPanel_TaskProgressBar.Minimum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Minimum
         If progressPercentage > SettingPreparationPanel_TaskProgressBar.Maximum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Maximum
@@ -104,7 +113,7 @@ Public Class MainForm
     ''' <param name="task">The reported item featuring the task name and whether the PT succeeded</param>
     ''' <param name="progressPercentage">The percentage to report to progress bars</param>
     ''' <remarks></remarks>
-    Sub ReportTaskSuccess(task As Dictionary(Of String, Boolean), progressPercentage As Double)
+    Sub ReportTaskSuccess(task As Dictionary(Of String, PreparationTasks.PreparationTask.PreparationTaskStatus), progressPercentage As Double)
         RaiseEvent TaskReported(task, progressPercentage)
     End Sub
 
@@ -315,7 +324,7 @@ Public Class MainForm
                            Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)
                                                                                             ReportTaskStart(task)
                                                                                         End Sub,
-                                                                 ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, Boolean), progressPercentage As Double)
+                                                                 ProgressFinishedReporter:=Sub(taskStatus As Dictionary(Of String, PreparationTasks.PreparationTask.PreparationTaskStatus), progressPercentage As Double)
                                                                                                ReportTaskSuccess(taskStatus, progressPercentage)
                                                                                            End Sub,
                                                                  ProgressSubProcessReporter:=Sub(Status As String)

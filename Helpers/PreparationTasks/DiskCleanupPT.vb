@@ -14,11 +14,11 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks></remarks>
-        Public Overrides Function RunPreparationTask() As Boolean
+        Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             DynaLog.LogMessage("Running Disk Cleanup...")
             ReportSubProcessStatus(GetValueFromLanguageData("DiskCleanupPT_SubProcessReporting.SPR_Message1"))
-            Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cleanmgr.exe"),
-                              "/sagerun:1") = PROC_SUCCESS
+            Return If(RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cleanmgr.exe"),
+                              "/sagerun:1") = PROC_SUCCESS, PreparationTaskStatus.Succeeded, PreparationTaskStatus.Failed)
         End Function
     End Class
 

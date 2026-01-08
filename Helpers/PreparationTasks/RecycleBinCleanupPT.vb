@@ -14,9 +14,9 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks>This will not launch when in test mode</remarks>
-        Public Overrides Function RunPreparationTask() As Boolean
+        Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             DynaLog.LogMessage("Clearing the Recycle Bin of the current user...")
-            If IsInTestMode Then Return True
+            If IsInTestMode Then Return PreparationTaskStatus.Skipped
             Try
                 For Each drive As DriveInfo In DriveInfo.GetDrives().Where(Function(driveInList) driveInList.IsReady).ToList()
                     Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, "$Recycle.Bin", GetUserSid(Environment.GetEnvironmentVariable("USERNAME")))
@@ -26,9 +26,9 @@ Namespace Helpers.PreparationTasks
                         Continue For
                     End Try
                 Next
-                Return True
+                Return PreparationTaskStatus.Succeeded
             Catch ex As Exception
-                Return False
+                Return PreparationTaskStatus.Failed
             End Try
         End Function
     End Class

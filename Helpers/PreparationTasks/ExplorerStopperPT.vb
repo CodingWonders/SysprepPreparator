@@ -14,11 +14,11 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks>This will not launch when in test mode</remarks>
-        Public Overrides Function RunPreparationTask() As Boolean
+        Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             DynaLog.LogMessage("Stopping Windows Explorer...")
-            If IsInTestMode Or IsInAutoMode Then Return True
-            Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "taskkill.exe"),
-                              "/f /im explorer.exe", HideWindow:=True) = PROC_SUCCESS
+            If IsInTestMode Then Return PreparationTaskStatus.Skipped
+            Return If(RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "taskkill.exe"),
+                              "/f /im explorer.exe", HideWindow:=True) = PROC_SUCCESS, PreparationTaskStatus.Succeeded, PreparationTaskStatus.Failed)
         End Function
     End Class
 

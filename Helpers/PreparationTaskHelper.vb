@@ -34,7 +34,7 @@ Namespace Helpers
         ''' <returns>All the success events</returns>
         ''' <remarks></remarks>
         Public Function RunTasks(Optional ProgressStartReporter As Action(Of String) = Nothing,
-                                 Optional ProgressFinishedReporter As Action(Of Dictionary(Of String, Boolean), Double) = Nothing,
+                                 Optional ProgressFinishedReporter As Action(Of Dictionary(Of String, PreparationTask.PreparationTaskStatus), Double) = Nothing,
                                  Optional ProgressSubProcessReporter As Action(Of String) = Nothing) As List(Of Boolean)
             DynaLog.LogMessage("Preparing to run Preparation Tasks (PTs)...")
             Dim StatusList As New List(Of Boolean)
@@ -46,7 +46,7 @@ Namespace Helpers
                 If ProgressStartReporter IsNot Nothing Then ProgressStartReporter.Invoke(PreparationTaskModule)
                 DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name, False)
                 PreparationTaskModules(PreparationTaskModule).SubProcessReporter = ProgressSubProcessReporter
-                Dim result As Boolean = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
+                Dim result As PreparationTask.PreparationTaskStatus = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
                 DynaLog.LogMessage("PT Succeeded? " & result, False)
                 StatusList.Add(result)
 
@@ -54,7 +54,7 @@ Namespace Helpers
                 idx += 1
                 progressPercentage = (idx / PreparationTaskModules.Count) * 100
 
-                If ProgressFinishedReporter IsNot Nothing Then ProgressFinishedReporter.Invoke(New Dictionary(Of String, Boolean) From {{PreparationTaskModule, result}}, progressPercentage)
+                If ProgressFinishedReporter IsNot Nothing Then ProgressFinishedReporter.Invoke(New Dictionary(Of String, PreparationTask.PreparationTaskStatus) From {{PreparationTaskModule, result}}, progressPercentage)
                 If ProgressSubProcessReporter IsNot Nothing Then ProgressSubProcessReporter.Invoke("")      ' clear subprocess status when finished
                 Threading.Thread.Sleep(100)
             Next

@@ -22,8 +22,8 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
 
 - `RunPreparationTask`
   - Summary: Runs a preparation task.
-  - Returns: Whether the preparation task succeeded.
-  - Remarks: This must not be called from this parent class, but from classes that inherit this.
+  - Returns: A `PreparationTaskStatus` value indicating the final status of the task: `Succeeded`, `Failed`, or `Skipped`.
+  - Remarks: This must not be called from this parent class, but from classes that inherit this. Classes that inherit this base class must override `RunPreparationTask` and return an appropriate `PreparationTaskStatus` enum value.
 
 - `ReportSubProcessStatus`
   - Summary: Reports a subprocess status change with a given status message.
@@ -74,7 +74,7 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Summary: Runs a REG process.
   - Parameters:
     - `CommandLine` (String): The command line arguments to pass to the REG program.
-  - Returns: The exit code of the REG process.
+  - Returns: The exit code of the REG process or a constant error code when `reg.exe` is not found.
   - Implements: `IRegistryRunner`
 
 - `GetRegValueTypeFromEnum`
@@ -88,7 +88,7 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Summary: Adds a registry item to the system.
   - Parameters:
     - `RegItem` (RegistryItem): The new registry item.
-  - Returns: The exit code of the underlying REG process call.
+  - Returns: The exit code of the underlying REG process call or an error constant when `RegItem` is null.
   - Implements: `IRegistryRunner`
 
 - `RemoveRegistryItem`
@@ -96,7 +96,7 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Parameters:
     - `RegPath` (String): The absolute path to the item (key or value).
     - `DeletionArgs` (String): Deletion arguments to pass to REG.
-  - Returns: The exit code of the underlying REG process call.
+  - Returns: The exit code of the underlying REG process call or an error constant when an argument is null or empty.
   - Implements: `IRegistryRunner`
 
 - `LoadRegistryHive`
@@ -104,14 +104,14 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Parameters:
     - `RegHivePath` (String): The path of the registry hive.
     - `RegMountPath` (String): The path to mount the registry hive to.
-  - Returns: The exit code of the underlying REG process call.
+  - Returns: The exit code of the underlying REG process call or an error constant when an argument is null or empty.
   - Implements: `IRegistryRunner`
 
 - `UnloadRegistryHive`
   - Summary: Unloads a registry hive from the system.
   - Parameters:
     - `RegMountPath` (String): The path of the mounted hive to unload.
-  - Returns: The exit code of the underlying REG process call.
+  - Returns: The exit code of the underlying REG process call or an error constant when an argument is null or empty.
   - Implements: `IRegistryRunner`
 
 - `RemoveRecursive`
@@ -135,6 +135,15 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
     - `UserName` (String): The user name to get the SID of.
   - Returns: The SID of the user.
   - Implements: `IWmiUserProcessor`
+
+## Enums
+
+- `PreparationTaskStatus`
+  - Summary: Enum returned by `RunPreparationTask`.
+  - Values:
+    - `Succeeded` - The preparation task completed successfully.
+    - `Failed` - The preparation task failed.
+    - `Skipped` - The preparation task did not run (skipped).
 
 ## Constants and Fields
 

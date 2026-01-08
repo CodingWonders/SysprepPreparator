@@ -17,12 +17,18 @@ Namespace Helpers.PreparationTasks
     Public MustInherit Class PreparationTask
         Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor, IWmiUserProcessor
 
+        Public Enum PreparationTaskStatus As Integer
+            Succeeded = 0
+            Failed = 1
+            Skipped = 2
+        End Enum
+
         ''' <summary>
         ''' Runs a preparation task
         ''' </summary>
         ''' <returns>Whether the preparation task succeeded</returns>
         ''' <remarks>This must not be called from this parent class, but from classes that inherit this</remarks>
-        Public MustOverride Function RunPreparationTask() As Boolean
+        Public MustOverride Function RunPreparationTask() As PreparationTaskStatus
 
         ''' <summary>
         ''' Constant for external processes that run successfully

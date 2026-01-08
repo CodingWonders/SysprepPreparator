@@ -130,6 +130,12 @@ Using this method can come in handy when your Preparation Task performs lengthy 
 
 *Take inspiration from existing Preparation Tasks as well.*
 
+The Preparation Task base class defines a `PreparationTaskStatus` enumeration which inheritors must return from their `RunPreparationTask` implementation. The enum values are:
+
+- `PreparationTaskStatus.Succeeded`, if the task completed successfully
+- `PreparationTaskStatus.Failed`, if the task failed
+- `PreparationTaskStatus.Skipped`, if the task was skipped and did not run
+
 ### Registering your PT
 
 When your PT is finished, you will need to **register it** in the list of providers. To do this, go to `PreparationTaskHelper.vb` and add your PT to the dictionary, like this:
