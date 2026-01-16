@@ -80,7 +80,7 @@ Public Class MainForm
             Case PreparationTasks.PreparationTask.PreparationTaskStatus.Failed
                 translatedTaskStatus = GetValueFromLanguageData("Common.Common_No")
             Case PreparationTasks.PreparationTask.PreparationTaskStatus.Skipped
-                translatedTaskStatus = "Skipped"
+                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Skipped")
         End Select
         SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, translatedTaskStatus}))
         ' do some value checking
@@ -359,7 +359,7 @@ Public Class MainForm
             sysprepProcess.Start()
             sysprepProcess.WaitForExit()
 
-            MsgBox("Sysprep exited with code " & sysprepProcess.ExitCode, vbOKOnly + vbInformation)
+            If Debugger.IsAttached Then MsgBox("Sysprep exited with code " & sysprepProcess.ExitCode, vbOKOnly + vbInformation)
         End If
 
         If Environment.GetCommandLineArgs().Contains("/auto") Then Close()
