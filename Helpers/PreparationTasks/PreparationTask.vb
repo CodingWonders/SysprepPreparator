@@ -57,6 +57,8 @@ Namespace Helpers.PreparationTasks
 
         Protected Friend BaseWorkDir As String = String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
 
+        Protected Friend Overridable Property PTWorkDir As String = ""
+
         ''' <summary>
         ''' Reports a subprocess status change with a given status message.
         ''' </summary>

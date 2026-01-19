@@ -6,7 +6,7 @@ Namespace Helpers.PreparationTasks
     Public Class SCSIAdapterDriverExportPT
         Inherits PreparationTask
 
-        Private ReadOnly WorkDir As String = "ScsiAdapter"
+        Protected Friend Overrides Property PTWorkDir As String = "ScsiAdapter"
 
         Private Function GetSystemDrivers() As DismDriverPackageCollection
             Dim obtainedDrivers As DismDriverPackageCollection = Nothing
@@ -33,7 +33,7 @@ Namespace Helpers.PreparationTasks
 
         Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             ReportSubProcessStatus("Preparing to export drivers...")
-            CreateWorkingDirForPT(WorkDir)
+            CreateWorkingDirForPT(PTWorkDir)
             ReportSubProcessStatus("Getting SCSI Adapter/Storage Controller drivers...")
             Dim installedDrivers As DismDriverPackageCollection = GetSystemDrivers()
             Dim installedScsiAdapters As IEnumerable(Of DismDriverPackage)
@@ -50,7 +50,7 @@ Namespace Helpers.PreparationTasks
                 For Each scsiAdapter In installedScsiAdapters
                     ' Extract the name from the original path
                     Dim drvName As String = Path.GetFileName(scsiAdapter.OriginalFileName)
-                    Dim destinationAdapterPath As String = Path.Combine(BaseWorkDir, WorkDir, drvName)
+                    Dim destinationAdapterPath As String = Path.Combine(BaseWorkDir, PTWorkDir, drvName)
                     ReportSubProcessStatus(String.Format("Exporting driver {0} ...", drvName))
                     DynaLog.LogMessage("Exporting driver " & drvName & " ...")
                     CopyRecursive(Path.GetDirectoryName(scsiAdapter.OriginalFileName), destinationAdapterPath)
