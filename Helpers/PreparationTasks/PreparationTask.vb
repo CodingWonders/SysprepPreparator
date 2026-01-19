@@ -55,6 +55,8 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         Protected Friend SubProcessReporter As Action(Of String) = Nothing
 
+        Protected Friend BaseWorkDir As String = String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+
         ''' <summary>
         ''' Reports a subprocess status change with a given status message.
         ''' </summary>
@@ -406,6 +408,35 @@ Namespace Helpers.PreparationTasks
                 Return GetObjectValue(UserSidCollection(0), "SID")
             End If
             Return ""
+        End Function
+
+        Public Function CreateWorkingDirForPT(PTWorkDir As String) As Boolean
+            DynaLog.LogMessage("Creating working directory " & Path.Combine(BaseWorkDir, PTWorkDir) & " ...")
+
+            If Not Directory.Exists(BaseWorkDir) Then
+                DynaLog.LogMessage("Attempting to create base work directory...")
+                Try
+                    Directory.CreateDirectory(BaseWorkDir)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not create base work directory. Error message: " & ex.Message)
+                    Return False
+                End Try
+            End If
+
+            If Not Directory.Exists(Path.Combine(BaseWorkDir, PTWorkDir)) Then
+                DynaLog.LogMessage("Attempting to PT base work directory...")
+                Try
+                    Directory.CreateDirectory(Path.Combine(BaseWorkDir, PTWorkDir))
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not create PT work directory. Error message: " & ex.Message)
+                    Return False
+                End Try
+            End If
+            Return True
+        End Function
+
+        Public Function PTWorkDirExists(WorkDirName As String) As Boolean
+            Return Directory.Exists(Path.Combine(BaseWorkDir, WorkDirName))
         End Function
     End Class
 

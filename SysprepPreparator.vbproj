@@ -119,6 +119,7 @@
     <Compile Include="Helpers\PreparationTasks\ExplorerStopperPT.vb" />
     <Compile Include="Helpers\PreparationTasks\PreparationTask.vb" />
     <Compile Include="Helpers\PreparationTasks\RecycleBinCleanupPT.vb" />
+    <Compile Include="Helpers\PreparationTasks\SCSIAdapterDriverExportPT.vb" />
     <Compile Include="Helpers\PreparationTasks\SysprepStopperPT.vb" />
     <Compile Include="Helpers\PreparationTasks\VssAdminShadowVolumeDeletePT.vb" />
     <Compile Include="Helpers\PreparationTasks\WindowsUpdateTempFileCleanupPT.vb" />

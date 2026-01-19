@@ -1,5 +1,6 @@
 ﻿Imports SysprepPreparator.Classes
 Imports SysprepPreparator.Helpers.PreparationTasks
+Imports System.IO
 
 Namespace Helpers
 
@@ -19,6 +20,7 @@ Namespace Helpers
             {GetValueFromLanguageData("RegisteredPTs.VssAdminShadowVolumeDeletePT"), New VssAdminShadowVolumeDeletePT()},
             {GetValueFromLanguageData("RegisteredPTs.DismComponentCleanupPT"), New DismComponentCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.WindowsUpdateTempFileCleanupPT"), New WindowsUpdateTempFileCleanupPT()},
+            {"Export System SCSI Adapters", New SCSIAdapterDriverExportPT()},
             {GetValueFromLanguageData("RegisteredPTs.DTImageCapturePT"), New DTImageCapturePT()},
             {GetValueFromLanguageData("RegisteredPTs.DiskCleanupPT"), New DiskCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.EventLogPT"), New EventLogPT()},
@@ -47,7 +49,14 @@ Namespace Helpers
                 DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name, False)
                 PreparationTaskModules(PreparationTaskModule).SubProcessReporter = ProgressSubProcessReporter
                 Dim result As PreparationTask.PreparationTaskStatus = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
-                DynaLog.LogMessage("PT Succeeded? " & result, False)
+                Select Case result
+                    Case PreparationTask.PreparationTaskStatus.Succeeded
+                        DynaLog.LogMessage("PT Succeeded? Yes", False)
+                    Case PreparationTask.PreparationTaskStatus.Failed
+                        DynaLog.LogMessage("PT Succeeded? No", False)
+                    Case PreparationTask.PreparationTaskStatus.Skipped
+                        DynaLog.LogMessage("PT Succeeded? Skipped", False)
+                End Select
                 StatusList.Add(result)
 
                 ' get actual progress
@@ -58,6 +67,14 @@ Namespace Helpers
                 If ProgressSubProcessReporter IsNot Nothing Then ProgressSubProcessReporter.Invoke("")      ' clear subprocess status when finished
                 Threading.Thread.Sleep(100)
             Next
+
+            If Directory.Exists(String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))) Then
+                Try
+                    Directory.Delete(String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), True)
+                Catch ex As Exception
+                    ' ignore
+                End Try
+            End If
 
             Return StatusList
         End Function

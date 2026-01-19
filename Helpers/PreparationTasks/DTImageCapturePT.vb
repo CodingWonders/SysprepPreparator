@@ -436,6 +436,39 @@ Namespace Helpers.PreparationTasks
         Private Sub ModifyImage(mountDir As String)
             Try
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
+                If PTWorkDirExists("ScsiAdapter") Then
+                    ' Install the scsi adapters we had previously exported.
+                    ReportSubProcessStatus("Scanning SCSI adapter drivers...")
+                    Dim scsiAdapterPaths As String() = Directory.GetFiles(Path.Combine(BaseWorkDir, "ScsiAdapter"), "*.inf", SearchOption.AllDirectories)
+
+                    Try
+                        DynaLog.LogMessage("Initializing API...")
+                        DismApi.Initialize(DismLogLevel.LogErrors)
+                        DynaLog.LogMessage("Adding SCSI Adapters/Storage Controllers...")
+                        Using session As DismSession = DismApi.OpenOfflineSession(mountDir)
+                            For Each scsiAdapterPath In scsiAdapterPaths
+                                ReportSubProcessStatus(String.Format("Installing SCSI adapter/Storage controller driver {0} ...", Path.GetFileName(scsiAdapterPath)))
+                                DynaLog.LogMessage("Installing SCSI adapter/Storage controller driver " & Path.GetFileName(scsiAdapterPath) & " ...")
+                                Try
+                                    DismApi.AddDriver(session, scsiAdapterPath, True)
+                                    DynaLog.LogMessage("Driver " & Path.GetFileName(scsiAdapterPath) & " was added successfully.")
+                                Catch ex As Exception
+                                    DynaLog.LogMessage("Could not add driver " & Path.GetFileName(scsiAdapterPath) & ".")
+                                End Try
+                            Next
+                        End Using
+                    Catch ex As Exception
+                        DynaLog.LogMessage("Could not add drivers. Error message: " & ex.Message)
+                    Finally
+                        Try
+                            DynaLog.LogMessage("Attempting to shut down API...")
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
+                    End Try
+
+                End If
             Catch ex As Exception
                 DynaLog.LogMessage("Could not modify image. Error message: " & ex.Message)
             End Try
