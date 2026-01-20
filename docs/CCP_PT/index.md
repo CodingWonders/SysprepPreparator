@@ -136,6 +136,52 @@ The Preparation Task base class defines a `PreparationTaskStatus` enumeration wh
 - `PreparationTaskStatus.Failed`, if the task failed
 - `PreparationTaskStatus.Skipped`, if the task was skipped and did not run
 
+### Storing temporary files
+
+Versions 0.7.3 and later of the Sysprep Preparation Tool allow you to make your Preparation Tasks drop and/or reference files in a temporary manner using the **working directories**. The Preparation Task base class offers 2 properties for working directories:
+
+- The **base working directory**. This folder contains the working directories of all Preparation Tasks and cannot be overridden by your Preparation Tasks
+- The **working directory**. This folder is specific to each Preparation Task that *needs to use it*
+
+To add working directory support for your Preparation Task, you **must** override the second property, like this:
+
+```vb
+Protected Friend Overrides Property PTWorkDir As String = "<name of the working directory>"
+```
+
+That alone will not create the working directory for your Preparation Task. To invoke the creation of said working directory, you must call `CreateWorkingDirForPT` in `RunPreparationTask`, and pass in the overridden property, like this:
+
+```vb
+Public Overrides Function RunPreparationTask() As PreparationTaskStatus
+    ' ...
+    CreateWorkingDirForPT(PTWorkDir)        ' this is important
+    ' ...
+End Function
+```
+
+The working directory of your Preparation Task is stored here after calling the method:
+
+```
+%SYSTEMDRIVE%\CWS_SYSPRP\<Preparation Task Working Directory Name>
+```
+
+Later, if you need to reference this working directory, you must combine the base working directory and your working directory using [Path.Combine](https://learn.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=netframework-4.8). For example, to copy a file to your working directory, do this:
+
+```vb
+File.Copy("<source path>", Path.Combine(BaseWorkDir, PTWorkDir, Path.GetFileName("<source path>")))
+```
+
+When working with working directories, bear in mind the following:
+
+- The Preparation Task that created the working directory can read and write content to said working directory
+- Other Preparation Tasks can reference the working directory that you create, but **should only read** the contents of said working directory. If they need to write content, they should copy the necessary files to their working directories before doing anything else
+
+Preparation Tasks can also detect whether specific working directories exist by calling `PTWorkDirExists` and passing the working directory name. This returns True when the specific working directory exists, and False otherwise.
+
+When **all preparation tasks are complete**, the base working directory, plus every working directory inside it, will be removed.
+
+For more information on working directories, please refer to the Preparation Task API documentation that you will find on the bottom of this document. Also refer to [this Preparation Task](../../Helpers/PreparationTasks/SCSIAdapterDriverExportPT.vb) for an example.
+
 ### Registering your PT
 
 When your PT is finished, you will need to **register it** in the list of providers. To do this, go to `PreparationTaskHelper.vb` and add your PT to the dictionary, like this:
