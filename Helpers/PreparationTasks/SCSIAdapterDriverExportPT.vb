@@ -8,6 +8,10 @@ Namespace Helpers.PreparationTasks
 
         Protected Friend Overrides Property PTWorkDir As String = "ScsiAdapter"
 
+        ''' <summary>
+        ''' Gets the information about the installed drivers of the active Windows installation.
+        ''' </summary>
+        ''' <returns>The installed drivers of the active Windows installation</returns>
         Private Function GetSystemDrivers() As DismDriverPackageCollection
             Dim obtainedDrivers As DismDriverPackageCollection = Nothing
             Try
@@ -31,10 +35,15 @@ Namespace Helpers.PreparationTasks
             Return obtainedDrivers
         End Function
 
+        ''' <summary>
+        ''' Exports all the SCSI adapters and storage controllers from an active installation
+        ''' to the PT working directory.
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function RunPreparationTask() As PreparationTaskStatus
-            ReportSubProcessStatus("Preparing to export drivers...")
+            ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message1"))
             CreateWorkingDirForPT(PTWorkDir)
-            ReportSubProcessStatus("Getting SCSI Adapter/Storage Controller drivers...")
+            ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message2"))
             Dim installedDrivers As DismDriverPackageCollection = GetSystemDrivers()
             Dim installedScsiAdapters As IEnumerable(Of DismDriverPackage)
             If installedDrivers IsNot Nothing Then
@@ -51,7 +60,7 @@ Namespace Helpers.PreparationTasks
                     ' Extract the name from the original path
                     Dim drvName As String = Path.GetFileName(scsiAdapter.OriginalFileName)
                     Dim destinationAdapterPath As String = Path.Combine(BaseWorkDir, PTWorkDir, drvName)
-                    ReportSubProcessStatus(String.Format("Exporting driver {0} ...", drvName))
+                    ReportSubProcessStatus(String.Format(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message3"), drvName))
                     DynaLog.LogMessage("Exporting driver " & drvName & " ...")
                     CopyRecursive(Path.GetDirectoryName(scsiAdapter.OriginalFileName), destinationAdapterPath)
                 Next

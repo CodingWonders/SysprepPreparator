@@ -17,9 +17,21 @@ Namespace Helpers.PreparationTasks
     Public MustInherit Class PreparationTask
         Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner, IFileProcessor, IWmiUserProcessor
 
+        ''' <summary>
+        ''' The status of a Preparation Task.
+        ''' </summary>
         Public Enum PreparationTaskStatus As Integer
+            ''' <summary>
+            ''' The Preparation Task succeeded in preparing the system.
+            ''' </summary>
             Succeeded = 0
+            ''' <summary>
+            ''' The Preparation Task failed to prepare the system.
+            ''' </summary>
             Failed = 1
+            ''' <summary>
+            ''' The Preparation Task was skipped.
+            ''' </summary>
             Skipped = 2
         End Enum
 
@@ -55,8 +67,28 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         Protected Friend SubProcessReporter As Action(Of String) = Nothing
 
-        Protected Friend BaseWorkDir As String = String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+        ''' <summary>
+        ''' The base working directory for all Preparation Tasks.
+        ''' </summary>
+        Protected Friend ReadOnly BaseWorkDir As String = String.Format("{0}\CWS_SYSPRP", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
 
+        ''' <summary>
+        ''' The working directory for a specific Preparation Task.
+        ''' </summary>
+        ''' <returns>The working directory</returns>
+        ''' <remarks>
+        ''' <para>
+        ''' Preparation Tasks that need to store files temporarily to reference them later
+        ''' must override this property. Files that are stored by this preparation task can also
+        ''' be referenced from other Preparation Tasks. That does NOT mean, however, that Preparation
+        ''' Tasks other than the one that created the working directory should drop files on there as
+        ''' well.
+        ''' </para>
+        ''' <para>
+        ''' They should only read the contents of the working directory and, if they need to store
+        ''' information, they need to do that on THEIR working directories.
+        ''' </para>
+        ''' </remarks>
         Protected Friend Overridable Property PTWorkDir As String = ""
 
         ''' <summary>
@@ -412,6 +444,15 @@ Namespace Helpers.PreparationTasks
             Return ""
         End Function
 
+        ''' <summary>
+        ''' Creates the working directory for a specific Preparation Task.
+        ''' </summary>
+        ''' <param name="PTWorkDir">The name of the working directory for the Preparation Task.</param>
+        ''' <returns>
+        ''' Whether the directory creation operation succeeded for both the creation of the
+        ''' base working directory (if non-existent) and the creation of the Preparation Task
+        ''' working directory (if non-existent). If both folders already exist, True is returned.
+        ''' </returns>
         Public Function CreateWorkingDirForPT(PTWorkDir As String) As Boolean
             DynaLog.LogMessage("Creating working directory " & Path.Combine(BaseWorkDir, PTWorkDir) & " ...")
 
@@ -437,6 +478,11 @@ Namespace Helpers.PreparationTasks
             Return True
         End Function
 
+        ''' <summary>
+        ''' Detects whether a working directory of a Preparation Task exists in the file system.
+        ''' </summary>
+        ''' <param name="WorkDirName">The name of the working directory</param>
+        ''' <returns>Whether the full working directory path exists.</returns>
         Public Function PTWorkDirExists(WorkDirName As String) As Boolean
             Return Directory.Exists(Path.Combine(BaseWorkDir, WorkDirName))
         End Function

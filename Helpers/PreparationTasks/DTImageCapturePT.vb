@@ -438,7 +438,7 @@ Namespace Helpers.PreparationTasks
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
                 If PTWorkDirExists("ScsiAdapter") Then
                     ' Install the scsi adapters we had previously exported.
-                    ReportSubProcessStatus("Scanning SCSI adapter drivers...")
+                    ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message7"))
                     Dim scsiAdapterPaths As String() = Directory.GetFiles(Path.Combine(BaseWorkDir, "ScsiAdapter"), "*.inf", SearchOption.AllDirectories)
 
                     Try
@@ -447,7 +447,7 @@ Namespace Helpers.PreparationTasks
                         DynaLog.LogMessage("Adding SCSI Adapters/Storage Controllers...")
                         Using session As DismSession = DismApi.OpenOfflineSession(mountDir)
                             For Each scsiAdapterPath In scsiAdapterPaths
-                                ReportSubProcessStatus(String.Format("Installing SCSI adapter/Storage controller driver {0} ...", Path.GetFileName(scsiAdapterPath)))
+                                ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message8"), Path.GetFileName(scsiAdapterPath)))
                                 DynaLog.LogMessage("Installing SCSI adapter/Storage controller driver " & Path.GetFileName(scsiAdapterPath) & " ...")
                                 Try
                                     DismApi.AddDriver(session, scsiAdapterPath, True)
