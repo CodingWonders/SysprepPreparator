@@ -118,7 +118,7 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Summary: Removes the contents of a directory, and any subdirectories within the directory, automatically and then removes the directory.
   - Parameters:
     - `DirectoryToRemove` (String): The directory to remove.
-  - Returns: Whether removal succeeded.
+  - Returns: Whether removal succeeded. The method will refuse to remove root paths and, on error deleting via .NET APIs, will fallback to using `cmd.exe /c del` and return success based on that command's result.
   - Implements: `IFileProcessor`
 
 - `CopyRecursive`
@@ -135,6 +135,19 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
     - `UserName` (String): The user name to get the SID of.
   - Returns: The SID of the user.
   - Implements: `IWmiUserProcessor`
+
+- `CreateWorkingDirForPT`
+  - Summary: Creates the working directory for a specific Preparation Task.
+  - Parameters:
+    - `PTWorkDir` (String): The name of the working directory for the Preparation Task.
+  - Returns: Whether the directory creation operation succeeded for both the creation of the base working directory (if non-existent) and the creation of the Preparation Task working directory (if non-existent). If both folders already exist, True is returned.
+  - Remarks: The method attempts to create a base work directory under the system drive and the PT-specific subdirectory. It logs progress to `DynaLog` and returns False on failure to create either folder.
+
+- `PTWorkDirExists`
+  - Summary: Detects whether a working directory of a Preparation Task exists in the file system.
+  - Parameters:
+    - `WorkDirName` (String): The name of the working directory
+  - Returns: Whether the full working directory path exists.
 
 ## Enums
 
@@ -164,6 +177,27 @@ This class is `MustInherit` (abstract in VB). No public constructors are defined
   - Summary: An event sender for subprocess status changes.
   - Type: `Action(Of String)`
 
+- `BaseWorkDir`
+  - Summary: The base working directory for all Preparation Tasks.
+  - Type: `String` (default: `%SYSTEMDRIVE%\CWS_SYSPRP`)
+
+- `PTWorkDir`
+  - Summary: The working directory for a specific Preparation Task (overridable per PT).
+  - Type: `String` (empty by default) - inheritors should override this property to provide a per-task working directory name.
+
+- `DTERR_RegNotFound`
+  - Summary: Error code returned when `reg.exe` is not found on the system.
+  - Type: `Integer` (value `2`)
+
+- `DTERR_RegItemObjectNull`
+  - Summary: Error code returned when a required registry item or argument is null or empty.
+  - Type: `Integer` (value `1`)
+
 ## Remarks
 
 This documentation summarizes the public surface of `PreparationTask` based on the current source file. Implementation details and example usage can be found in the project source.
+
+Working directory guidance:
+- `BaseWorkDir` is created under the system drive and is intended to host per-preparation-task working folders.
+- Preparation Tasks that need to persist temporary files should override the `PTWorkDir` property to return their working directory name and call `CreateWorkingDirForPT(PTWorkDir)` before writing files.
+- Other Preparation Tasks may read from another PT's work folder but should not write to it; each PT should write only to its own working directory.
