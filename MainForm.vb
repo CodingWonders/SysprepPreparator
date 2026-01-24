@@ -56,6 +56,8 @@ Public Class MainForm
     ''' <remarks></remarks>
     Public Event SubProcessStatusUpdated(Status As String)
 
+    Public Event CheckFinished(Check As CompatibilityCheckerProviderStatus)
+
     ''' <summary>
     ''' Handles the TaskStarted event
     ''' </summary>
@@ -98,6 +100,11 @@ Public Class MainForm
         SettingPreparationPage_SubProcessProgressLabel.Text = Status
     End Sub
 
+    Private Sub OnCheckFinished(Check As CompatibilityCheckerProviderStatus) Handles Me.CheckFinished
+        PerformedChecks.Add(Check)
+        SysCheckPage_ChecksLv.Items.Add(New ListViewItem(New String() {Check.StatusMessage.StatusTitle, If(Check.Compatible, GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No")), Check.StatusMessage.SeverityToString(Check.StatusMessage.StatusSeverity)}))
+    End Sub
+
     ''' <summary>
     ''' A public method for the PT Helper to report task starts
     ''' </summary>
@@ -126,17 +133,28 @@ Public Class MainForm
         RaiseEvent SubProcessStatusUpdated(Status)
     End Sub
 
+    Sub ReportCheckFinished(Check As CompatibilityCheckerProviderStatus)
+        RaiseEvent CheckFinished(Check)
+    End Sub
+
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
     Dim currentTheme As Theme
 
-    Sub RunAutoMode()
+    Async Sub RunAutoMode()
         DynaLog.LogMessage("Auto Mode enabled -- performing steps automatically...")
         WindowHelper.DisableCloseCapability(Handle)
 
         Do Until SettingPreparationPanel.Visible
             If SystemCheckPanel.Visible AndAlso Not Environment.GetCommandLineArgs().Contains("/test") Then
+                Await Task.Run(Function()
+                                   While Not IsComputerChecked
+                                       System.Threading.Thread.Sleep(50)
+                                   End While
+                                   Return True
+                               End Function)
+
                 If PerformedChecks.Any(Function(check) Not check.Compatible) Then
                     Exit Do
                 End If
@@ -149,7 +167,7 @@ Public Class MainForm
                         compatWarningStr &= String.Format("- {0}: {1}{2}", compatWarning.StatusMessage.StatusTitle, compatWarning.StatusMessage.StatusDescription, Environment.NewLine)
                     Next
 
-                    If MessageBox.Show(String.Format(GetValueFromLanguageData("MainForm.AutoMode_WarningsDetected"), compatWarningStr),
+                    If MessageBox.Show(Me, String.Format(GetValueFromLanguageData("MainForm.AutoMode_WarningsDetected"), compatWarningStr),
                                        Text, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.No Then
                         Exit Do
                     End If
@@ -157,6 +175,7 @@ Public Class MainForm
             End If
 
             Next_Button.PerformClick()
+            Await Task.Delay(100)
         Loop
     End Sub
 
@@ -252,6 +271,7 @@ Public Class MainForm
         SysCheckPage_CheckDetails_Description.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckDescField")
         SysCheckPage_CheckDetails_Resolution.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckResField")
         SysCheckPage_CheckAgainBtn.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckAgainBtn")
+        SysCheckPage_ProgressLabel.Text = GetValueFromLanguageData("Common.Common_PleaseWait")
         AdvSettingsPage_Header.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Header")
         AdvSettingsPage_Description.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Description")
         AdvSettingsPage_ConfigSysprepSettings.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ConfigCheck")
@@ -299,18 +319,29 @@ Public Class MainForm
     ''' Starts the CCP Helper and reports the events logged by each of the CCPs
     ''' </summary>
     ''' <remarks></remarks>
-    Sub CheckComputer()
+    Private Async Sub CheckComputer()
         If IsComputerChecked Then
             Exit Sub
         End If
         SysCheckPage_ChecksLv.Items.Clear()
         Refresh()
+        SysCheckPage_CheckAgainBtn.Enabled = False
+        TableLayoutPanel1.Enabled = False
+        SysCheckPage_CCPProgressBar.Style = ProgressBarStyle.Marquee
+        SysCheckPage_CCPProgressBar.Value = 0
+        SysCheckPage_CCPProgressPanel.Visible = True
         Cursor = Cursors.WaitCursor
-        PerformedChecks = CompatibilityCheckerHelper.RunChecks()
+        PerformedChecks = Await Task.Run(Function()
+                                             Return CompatibilityCheckerHelper.RunChecks(CheckFinishedReporter:=Sub(Check As CompatibilityCheckerProviderStatus)
+                                                                                                                    ReportCheckFinished(Check)
+                                                                                                                End Sub)
+                                         End Function)
         Cursor = Cursors.Arrow
-        For Each PerformedCheck In PerformedChecks
-            SysCheckPage_ChecksLv.Items.Add(New ListViewItem(New String() {PerformedCheck.StatusMessage.StatusTitle, If(PerformedCheck.Compatible, GetValueFromLanguageData("Common.Common_Yes"), GetValueFromLanguageData("Common.Common_No")), PerformedCheck.StatusMessage.SeverityToString(PerformedCheck.StatusMessage.StatusSeverity)}))
-        Next
+        SysCheckPage_CheckAgainBtn.Enabled = True
+        TableLayoutPanel1.Enabled = True
+        SysCheckPage_CCPProgressPanel.Visible = False
+        SysCheckPage_CCPProgressBar.Style = ProgressBarStyle.Blocks
+        SysCheckPage_CCPProgressBar.Value = 100
         IsComputerChecked = True
     End Sub
 
@@ -318,7 +349,7 @@ Public Class MainForm
     ''' Starts the PT Helper
     ''' </summary>
     ''' <remarks></remarks>
-    Async Sub PrepareComputer()
+    Private Async Sub PrepareComputer()
         Refresh()
         Await Task.Run(Function()
                            Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)

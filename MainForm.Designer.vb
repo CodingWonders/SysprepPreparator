@@ -67,6 +67,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_Description = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_Header = New System.Windows.Forms.Label()
         Me.SettingPreparationPanel = New System.Windows.Forms.Panel()
+        Me.SettingPreparationPanel_TaskProgressBar = New System.Windows.Forms.ProgressBar()
         Me.SettingPreparationPanel_TaskLv = New System.Windows.Forms.ListView()
         Me.SettingPreparationPage_TaskCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SettingPreparationPage_SuccessfulCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -81,7 +82,9 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
-        Me.SettingPreparationPanel_TaskProgressBar = New System.Windows.Forms.ProgressBar()
+        Me.SysCheckPage_CCPProgressPanel = New System.Windows.Forms.Panel()
+        Me.SysCheckPage_CCPProgressBar = New System.Windows.Forms.ProgressBar()
+        Me.SysCheckPage_ProgressLabel = New System.Windows.Forms.Label()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -95,6 +98,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepConfigPanel.SuspendLayout()
         Me.SettingPreparationPanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
+        Me.SysCheckPage_CCPProgressPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'ButtonPanel
@@ -241,6 +245,7 @@ Partial Class MainForm
         '
         'SystemCheckPanel
         '
+        Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CCPProgressPanel)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CheckAgainBtn)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CheckDetailsGB)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_ChecksLv)
@@ -619,6 +624,15 @@ Partial Class MainForm
         Me.SettingPreparationPanel.TabIndex = 3
         Me.SettingPreparationPanel.Visible = False
         '
+        'SettingPreparationPanel_TaskProgressBar
+        '
+        Me.SettingPreparationPanel_TaskProgressBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPanel_TaskProgressBar.Location = New System.Drawing.Point(18, 187)
+        Me.SettingPreparationPanel_TaskProgressBar.Name = "SettingPreparationPanel_TaskProgressBar"
+        Me.SettingPreparationPanel_TaskProgressBar.Size = New System.Drawing.Size(852, 23)
+        Me.SettingPreparationPanel_TaskProgressBar.TabIndex = 6
+        '
         'SettingPreparationPanel_TaskLv
         '
         Me.SettingPreparationPanel_TaskLv.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -770,14 +784,37 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
         '
-        'SettingPreparationPanel_TaskProgressBar
+        'SysCheckPage_CCPProgressPanel
         '
-        Me.SettingPreparationPanel_TaskProgressBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPanel_TaskProgressBar.Location = New System.Drawing.Point(18, 187)
-        Me.SettingPreparationPanel_TaskProgressBar.Name = "SettingPreparationPanel_TaskProgressBar"
-        Me.SettingPreparationPanel_TaskProgressBar.Size = New System.Drawing.Size(852, 23)
-        Me.SettingPreparationPanel_TaskProgressBar.TabIndex = 6
+        Me.SysCheckPage_CCPProgressPanel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.SysCheckPage_CCPProgressPanel.Controls.Add(Me.SysCheckPage_ProgressLabel)
+        Me.SysCheckPage_CCPProgressPanel.Controls.Add(Me.SysCheckPage_CCPProgressBar)
+        Me.SysCheckPage_CCPProgressPanel.Location = New System.Drawing.Point(23, 650)
+        Me.SysCheckPage_CCPProgressPanel.Name = "SysCheckPage_CCPProgressPanel"
+        Me.SysCheckPage_CCPProgressPanel.Size = New System.Drawing.Size(460, 23)
+        Me.SysCheckPage_CCPProgressPanel.TabIndex = 5
+        Me.SysCheckPage_CCPProgressPanel.Visible = False
+        '
+        'SysCheckPage_CCPProgressBar
+        '
+        Me.SysCheckPage_CCPProgressBar.Dock = System.Windows.Forms.DockStyle.Right
+        Me.SysCheckPage_CCPProgressBar.Location = New System.Drawing.Point(135, 0)
+        Me.SysCheckPage_CCPProgressBar.MarqueeAnimationSpeed = 25
+        Me.SysCheckPage_CCPProgressBar.Name = "SysCheckPage_CCPProgressBar"
+        Me.SysCheckPage_CCPProgressBar.Size = New System.Drawing.Size(325, 23)
+        Me.SysCheckPage_CCPProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.SysCheckPage_CCPProgressBar.TabIndex = 0
+        '
+        'SysCheckPage_ProgressLabel
+        '
+        Me.SysCheckPage_ProgressLabel.AutoEllipsis = True
+        Me.SysCheckPage_ProgressLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SysCheckPage_ProgressLabel.Location = New System.Drawing.Point(0, 0)
+        Me.SysCheckPage_ProgressLabel.Name = "SysCheckPage_ProgressLabel"
+        Me.SysCheckPage_ProgressLabel.Size = New System.Drawing.Size(135, 23)
+        Me.SysCheckPage_ProgressLabel.TabIndex = 1
+        Me.SysCheckPage_ProgressLabel.Text = "Please wait..."
+        Me.SysCheckPage_ProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'MainForm
         '
@@ -815,6 +852,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepConfigPanel.PerformLayout()
         Me.SettingPreparationPanel.ResumeLayout(False)
         Me.FinishPanel.ResumeLayout(False)
+        Me.SysCheckPage_CCPProgressPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -877,4 +915,7 @@ Partial Class MainForm
     Friend WithEvents AboutBtn As Button
     Friend WithEvents SettingPreparationPage_SubProcessProgressLabel As Label
     Friend WithEvents SettingPreparationPanel_TaskProgressBar As ProgressBar
+    Friend WithEvents SysCheckPage_CCPProgressPanel As Panel
+    Friend WithEvents SysCheckPage_ProgressLabel As Label
+    Friend WithEvents SysCheckPage_CCPProgressBar As ProgressBar
 End Class

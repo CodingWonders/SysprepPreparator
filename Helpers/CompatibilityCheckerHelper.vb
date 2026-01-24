@@ -27,7 +27,7 @@ Namespace Helpers
         ''' </summary>
         ''' <returns>All the status events logged</returns>
         ''' <remarks></remarks>
-        Public Function RunChecks() As List(Of CompatibilityCheckerProviderStatus)
+        Public Function RunChecks(Optional CheckFinishedReporter As Action(Of CompatibilityCheckerProviderStatus) = Nothing) As List(Of CompatibilityCheckerProviderStatus)
             DynaLog.LogMessage("Preparing to run Compatibility Checker Providers (CCPs)...")
             Dim StatusList As New List(Of CompatibilityCheckerProviderStatus)
 
@@ -35,6 +35,7 @@ Namespace Helpers
                 DynaLog.LogMessage("CCP to run: " & CompatibilityCheckerModule.GetType().Name)
                 Dim result As CompatibilityCheckerProviderStatus = CompatibilityCheckerModule.PerformCompatibilityCheck()
                 DynaLog.LogMessage(String.Format("[{0}] {1}", CompatibilityCheckerModule.GetType().Name, result.ToString()))
+                CheckFinishedReporter.Invoke(result)
                 StatusList.Add(result)
             Next
 
