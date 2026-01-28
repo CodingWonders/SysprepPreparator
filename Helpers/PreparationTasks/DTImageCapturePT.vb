@@ -338,7 +338,7 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns>Whether the operation succeeded</returns>
         Public Overrides Function RunPreparationTask() As PreparationTaskStatus
-            If Not WillPrepareBootImage Then
+            If Not WillPrepareBootImage OrElse File.Exists(String.Format("{0}\capture_completed", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))) Then
                 DynaLog.LogMessage("The boot image will not be prepared. Stopping...")
                 Return PreparationTaskStatus.Skipped
             End If
@@ -426,6 +426,13 @@ Namespace Helpers.PreparationTasks
                 Return False
             End Try
 
+            If Not IsInTestMode Then
+                Try
+                    File.WriteAllText(String.Format("{0}\capture_completed", Environment.GetEnvironmentVariable("SYSTEMDRIVE")), String.Empty)
+                Catch ex As Exception
+                    ' Ignore errors
+                End Try
+            End If
             Return PreparationTaskStatus.Succeeded
         End Function
 
