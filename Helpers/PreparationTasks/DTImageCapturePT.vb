@@ -361,7 +361,7 @@ Namespace Helpers.PreparationTasks
 
             If Not File.Exists(sourceFile) Then
                 DynaLog.LogMessage("Source file " & sourceFile & " does not exist. Stopping...")
-                Return False
+                Return PreparationTaskStatus.Failed
             End If
             If Not Directory.Exists(destinationFolder) Then
                 DynaLog.LogMessage("Destination folder does not exist. Attempting to create it...")
@@ -423,7 +423,7 @@ Namespace Helpers.PreparationTasks
                 DynaLog.LogMessage("An error occurred while preparing the Windows image. Error message: " & ex.Message)
                 DynaLog.LogMessage("Cleaning up files...")
                 CleanupOnFailure(destinationFolder)
-                Return False
+                Return PreparationTaskStatus.Failed
             End Try
 
             If Not IsInTestMode Then
