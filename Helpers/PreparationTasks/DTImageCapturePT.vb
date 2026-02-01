@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
 Imports Microsoft.Dism
+Imports Microsoft.Win32
 
 Namespace Helpers.PreparationTasks
 
@@ -9,6 +10,7 @@ Namespace Helpers.PreparationTasks
 
         Private WillPrepareBootImage As Boolean = Environment.GetCommandLineArgs().Contains("/dt_capture")
         Private Const DISM_ERR_CANT_UNMOUNT_OPEN_FILE_HANDLES As Integer = -1052638953
+        Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A")
 
         ''' <summary>
         ''' Gets the information of a given Windows image.
@@ -193,8 +195,10 @@ Namespace Helpers.PreparationTasks
             RunBCDConfigurator("/set {current} bootmenupolicy legacy", True)
             RunBCDConfigurator("/set {bootmgr} timeout 3", True)
 
-            ' Configure ramdisk
-            RunBCDConfigurator("/create {ramdiskoptions}")
+            ' Configure ramdisk. Creating something that already exists will cause bcdedit to fail,
+            ' so we'll first check if the ramdisk entry is already defined; it may have been added
+            ' by a previous run of this PT.
+            If Not BcdObjectExists(GUID_WINDOWS_SETUP_RAMDISK_OPTIONS) Then RunBCDConfigurator("/create {ramdiskoptions}")
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdidevice partition=" & Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdipath " & sdiPath.Replace(Path.GetPathRoot(sdiPath), "\"))
 
@@ -238,6 +242,25 @@ Namespace Helpers.PreparationTasks
             RunBCDConfigurator(String.Format("/displayorder {0} /addfirst", targetGuid))
             RunBCDConfigurator(String.Format("/default {0}", targetGuid))
         End Sub
+
+        Private Function BcdObjectExists(objectId As Guid) As Boolean
+            DynaLog.LogMessage("Determining if BCD boot entry with object ID " & objectId.ToString() & " exists in the system BCD store...")
+
+            Dim bcdEntryCollectionRk As RegistryKey = Nothing
+            Dim objectEntryExists As Boolean = False
+
+            Try
+                bcdEntryCollectionRk = Registry.LocalMachine.OpenSubKey("BCD00000000\Objects")
+                objectEntryExists = bcdEntryCollectionRk.GetSubKeyNames().Any(Function(entry) entry.Equals(String.Format("{{{0}}}", objectId.ToString()), StringComparison.OrdinalIgnoreCase))
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not get presence of BCD boot entry object. Error message: " & ex.Message)
+            Finally
+                If bcdEntryCollectionRk IsNot Nothing Then bcdEntryCollectionRk.Close()
+            End Try
+
+            DynaLog.LogMessage("Boot entry object exists? " & If(objectEntryExists, "Yes", "No"))
+            Return objectEntryExists
+        End Function
 
         ''' <summary>
         ''' Unmounts a specified Windows image.
