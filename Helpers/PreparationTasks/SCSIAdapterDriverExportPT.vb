@@ -42,7 +42,7 @@ Namespace Helpers.PreparationTasks
         ''' <returns></returns>
         Public Overrides Function RunPreparationTask() As PreparationTaskStatus
             ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message1"))
-            CreateWorkingDirForPT(PTWorkDir)
+            If Not CreateWorkingDirForPT(PTWorkDir) Then Return PreparationTaskStatus.Failed
             ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message2"))
             Dim installedDrivers As DismDriverPackageCollection = GetSystemDrivers()
             Dim installedScsiAdapters As IEnumerable(Of DismDriverPackage)
