@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -67,6 +67,23 @@ Namespace My.Resources
             Get
                 Dim obj As Object = ResourceManager.GetObject("preparator_image_full", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca una cadena traducida similar a &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        '''&lt;unattend xmlns=&quot;urn:schemas-microsoft-com:unattend&quot;&gt;
+        '''    &lt;settings pass=&quot;specialize&quot;&gt;
+        '''        &lt;component name=&quot;Microsoft-Windows-Shell-Setup&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        '''            &lt;CopyProfile&gt;true&lt;/CopyProfile&gt;
+        '''        &lt;/component&gt;
+        '''    &lt;/settings&gt;
+        '''&lt;/unattend&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property UnattendXml_CopyProfile() As String
+            Get
+                Return ResourceManager.GetString("UnattendXml_CopyProfile", resourceCulture)
             End Get
         End Property
         
