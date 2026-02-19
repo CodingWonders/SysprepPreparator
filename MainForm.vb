@@ -509,6 +509,12 @@ Public Class MainForm
             MsgBox(GetValueFromLanguageData("MainForm.RunAsAdminMessage"), vbOKOnly + vbCritical, GetValueFromLanguageData("MainForm.WndTitle"))
             Environment.Exit(1)
         End If
+        ' Prevent tool from running in Safe Mode
+        If SystemInformation.BootMode <> BootMode.Normal Then
+            DynaLog.LogMessage("This system is in Safe Mode.")
+            MsgBox(GetValueFromLanguageData("MainForm.SafeModeNotSupported"), vbOKOnly + vbCritical, GetValueFromLanguageData("MainForm.WndTitle"))
+            Environment.Exit(1)
+        End If
         OriginalWindowState = WindowState
         OriginalWindowBounds = Bounds
         FormBorderStyle = FormBorderStyle.None
