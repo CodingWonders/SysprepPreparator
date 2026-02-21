@@ -9,6 +9,8 @@ This tool is designed to be as modular as possible. Checks are performed by *Com
 
 *Special Thanks to [Real-MullaC](https://github.com/Real-MullaC) for helping with initial testing and expansion of this tool.*
 
+The Sysprep Preparation Tool follows steps described by [Windows OSHub](https://woshub.com/create-custom-windows-image-preinstalled-apps/).
+
 ## How do I get started?
 
 No releases are available yet because this is still under construction. So you'll have to build it.
