@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 Imports SysprepPreparator.Classes
 Imports SysprepPreparator.Helpers
+Imports System.Text.Encoding
 
 Public Class MainForm
 
@@ -391,9 +392,41 @@ Public Class MainForm
             sysprepProcess.WaitForExit()
 
             If Debugger.IsAttached Then MsgBox("Sysprep exited with code " & sysprepProcess.ExitCode, vbOKOnly + vbInformation)
+            If SysprepConfiguration.CopyProfile Then
+                ' Microsoft recommends that we remove certain keys from the default user's registry to prevent reset issues. We'll
+                ' listen to them for once.
+                ' https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-copyprofile
+                RemoveCopyProfileTemp()
+            End If
         End If
 
         If Environment.GetCommandLineArgs().Contains("/auto") Then Close()
+    End Sub
+
+    Private Sub RemoveCopyProfileTemp()
+        Dim regProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden
+            }
+        }
+
+        regProc.StartInfo.Arguments = String.Format("load HKU\DefUser {0}", Quote & String.Format("{0}\Users\Default\NTUSER.DAT", Environment.GetEnvironmentVariable("SYSTEMDRIVE")) & Quote)
+        regProc.Start()
+        regProc.WaitForExit()
+        regProc.StartInfo.Arguments = String.Format("delete {0} /f /v FileAssociationsUpdateVersion", Quote & "HKU\DefUser\Software\Microsoft\Windows\Shell\Associations" & Quote)
+        regProc.Start()
+        regProc.WaitForExit()
+        regProc.StartInfo.Arguments = String.Format("delete {0} /f", Quote & "HKU\DefUser\Software\Microsoft\Windows\Shell\Associations\UrlAssociations" & Quote)
+        regProc.Start()
+        regProc.WaitForExit()
+        regProc.StartInfo.Arguments = String.Format("delete {0} /f", Quote & "HKU\DefUser\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts" & Quote)
+        regProc.Start()
+        regProc.WaitForExit()
+        regProc.StartInfo.Arguments = "unload HKU\DefUser"
+        regProc.Start()
+        regProc.WaitForExit()
     End Sub
 
     ''' <summary>
@@ -420,12 +453,27 @@ Public Class MainForm
             Case SysprepConfig.ShutdownMode.Quit
                 sysprepCommandLine &= "/quit "
         End Select
-        If SysprepConfiguration.AnswerFile <> "" AndAlso File.Exists(SysprepConfiguration.AnswerFile) Then
-            sysprepCommandLine &= String.Format("/unattend:{0} ", Quote & SysprepConfiguration.AnswerFile & Quote)
+        ' If we ticked CopyProfile, then we have to use a different answer file, no matter
+        ' what the user picked.
+        If SysprepConfiguration.CopyProfile Then
+            Try
+                Dim cpXmlPath As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "sysprep_copyprofile.xml")
+                File.WriteAllText(cpXmlPath, My.Resources.UnattendXml_CopyProfile, UTF8)
+                sysprepCommandLine &= String.Format("/unattend:{0} ", Quote & cpXmlPath & Quote)
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not prepare unattended for copyprofile. Error message: " & ex.Message)
+                DynaLog.LogMessage("Continuing without answer files...")
+                SysprepConfiguration.CopyProfile = False
+            End Try
+        Else
+            If SysprepConfiguration.AnswerFile <> "" AndAlso File.Exists(SysprepConfiguration.AnswerFile) Then
+                sysprepCommandLine &= String.Format("/unattend:{0} ", Quote & SysprepConfiguration.AnswerFile & Quote)
+            End If
         End If
         If SysprepConfiguration.VMMode Then
             sysprepCommandLine &= "/mode:vm"
         End If
+
         Return sysprepCommandLine.TrimEnd(" ")
     End Function
 
@@ -452,6 +500,7 @@ Public Class MainForm
         SysprepConfiguration.Shutdown = AdvSettingsPage_ShutdownOptionsCBox.SelectedIndex
         SysprepConfiguration.AnswerFile = AdvSettingsPage_SysprepUnatt_AnswerFileText.Text
         SysprepConfiguration.VMMode = AdvSettingsPage_VMMode.Checked
+        SysprepConfiguration.CopyProfile = AdvSettingsPage_CopyProfile.Checked
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
@@ -526,6 +575,7 @@ Public Class MainForm
         AddHandler AdvSettingsPage_ShutdownOptionsCBox.SelectedIndexChanged, AddressOf ChangeSysprepConfiguration
         AddHandler AdvSettingsPage_SysprepUnatt_AnswerFileText.TextChanged, AddressOf ChangeSysprepConfiguration
         AddHandler AdvSettingsPage_VMMode.CheckedChanged, AddressOf ChangeSysprepConfiguration
+        AddHandler AdvSettingsPage_CopyProfile.CheckedChanged, AddressOf ChangeSysprepConfiguration
         ChangeTheme()
         FinishPage_CloseBtn.Enabled = Environment.GetCommandLineArgs().Contains("/test")
 

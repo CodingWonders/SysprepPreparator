@@ -38,6 +38,12 @@
         Public Property VMMode As Boolean
 
         ''' <summary>
+        ''' Determines whether Sysprep will copy all registry preferences of the current user for new user profiles.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property CopyProfile As Boolean
+
+        ''' <summary>
         ''' Initializes a default instance of Sysprep configuration with default settings
         ''' </summary>
         ''' <remarks></remarks>

@@ -85,6 +85,7 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
+        Me.AdvSettingsPage_CopyProfile = New System.Windows.Forms.CheckBox()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -475,9 +476,9 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.AutoEllipsis = True
-        Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Location = New System.Drawing.Point(20, 312)
+        Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Location = New System.Drawing.Point(20, 344)
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Name = "AdvSettingsPage_SysprepPrepToolDeploySteps"
-        Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Size = New System.Drawing.Size(852, 346)
+        Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Size = New System.Drawing.Size(852, 314)
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.TabIndex = 4
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Text = resources.GetString("AdvSettingsPage_SysprepPrepToolDeploySteps.Text")
         '
@@ -486,6 +487,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepConfigPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_VMModeExplanationLink)
+        Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_CopyProfile)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_VMMode)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_SysprepUnatt_Btn)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_SysprepUnatt_AnswerFileText)
@@ -498,7 +500,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepConfigPanel.Enabled = False
         Me.AdvSettingsPage_SysprepConfigPanel.Location = New System.Drawing.Point(39, 149)
         Me.AdvSettingsPage_SysprepConfigPanel.Name = "AdvSettingsPage_SysprepConfigPanel"
-        Me.AdvSettingsPage_SysprepConfigPanel.Size = New System.Drawing.Size(834, 157)
+        Me.AdvSettingsPage_SysprepConfigPanel.Size = New System.Drawing.Size(834, 192)
         Me.AdvSettingsPage_SysprepConfigPanel.TabIndex = 3
         '
         'AdvSettingsPage_VMModeExplanationLink
@@ -517,7 +519,6 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_VMMode.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AdvSettingsPage_VMMode.AutoCheck = False
         Me.AdvSettingsPage_VMMode.AutoSize = True
         Me.AdvSettingsPage_VMMode.Location = New System.Drawing.Point(23, 105)
         Me.AdvSettingsPage_VMMode.Name = "AdvSettingsPage_VMMode"
@@ -816,6 +817,18 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
         '
+        'AdvSettingsPage_CopyProfile
+        '
+        Me.AdvSettingsPage_CopyProfile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AdvSettingsPage_CopyProfile.AutoSize = True
+        Me.AdvSettingsPage_CopyProfile.Location = New System.Drawing.Point(23, 154)
+        Me.AdvSettingsPage_CopyProfile.Name = "AdvSettingsPage_CopyProfile"
+        Me.AdvSettingsPage_CopyProfile.Size = New System.Drawing.Size(412, 19)
+        Me.AdvSettingsPage_CopyProfile.TabIndex = 6
+        Me.AdvSettingsPage_CopyProfile.Text = "Copy registry changes and other current preferences for new user profiles"
+        Me.AdvSettingsPage_CopyProfile.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -918,4 +931,5 @@ Partial Class MainForm
     Friend WithEvents SysCheckPage_CCPProgressPanel As Panel
     Friend WithEvents SysCheckPage_ProgressLabel As Label
     Friend WithEvents SysCheckPage_CCPProgressBar As ProgressBar
+    Friend WithEvents AdvSettingsPage_CopyProfile As CheckBox
 End Class
