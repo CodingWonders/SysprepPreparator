@@ -285,6 +285,7 @@ Public Class MainForm
         AdvSettingsPage_SysprepUnatt_Btn.Text = GetValueFromLanguageData("Common.Common_Browse")
         AdvSettingsPage_VMMode.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_VMModeField")
         AdvSettingsPage_VMModeExplanationLink.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_VMModeLink")
+        AdvSettingsPage_CopyProfile.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_CopyProfileField")
         AdvSettingsPage_SysprepPrepToolDeploySteps.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ExplanationField")
         SettingPreparationPage_Header.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Header")
         SettingPreparationPage_Description.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Description")
