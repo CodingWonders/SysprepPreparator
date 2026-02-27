@@ -502,6 +502,13 @@ Public Class MainForm
         SysprepConfiguration.AnswerFile = AdvSettingsPage_SysprepUnatt_AnswerFileText.Text
         SysprepConfiguration.VMMode = AdvSettingsPage_VMMode.Checked
         SysprepConfiguration.CopyProfile = AdvSettingsPage_CopyProfile.Checked
+
+        ' The copyprofile option prevents us from using an answer file. We already use a custom
+        ' answer file instead of the user-provided one when ticking the option, but we want to have
+        ' a visual indication.
+        If SysprepConfiguration.CopyProfile AndAlso SysprepConfiguration.AnswerFile <> "" Then
+            MessageBox.Show(GetValueFromLanguageData("MainForm.CopyProfileWarning"), Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
