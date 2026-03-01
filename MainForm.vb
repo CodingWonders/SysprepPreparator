@@ -373,10 +373,18 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub SysprepComputer()
+        Dim powerActionDelayed As Boolean = False
+
         If Environment.GetCommandLineArgs().Contains("/dt_capture") Then
             ' we are more interested in rebooting the system than shutting it down, in order
             ' to capture the image
             SysprepConfiguration.Shutdown = SysprepConfig.ShutdownMode.Reboot
+        End If
+        Dim delayedSystemPowerAction As SysprepConfig.ShutdownMode = SysprepConfiguration.Shutdown
+        If SysprepConfiguration.CopyProfile Then
+            ' We have to let REG do its thing before we apply the correct power action.
+            SysprepConfiguration.Shutdown = SysprepConfig.ShutdownMode.Quit
+            powerActionDelayed = True
         End If
         Dim CmdLine As String = ParseSysprepSettings()
         If Environment.GetCommandLineArgs().Contains("/test") Then
@@ -398,6 +406,15 @@ Public Class MainForm
                 ' listen to them for once.
                 ' https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-copyprofile
                 RemoveCopyProfileTemp()
+            End If
+
+            If powerActionDelayed AndAlso {SysprepConfig.ShutdownMode.Shutdown, SysprepConfig.ShutdownMode.Reboot}.Contains(delayedSystemPowerAction) Then
+                Select Case delayedSystemPowerAction
+                    Case SysprepConfig.ShutdownMode.Shutdown
+                        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"), "/s /t 0")
+                    Case SysprepConfig.ShutdownMode.Reboot
+                        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"), "/r /t 0")
+                End Select
             End If
         End If
 
