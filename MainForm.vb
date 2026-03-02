@@ -604,6 +604,10 @@ Public Class MainForm
         ChangeTheme()
         FinishPage_CloseBtn.Enabled = Environment.GetCommandLineArgs().Contains("/test")
 
+        If Environment.GetCommandLineArgs().Contains("/copyprofile") Then
+            AdvSettingsPage_CopyProfile.Checked = True
+        End If
+
         If Environment.GetCommandLineArgs().Contains("/auto") Then
             RunAutoMode()
         End If
