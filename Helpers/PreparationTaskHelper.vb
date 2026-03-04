@@ -24,7 +24,8 @@ Namespace Helpers
             {GetValueFromLanguageData("RegisteredPTs.DTImageCapturePT"), New DTImageCapturePT()},
             {GetValueFromLanguageData("RegisteredPTs.DiskCleanupPT"), New DiskCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.EventLogPT"), New EventLogPT()},
-            {GetValueFromLanguageData("RegisteredPTs.RecycleBinCleanupPT"), New RecycleBinCleanupPT()}
+            {GetValueFromLanguageData("RegisteredPTs.RecycleBinCleanupPT"), New RecycleBinCleanupPT()},
+            {"Clear User Profile Temporary Items", New UserProfilePT()}
         }
 
         ''' <summary>

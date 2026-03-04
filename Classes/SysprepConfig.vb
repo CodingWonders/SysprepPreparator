@@ -53,6 +53,7 @@
             Shutdown = ShutdownMode.Shutdown
             AnswerFile = ""
             VMMode = False
+            CopyProfile = False
         End Sub
 
         ''' <summary>
