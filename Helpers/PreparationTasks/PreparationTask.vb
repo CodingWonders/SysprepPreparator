@@ -255,7 +255,7 @@ Namespace Helpers.PreparationTasks
             DynaLog.LogMessage("REG found. Running...")
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"),
                               CommandLine,
-                              HideWindow:=Debugger.IsAttached)
+                              HideWindow:=Not Debugger.IsAttached)
         End Function
 
         ''' <summary>
