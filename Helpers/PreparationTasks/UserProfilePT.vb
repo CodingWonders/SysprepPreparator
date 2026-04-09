@@ -19,7 +19,7 @@ Namespace Helpers.PreparationTasks
             ' Remove recents in run box and file explorer
             ReportSubProcessStatus(GetValueFromLanguageData("UserProfilePT_SubProcessReporting.SPR_Message1"))
             RemoveRegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU", "/va /f")
-            ReportSubProcessStatus(GetValueFromLanguageData("UserProfilePT-SubProcessReporting.SPR_Message2"))
+            ReportSubProcessStatus(GetValueFromLanguageData("UserProfilePT_SubProcessReporting.SPR_Message2"))
             RemoveRegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths", "/va /f")
 
             Return PreparationTaskStatus.Succeeded
