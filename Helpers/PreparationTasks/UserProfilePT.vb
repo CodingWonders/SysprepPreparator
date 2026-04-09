@@ -17,9 +17,9 @@ Namespace Helpers.PreparationTasks
             If IsInTestMode Then Return PreparationTaskStatus.Skipped
 
             ' Remove recents in run box and file explorer
-            ReportSubProcessStatus("Clearing Run items...")
+            ReportSubProcessStatus(GetValueFromLanguageData("UserProfilePT_SubProcessReporting.SPR_Message1"))
             RemoveRegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU", "/va /f")
-            ReportSubProcessStatus("Clearing MRU list in File Explorer...")
+            ReportSubProcessStatus(GetValueFromLanguageData("UserProfilePT-SubProcessReporting.SPR_Message2"))
             RemoveRegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths", "/va /f")
 
             Return PreparationTaskStatus.Succeeded

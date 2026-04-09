@@ -25,7 +25,7 @@ Namespace Helpers
             {GetValueFromLanguageData("RegisteredPTs.DiskCleanupPT"), New DiskCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.EventLogPT"), New EventLogPT()},
             {GetValueFromLanguageData("RegisteredPTs.RecycleBinCleanupPT"), New RecycleBinCleanupPT()},
-            {"Clear User Profile Temporary Items", New UserProfilePT()}
+            {GetValueFromLanguageData("RegisteredPTs.UserProfilePT"), New UserProfilePT()}
         }
 
         ''' <summary>
