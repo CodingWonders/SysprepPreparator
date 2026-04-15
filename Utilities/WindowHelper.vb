@@ -41,4 +41,26 @@ Public Class WindowHelper
         End If
     End Sub
 
+    Public Shared Function ScaleLogical(px As Integer) As Integer
+        Dim dx As Single
+        Dim ctrl As New Control()
+        Dim g As Graphics = ctrl.CreateGraphics()
+
+        Try
+            dx = g.DpiX
+        Finally
+            g.Dispose()
+        End Try
+
+        Return CInt(px * (dx / 96.0))
+    End Function
+
+    Public Shared Function ScalePositionLogical(posX As Integer, posY As Integer) As Point
+        Return New Point(ScaleLogical(posX), ScaleLogical(posY))
+    End Function
+
+    Public Shared Function ScaleSizeLogical(width As Integer, height As Integer) As Size
+        Return New Size(ScaleLogical(width), ScaleLogical(height))
+    End Function
+
 End Class

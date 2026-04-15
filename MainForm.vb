@@ -604,6 +604,12 @@ Public Class MainForm
         ChangeTheme()
         FinishPage_CloseBtn.Enabled = Environment.GetCommandLineArgs().Contains("/test")
 
+        SysCheckPage_CheckCH.Width = WindowHelper.ScaleLogical(376)
+        SysCheckPage_CompatibleCH.Width = WindowHelper.ScaleLogical(96)
+        SysCheckPage_SeverityCH.Width = WindowHelper.ScaleLogical(128)
+        SettingPreparationPage_TaskCH.Width = WindowHelper.ScaleLogical(512)
+        SettingPreparationPage_SuccessfulCH.Width = WindowHelper.ScaleLogical(128)
+
         If Environment.GetCommandLineArgs().Contains("/copyprofile") Then
             AdvSettingsPage_CopyProfile.Checked = True
         End If
