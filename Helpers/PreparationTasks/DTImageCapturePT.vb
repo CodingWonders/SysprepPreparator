@@ -320,7 +320,7 @@ Namespace Helpers.PreparationTasks
                 DynaLog.LogMessage("Could not unmount Windows image because there are open handles. Retrying operation until it succeeds...")
                 Dim unmountAttempt As Integer = 2       ' it is the second time we do this
                 Do Until unmounted
-                    ReportSubProcessStatus(String.Format("Retrying unmount operation... (attempt {0})", unmountAttempt))
+                    ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message9"), unmountAttempt))
                     Try
                         DismApi.UnmountImage(MountDir, False)
                         unmounted = True
