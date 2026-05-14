@@ -15,6 +15,10 @@ Public Class WindowHelper
         <DllImport("user32.dll", CharSet:=CharSet.Auto)>
         Public Shared Function EnableMenuItem(hMenu As IntPtr, uIDEnableItem As UInteger, uEnable As UInteger) As Boolean
         End Function
+
+        <DllImport("dwmapi.dll")>
+        Public Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
     End Class
 
     Const SC_CLOSE As Integer = &HF060
@@ -61,6 +65,30 @@ Public Class WindowHelper
 
     Public Shared Function ScaleSizeLogical(width As Integer, height As Integer) As Size
         Return New Size(ScaleLogical(width), ScaleLogical(height))
+    End Function
+
+    Public Shared Function GetWindowHandle(ctrl As Control) As IntPtr
+        Return ctrl.Handle
+    End Function
+
+
+    ' DWMAPI Constants
+    Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
+    Const WS_EX_COMPOSITED As Integer = &H2000000
+    Const GWL_EXSTYLE As Integer = -20
+    Const DARKMODE_MINMAJOR As Integer = 10
+    Const DARKMODE_MINMINOR As Integer = 0
+    Const DARKMODE_MINBUILD As Integer = 18362
+
+    Public Shared Sub ToggleDarkTitleBar(hwnd As IntPtr, darkMode As Boolean)
+        Dim attribute As Integer = If(darkMode, 1, 0)
+        If Not IsWindowsVersionOrGreater(DARKMODE_MINMAJOR, DARKMODE_MINMINOR, DARKMODE_MINBUILD) Then Exit Sub
+        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+    End Sub
+
+    Private Shared Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
+        Dim version = Environment.OSVersion.Version
+        Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
     End Function
 
 End Class

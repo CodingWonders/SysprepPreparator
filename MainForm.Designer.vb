@@ -57,6 +57,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepConfigPanel = New System.Windows.Forms.Panel()
         Me.AdvSettingsPage_VMModeExplanationLink = New System.Windows.Forms.LinkLabel()
+        Me.AdvSettingsPage_CopyProfile = New System.Windows.Forms.CheckBox()
         Me.AdvSettingsPage_VMMode = New System.Windows.Forms.CheckBox()
         Me.AdvSettingsPage_SysprepUnatt_Btn = New System.Windows.Forms.Button()
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText = New System.Windows.Forms.TextBox()
@@ -85,7 +86,7 @@ Partial Class MainForm
         Me.FinishPage_Description = New System.Windows.Forms.Label()
         Me.FinishPage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepUnatt_OFD = New System.Windows.Forms.OpenFileDialog()
-        Me.AdvSettingsPage_CopyProfile = New System.Windows.Forms.CheckBox()
+        Me.SysCheckPage_RemoveAppxBtn = New System.Windows.Forms.Button()
         Me.ButtonPanel.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.BannerPanel.SuspendLayout()
@@ -197,8 +198,8 @@ Partial Class MainForm
         'PageContainerPanel
         '
         Me.PageContainerPanel.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.PageContainerPanel.Controls.Add(Me.WelcomePage)
         Me.PageContainerPanel.Controls.Add(Me.SystemCheckPanel)
+        Me.PageContainerPanel.Controls.Add(Me.WelcomePage)
         Me.PageContainerPanel.Controls.Add(Me.AdvSettingsPanel)
         Me.PageContainerPanel.Controls.Add(Me.SettingPreparationPanel)
         Me.PageContainerPanel.Controls.Add(Me.FinishPanel)
@@ -246,6 +247,7 @@ Partial Class MainForm
         '
         'SystemCheckPanel
         '
+        Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_RemoveAppxBtn)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CCPProgressPanel)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CheckAgainBtn)
         Me.SystemCheckPanel.Controls.Add(Me.SysCheckPage_CheckDetailsGB)
@@ -514,6 +516,18 @@ Partial Class MainForm
         Me.AdvSettingsPage_VMModeExplanationLink.TabIndex = 7
         Me.AdvSettingsPage_VMModeExplanationLink.TabStop = True
         Me.AdvSettingsPage_VMModeExplanationLink.Text = "Learn More about Sysprep VM Mode"
+        '
+        'AdvSettingsPage_CopyProfile
+        '
+        Me.AdvSettingsPage_CopyProfile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AdvSettingsPage_CopyProfile.AutoSize = True
+        Me.AdvSettingsPage_CopyProfile.Location = New System.Drawing.Point(23, 154)
+        Me.AdvSettingsPage_CopyProfile.Name = "AdvSettingsPage_CopyProfile"
+        Me.AdvSettingsPage_CopyProfile.Size = New System.Drawing.Size(412, 19)
+        Me.AdvSettingsPage_CopyProfile.TabIndex = 6
+        Me.AdvSettingsPage_CopyProfile.Text = "Copy registry changes and other current preferences for new user profiles"
+        Me.AdvSettingsPage_CopyProfile.UseVisualStyleBackColor = True
         '
         'AdvSettingsPage_VMMode
         '
@@ -817,17 +831,17 @@ Partial Class MainForm
         '
         Me.AdvSettingsPage_SysprepUnatt_OFD.Filter = "Unattended Answer Files|*.xml"
         '
-        'AdvSettingsPage_CopyProfile
+        'SysCheckPage_RemoveAppxBtn
         '
-        Me.AdvSettingsPage_CopyProfile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AdvSettingsPage_CopyProfile.AutoSize = True
-        Me.AdvSettingsPage_CopyProfile.Location = New System.Drawing.Point(23, 154)
-        Me.AdvSettingsPage_CopyProfile.Name = "AdvSettingsPage_CopyProfile"
-        Me.AdvSettingsPage_CopyProfile.Size = New System.Drawing.Size(412, 19)
-        Me.AdvSettingsPage_CopyProfile.TabIndex = 6
-        Me.AdvSettingsPage_CopyProfile.Text = "Copy registry changes and other current preferences for new user profiles"
-        Me.AdvSettingsPage_CopyProfile.UseVisualStyleBackColor = True
+        Me.SysCheckPage_RemoveAppxBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SysCheckPage_RemoveAppxBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SysCheckPage_RemoveAppxBtn.Location = New System.Drawing.Point(489, 650)
+        Me.SysCheckPage_RemoveAppxBtn.Name = "SysCheckPage_RemoveAppxBtn"
+        Me.SysCheckPage_RemoveAppxBtn.Size = New System.Drawing.Size(169, 23)
+        Me.SysCheckPage_RemoveAppxBtn.TabIndex = 6
+        Me.SysCheckPage_RemoveAppxBtn.Text = "Remove Store apps"
+        Me.SysCheckPage_RemoveAppxBtn.UseVisualStyleBackColor = True
+        Me.SysCheckPage_RemoveAppxBtn.Visible = False
         '
         'MainForm
         '
@@ -932,4 +946,5 @@ Partial Class MainForm
     Friend WithEvents SysCheckPage_ProgressLabel As Label
     Friend WithEvents SysCheckPage_CCPProgressBar As ProgressBar
     Friend WithEvents AdvSettingsPage_CopyProfile As CheckBox
+    Friend WithEvents SysCheckPage_RemoveAppxBtn As Button
 End Class

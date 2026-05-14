@@ -248,6 +248,13 @@ Public Class MainForm
             AdvSettingsPage_SysprepUnatt_AnswerFileText.ForeColor = currentTheme.ForegroundColor
             SettingPreparationPanel_TaskLv.BackColor = currentTheme.SectionBackgroundColor
             SettingPreparationPanel_TaskLv.ForeColor = currentTheme.ForegroundColor
+
+            OnlineAppxRemovalDialog.BackColor = currentTheme.SectionBackgroundColor
+            OnlineAppxRemovalDialog.ForeColor = currentTheme.ForegroundColor
+            OnlineAppxRemovalDialog.ListView1.BackColor = currentTheme.SectionBackgroundColor
+            OnlineAppxRemovalDialog.ListView1.ForeColor = currentTheme.ForegroundColor
+
+
         End If
     End Sub
 
@@ -627,6 +634,10 @@ Public Class MainForm
             SysCheckPage_CheckDetails_Title.Text = PerformedChecks(focusedIdx).StatusMessage.StatusTitle
             SysCheckPage_CheckDetails_DescriptionValue.Text = PerformedChecks(focusedIdx).StatusMessage.StatusDescription
             SysCheckPage_CheckDetails_ResolutionValue.Text = PerformedChecks(focusedIdx).StatusMessage.StatusPossibleResolution
+
+            ' Present cool appx crap remover when we select the appropriate option
+            SysCheckPage_RemoveAppxBtn.Visible = PerformedChecks(focusedIdx).StatusMessage.StatusTitle = GetValueFromLanguageData("ThirdPartyAppxCCP.CCPTitle") AndAlso
+                File.Exists(Path.Combine(Application.StartupPath, "Tools", "RemoveOnlineAppxPackage.ps1"))
         End If
     End Sub
 
@@ -697,5 +708,9 @@ Public Class MainForm
                              My.Application.Info.Copyright.Replace("©", "(c)"),
                              GetCopyrightTimespan(2016, 2016) & " Jeff Kluge",
                              GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández"), vbOKOnly + vbInformation, GetValueFromLanguageData("Common.Common_About"))
+    End Sub
+
+    Private Sub SysCheckPage_RemoveAppxBtn_Click(sender As Object, e As EventArgs) Handles SysCheckPage_RemoveAppxBtn.Click
+        OnlineAppxRemovalDialog.ShowDialog(Me)
     End Sub
 End Class

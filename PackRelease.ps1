@@ -6,6 +6,8 @@ if (Test-Path -Path "$((Get-Location).Path)\bin\Debug\SysprepPreparator.exe" -Pa
 	New-Item -Path "$((Get-Location).Path)\out\Languages" -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\Languages\*.ini" -Destination "$((Get-Location).Path)\out\Languages" -Verbose -Force
 	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\SysprepPreparator.exe*" -Destination "$((Get-Location).Path)\out" -Verbose -Force
+	New-Item -Path "$((Get-Location).Path)\out\Tools" -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\Tools\*.*" -Destination "$((Get-Location).Path)\out\Tools" -Verbose -Force
 	Compress-Archive -Path "$((Get-Location).Path)\out\*" -DestinationPath "$((Get-Location).Path)\SysprepPreparator.zip" -Force
 } else {
 	Write-Host "Output directory not found."
