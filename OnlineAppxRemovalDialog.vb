@@ -8,6 +8,11 @@ Public Class OnlineAppxRemovalDialog
     Private Appxs As New List(Of String)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If ListView1.CheckedItems.Count = 0 Then
+            MessageBox.Show("Please select AppX packages to remove.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Exit Sub
+        End If
+
         Cursor = Cursors.WaitCursor
 
         Dim MarkedAppxPackages As New List(Of String)
@@ -45,7 +50,7 @@ Public Class OnlineAppxRemovalDialog
                 DynaLog.LogMessage("Restarting the computer in 1 minute!")
                 Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"),
                               String.Format("/r /t 60 /c {0}The Sysprep Preparation Tool has scheduled a system restart in 1 minute. " &
-                              "You can restart your computer now by clicking OK on the message that will appear after this one. Please save your work.{0}", ControlChars.Quote))
+                              "You can restart your computer now by clicking OK on the message that will appear after this one. Please save your work.{0}", ControlChars.Quote)).WaitForExit()
                 If MessageBox.Show("Click OK to restart your computer now.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information) = DialogResult.OK Then
                     DynaLog.LogMessage("Restarting the computer NOW!!!")
                     Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"), "/a")
@@ -108,7 +113,17 @@ Public Class OnlineAppxRemovalDialog
     Private Sub OnlineAppxRemovalDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         GetAppxPackages()
 
+        Text = GetValueFromLanguageData("OnlineAppxRemovalDialog.WndTitle")
+        Label1.Text = GetValueFromLanguageData("OnlineAppxRemovalDialog.AppxRemoval_Title")
+        Label2.Text = GetValueFromLanguageData("OnlineAppxRemovalDialog.AppxRemoval_Notes")
+        OK_Button.Text = GetValueFromLanguageData("Common.Common_OK")
+        Cancel_Button.Text = GetValueFromLanguageData("Common.Common_Cancel")
+
         ListView1.Items.Clear()
         ListView1.Items.AddRange(Appxs.Select(Function(Appx) New ListViewItem(New String() {Appx})).ToArray())
+    End Sub
+
+    Private Sub ListView1_ItemChecked(sender As Object, e As ItemCheckedEventArgs) Handles ListView1.ItemChecked
+        OK_Button.Enabled = ListView1.CheckedItems.Count > 0
     End Sub
 End Class

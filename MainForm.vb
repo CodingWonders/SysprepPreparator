@@ -280,6 +280,7 @@ Public Class MainForm
         SysCheckPage_CheckDetails_Resolution.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckResField")
         SysCheckPage_CheckAgainBtn.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_CheckAgainBtn")
         SysCheckPage_ProgressLabel.Text = GetValueFromLanguageData("Common.Common_PleaseWait")
+        SysCheckPage_RemoveAppxBtn.Text = GetValueFromLanguageData("MainForm.SystemChecksPanel_StoreAppRemovalBtn")
         AdvSettingsPage_Header.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Header")
         AdvSettingsPage_Description.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_Description")
         AdvSettingsPage_ConfigSysprepSettings.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ConfigCheck")
