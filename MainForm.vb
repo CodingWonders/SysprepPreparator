@@ -398,6 +398,18 @@ Public Class MainForm
         If Environment.GetCommandLineArgs().Contains("/test") Then
             MsgBox("Sysprep would be launched with flags " & Quote & CmdLine & Quote, vbOKOnly + vbInformation)
         Else
+            Dim runRegProc As New Process() With {
+                .StartInfo = New ProcessStartInfo() With {
+                    .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"),
+                    .Arguments = "delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /f /v SysprepPrepTool",
+                    .CreateNoWindow = True,
+                    .WindowStyle = ProcessWindowStyle.Hidden
+                }
+            }
+
+            runRegProc.Start()
+            runRegProc.WaitForExit()
+
             Dim sysprepProcess As New Process() With {
                 .StartInfo = New ProcessStartInfo() With {
                     .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "sysprep", "sysprep.exe"),
@@ -620,6 +632,10 @@ Public Class MainForm
 
         If Environment.GetCommandLineArgs().Contains("/copyprofile") Then
             AdvSettingsPage_CopyProfile.Checked = True
+        End If
+
+        If Environment.GetCommandLineArgs().Contains("/skipwelcome") Then
+            Next_Button.PerformClick()
         End If
 
         If Environment.GetCommandLineArgs().Contains("/auto") Then

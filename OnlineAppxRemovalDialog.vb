@@ -13,6 +13,8 @@ Public Class OnlineAppxRemovalDialog
             Exit Sub
         End If
 
+        MessageBox.Show("Please keep the medium from which you started the Sysprep Preparation Tool inserted. It will be launched automatically after your computer restarts.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+
         Cursor = Cursors.WaitCursor
 
         Dim MarkedAppxPackages As New List(Of String)
@@ -46,6 +48,23 @@ Public Class OnlineAppxRemovalDialog
             psAppxRemovalProc.WaitForExit()
             If psAppxRemovalProc.ExitCode = 0 Then
                 Cursor = Cursors.Arrow
+
+                Dim cmdArgParts As IEnumerable(Of String) = Environment.GetCommandLineArgs().Skip(1)
+                Dim cmdArgs As String = String.Join(" ", cmdArgParts.ToArray())
+
+                Dim regArgs As String = String.Format("{0}{0}{0}{1}{0}{0} {2} /skipwelcome{0}", ControlChars.Quote, Application.ExecutablePath, String.Join(" ", cmdArgs))
+                Dim regProc As New Process() With {
+                    .StartInfo = New ProcessStartInfo() With {
+                        .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"),
+                        .Arguments = String.Format("add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /f /v SysprepPrepTool /t REG_SZ /d {0}", regArgs),
+                        .CreateNoWindow = True,
+                        .WindowStyle = ProcessWindowStyle.Hidden
+                    }
+                }
+
+                regProc.Start()
+                regProc.WaitForExit()
+
                 ' Invoke the restart operation in 1 minute
                 DynaLog.LogMessage("Restarting the computer in 1 minute!")
                 Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"),
