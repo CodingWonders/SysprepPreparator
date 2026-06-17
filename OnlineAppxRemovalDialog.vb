@@ -9,11 +9,11 @@ Public Class OnlineAppxRemovalDialog
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If ListView1.CheckedItems.Count = 0 Then
-            MessageBox.Show("Please select AppX packages to remove.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(GetValueFromLanguageData("OnlineAppxRemovalDialog.AppxRemoval_NoPackages"), Text, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End If
 
-        MessageBox.Show("Please keep the medium from which you started the Sysprep Preparation Tool inserted. It will be launched automatically after your computer restarts.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        MessageBox.Show(GetValueFromLanguageData("OnlineAppxRemovalDialog.AppxRemoval_AutoRestart"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information)
 
         Cursor = Cursors.WaitCursor
 
@@ -68,9 +68,8 @@ Public Class OnlineAppxRemovalDialog
                 ' Invoke the restart operation in 1 minute
                 DynaLog.LogMessage("Restarting the computer in 1 minute!")
                 Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"),
-                              String.Format("/r /t 60 /c {0}The Sysprep Preparation Tool has scheduled a system restart in 1 minute. " &
-                              "You can restart your computer now by clicking OK on the message that will appear after this one. Please save your work.{0}", ControlChars.Quote)).WaitForExit()
-                If MessageBox.Show("Click OK to restart your computer now.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information) = DialogResult.OK Then
+                              String.Format("/r /t 60 /c {0}{1}{0}", ControlChars.Quote, GetValueFromLanguageData("OnlineAppxRemovalDialog.RestartPrompt_60sec"))).WaitForExit()
+                If MessageBox.Show(GetValueFromLanguageData("OnlineAppxRemovalDialog.RestartPrompt_Now"), Text, MessageBoxButtons.OK, MessageBoxIcon.Information) = DialogResult.OK Then
                     DynaLog.LogMessage("Restarting the computer NOW!!!")
                     Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"), "/a")
                     Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "shutdown.exe"), "/r /t 0").WaitForExit()
