@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("Sysprep Preparation Tool")> 
-<Assembly: AssemblyDescription("The Sysprep Prep Tool prepares your computer for sysprep generalization and image capture")> 
+<Assembly: AssemblyTitle("BitLocker Drive Encryption Managed Library")> 
+<Assembly: AssemblyDescription("BitLocker Drive Encryption Managed Library")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Sysprep Preparation Tool")>
-<Assembly: AssemblyCopyright("© 2025-2026 CodingWonders Software")>
+<Assembly: AssemblyProduct("BitLocker Drive Encryption Managed Library")> 
+<Assembly: AssemblyCopyright("© 2026 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-<Assembly: Guid("3a52d9f8-bd95-4680-bda9-929de2dd73df")>
+<Assembly: Guid("f835c126-7042-43e9-9a86-ac97d7fb70f4")> 
 
 ' La información de versión de un ensamblado consta de los cuatro valores siguientes:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.8.1.0")>
-<Assembly: AssemblyFileVersion("0.8.1.0")>
+<Assembly: AssemblyVersion("0.8.1.0")> 
+<Assembly: AssemblyFileVersion("0.8.1.0")> 

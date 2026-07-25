@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 18
+VisualStudioVersion = 18.8.12021.73 stable
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SysprepPreparator", "SysprepPreparator.vbproj", "{0CE2ABFD-4AB4-4D5C-80BE-774BB1FE2F41}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "BDELib", "Tools\BDELib\BDELib.vbproj", "{4F91E8CD-220B-4882-9228-B30B7F32C4A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,8 +17,15 @@ Global
 		{0CE2ABFD-4AB4-4D5C-80BE-774BB1FE2F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CE2ABFD-4AB4-4D5C-80BE-774BB1FE2F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CE2ABFD-4AB4-4D5C-80BE-774BB1FE2F41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F91E8CD-220B-4882-9228-B30B7F32C4A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F91E8CD-220B-4882-9228-B30B7F32C4A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F91E8CD-220B-4882-9228-B30B7F32C4A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F91E8CD-220B-4882-9228-B30B7F32C4A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0EFFE19-913B-420C-A3DA-53E9C3C820D2}
 	EndGlobalSection
 EndGlobal

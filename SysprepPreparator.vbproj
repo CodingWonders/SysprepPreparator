@@ -74,12 +74,14 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Data" />
     <Import Include="System.Drawing" />
     <Import Include="System.Diagnostics" />
+    <Import Include="System.Management" />
     <Import Include="System.Windows.Forms" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
@@ -99,6 +101,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Helpers\CompatChecks\ActiveDirectoryDomainJoinCCP.vb" />
+    <Compile Include="Helpers\CompatChecks\BitLockerCCP.vb" />
     <Compile Include="Helpers\CompatChecks\CompatibilityCheckerProvider.vb" />
     <Compile Include="Helpers\CompatChecks\DismThirdPartyDriverCCP.vb" />
     <Compile Include="Helpers\CompatChecks\PendingServicingOperationsCCP.vb" />
@@ -229,6 +232,12 @@
     <Content Include="docs\res\sptest_snapshot.png" />
     <Content Include="docs\res\sptest_sysprep.png" />
     <Content Include="logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Tools\BDELib\BDELib.vbproj">
+      <Project>{4f91e8cd-220b-4882-9228-b30b7f32c4a9}</Project>
+      <Name>BDELib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
