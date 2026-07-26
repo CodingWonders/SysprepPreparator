@@ -11,8 +11,8 @@ Namespace Helpers.CompatChecks
             ' If we have no persistent volume ID, then we know that the volume is not encrypted
             If SystemPersistentVolumeId = "" Then
                 Status.Compatible = True
-                Status.StatusMessage = New Classes.StatusMessage("BitLocker Drive Encryption Status on System Volume",
-                                                                 "The system volume is not encrypted with BitLocker.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("BitLockerCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("BitLockerCCP.CCP_OK"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Info)
                 Return Status
             End If
@@ -20,31 +20,31 @@ Namespace Helpers.CompatChecks
             Dim systemVolumeConversionStatus As ConversionStatus = GetVolumeConversionStatus(SystemPersistentVolumeId)
             If systemVolumeConversionStatus Is Nothing Then
                 Status.Compatible = False
-                Status.StatusMessage = New Classes.StatusMessage("BitLocker Drive Encryption Status on System Volume",
-                                                                 "The system volume is encrypted with BitLocker, but we could not get information about it. Sysprep will fail to validate your installation.",
+                Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("BitLockerCCP.CCPTitle"),
+                                                                 GetValueFromLanguageData("BitLockerCCP.CCP_NotOK_NoBDEInfo"),
                                                                  Classes.StatusMessage.StatusMessageSeverity.Critical)
                 Return Status
             End If
 
             Status.Compatible = False
 
-            Dim blStatusStr As String = ""
+            Dim blStatusStr As String = GetValueFromLanguageData("BitLockerCCP.CCP_VolStat")
             Select Case systemVolumeConversionStatus.ConversionStatus
-                Case VolumeConversionStatus.FullyDecrypted : blStatusStr &= String.Format("- Volume Status: Fully Decrypted{0}", Environment.NewLine)       ' uhhh, what? this is not possible!
-                Case VolumeConversionStatus.FullyEncrypted : blStatusStr &= String.Format("- Volume Status: Fully Encrypted{0}", Environment.NewLine)
-                Case VolumeConversionStatus.DecryptionInProgress : blStatusStr &= String.Format("- Volume Status: Decryption in progress{0}", Environment.NewLine)
-                Case VolumeConversionStatus.EncryptionInProgress : blStatusStr &= String.Format("- Volume Status: Encryption in progress{0}", Environment.NewLine)
-                Case VolumeConversionStatus.DecryptionPaused : blStatusStr &= String.Format("- Volume Status: Decryption paused{0}", Environment.NewLine)
-                Case VolumeConversionStatus.EncryptionPaused : blStatusStr &= String.Format("- Volume Status: Encryption paused{0}", Environment.NewLine)
+                Case VolumeConversionStatus.FullyDecrypted : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_Decrypted"))       ' uhhh, what? this is not possible!
+                Case VolumeConversionStatus.FullyEncrypted : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_Encrypted"))
+                Case VolumeConversionStatus.DecryptionInProgress : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_DecryptionInProgress"))
+                Case VolumeConversionStatus.EncryptionInProgress : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_EncryptionInProgress"))
+                Case VolumeConversionStatus.DecryptionPaused : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_DecryptionPaused"))
+                Case VolumeConversionStatus.EncryptionPaused : blStatusStr = String.Format(blStatusStr, GetValueFromLanguageData("BitLockerCCP.CCP_VolStat_EncryptionPaused"))
             End Select
 
             Dim divider As Integer = 10000
 
-            blStatusStr &= String.Format("- % Encrypted: {0}%", Math.Round(systemVolumeConversionStatus.EncryptionPercentage / divider, 2))
+            blStatusStr &= String.Format(GetValueFromLanguageData("BitLockerCCP.CCP_PercentEncrypted"), Math.Round(systemVolumeConversionStatus.EncryptionPercentage / divider, 2))
 
-            Status.StatusMessage = New Classes.StatusMessage("BitLocker Drive Encryption Status on System Volume",
-                                                             "The system volume is encrypted with BitLocker. Sysprep will fail to validate your installation.",
-                                                             String.Format("This is the current encryption state of the system volume:{0}{1}{0}You must decrypt this volume by using the Control Panel or manage-bde. You don't need to restart your computer. After it is fully done, refresh the checks.", Environment.NewLine, blStatusStr),
+            Status.StatusMessage = New Classes.StatusMessage(GetValueFromLanguageData("BitLockerCCP.CCPTitle"),
+                                                             GetValueFromLanguageData("BitLockerCCP.CCP_NotOK_BDEInfo"),
+                                                             String.Format(GetValueFromLanguageData("BitLockerCCP.CCP_NotOK_Resolution"), blStatusStr),
                                                              Classes.StatusMessage.StatusMessageSeverity.Critical)
             Return Status
         End Function
