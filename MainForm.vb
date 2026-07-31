@@ -566,6 +566,8 @@ Public Class MainForm
 
     Private Sub SysCheckPage_CheckAgainBtn_Click(sender As Object, e As EventArgs) Handles SysCheckPage_CheckAgainBtn.Click
         IsComputerChecked = False
+        SysCheckPage_RemoveAppxBtn.Visible = False
+        SysCheckPage_DecryptBtn.Visible = False
         CheckComputer()
     End Sub
 
@@ -652,9 +654,11 @@ Public Class MainForm
             SysCheckPage_CheckDetails_DescriptionValue.Text = PerformedChecks(focusedIdx).StatusMessage.StatusDescription
             SysCheckPage_CheckDetails_ResolutionValue.Text = PerformedChecks(focusedIdx).StatusMessage.StatusPossibleResolution
 
-            ' Present cool appx crap remover when we select the appropriate option
-            SysCheckPage_RemoveAppxBtn.Visible = PerformedChecks(focusedIdx).StatusMessage.StatusTitle = GetValueFromLanguageData("ThirdPartyAppxCCP.CCPTitle") AndAlso
-                File.Exists(Path.Combine(Application.StartupPath, "Tools", "RemoveOnlineAppxPackage.ps1"))
+            ' Present cool buttons when we select the appropriate option
+            Dim performedCheck As CompatibilityCheckerProviderStatus = PerformedChecks.ElementAtOrDefault(focusedIdx)
+            If performedCheck Is Nothing Then Exit Sub
+            SysCheckPage_RemoveAppxBtn.Visible = performedCheck.StatusMessage.StatusTitle = GetValueFromLanguageData("ThirdPartyAppxCCP.CCPTitle") AndAlso File.Exists(Path.Combine(Application.StartupPath, "Tools", "RemoveOnlineAppxPackage.ps1"))
+            SysCheckPage_DecryptBtn.Visible = performedCheck.StatusMessage.StatusTitle = GetValueFromLanguageData("BitLockerCCP.CCPTitle") AndAlso Not performedCheck.Compatible
         End If
     End Sub
 
@@ -729,5 +733,11 @@ Public Class MainForm
 
     Private Sub SysCheckPage_RemoveAppxBtn_Click(sender As Object, e As EventArgs) Handles SysCheckPage_RemoveAppxBtn.Click
         OnlineAppxRemovalDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub SysCheckPage_DecryptBtn_Click(sender As Object, e As EventArgs) Handles SysCheckPage_DecryptBtn.Click
+        SysvolBDEDecryptDialog.ShowDialog(Me)
+        IsComputerChecked = False
+        CheckComputer()
     End Sub
 End Class

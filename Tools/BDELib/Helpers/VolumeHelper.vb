@@ -232,6 +232,64 @@ Namespace Helpers
             Return obtainedConversionStatus
         End Function
 
+        Private Shared Function IsVolumeAutoUnlockable(PersistentVolumeId As String) As Boolean
+            Try
+                Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
+                If encryptedVolumeInstance Is Nothing Then Throw New Exception()
+
+                Dim autoUnlockResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod("IsAutoUnlockEnabled", encryptedVolumeInstance.GetMethodParameters("IsAutoUnlockEnabled"), Nothing)
+                If autoUnlockResults Is Nothing OrElse autoUnlockResults("ReturnValue") <> Constants.S_OK Then Throw New Exception()
+
+                Return autoUnlockResults("IsAutoUnlockEnabled")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        Private Shared Function ClearVolumeAutoUnlockKeys(PersistentVolumeId As String) As UInteger
+            Try
+                Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
+                If encryptedVolumeInstance Is Nothing Then Throw New Exception()
+
+                Dim clearResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod("ClearAllAutoUnlockKeys", encryptedVolumeInstance.GetMethodParameters("ClearAllAutoUnlockKeys"), Nothing)
+                If clearResults Is Nothing Then Throw New Exception()
+
+                Return clearResults("ReturnValue")
+            Catch ex As Exception
+                Return Constants.E_FAIL
+            End Try
+        End Function
+
+        Public Shared Async Function StartVolumeDecryption(PersistentVolumeId As String, Optional DecryptionProgressReporter As Action(Of ConversionStatus) = Nothing) As Task(Of UInteger)
+            Try
+                ' If auto-unlock is enabled on the volume, decryption will fail. Clear all keys
+                ' before proceeding.
+                If IsVolumeAutoUnlockable(PersistentVolumeId) Then
+                    If ClearVolumeAutoUnlockKeys(PersistentVolumeId) <> Constants.S_OK Then Throw New Exception()
+                End If
+
+                Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
+                If encryptedVolumeInstance Is Nothing Then Throw New Exception()
+                Dim decryptionResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod("Decrypt", encryptedVolumeInstance.GetMethodParameters("Decrypt"), Nothing)
+                If decryptionResults Is Nothing Then Throw New Exception()
+                If decryptionResults IsNot Nothing AndAlso decryptionResults("ReturnValue") <> Constants.S_OK Then Return decryptionResults("ReturnValue")
+
+                ' Now we report if we have a reporter.
+                If DecryptionProgressReporter IsNot Nothing Then
+                    Do
+                        Dim convStatus As ConversionStatus = GetVolumeConversionStatus(PersistentVolumeId)
+                        DecryptionProgressReporter.Invoke(convStatus)
+                        If convStatus Is Nothing OrElse convStatus.ConversionStatus = VolumeConversionStatus.FullyDecrypted Then Exit Do
+                        Await Task.Delay(50)
+                    Loop
+                End If
+
+                Return Constants.S_OK
+            Catch ex As Exception
+                Return Constants.E_FAIL
+            End Try
+        End Function
+
     End Class
 
 End Namespace

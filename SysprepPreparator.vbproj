@@ -157,6 +157,12 @@
     <Compile Include="OnlineAppxRemovalDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SysvolBDEDecryptDialog.Designer.vb">
+      <DependentUpon>SysvolBDEDecryptDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SysvolBDEDecryptDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\LanguageFileParser.vb" />
@@ -181,6 +187,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OnlineAppxRemovalDialog.resx">
       <DependentUpon>OnlineAppxRemovalDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SysvolBDEDecryptDialog.resx">
+      <DependentUpon>SysvolBDEDecryptDialog.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
