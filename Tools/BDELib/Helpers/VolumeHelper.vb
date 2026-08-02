@@ -251,7 +251,15 @@ Namespace Helpers
                 Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
                 If encryptedVolumeInstance Is Nothing Then Throw New Exception()
 
-                Dim clearResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod("ClearAllAutoUnlockKeys", encryptedVolumeInstance.GetMethodParameters("ClearAllAutoUnlockKeys"), Nothing)
+                ' If we're decrypting the OS volume, we're going to clear all keys; otherwise,
+                ' we just disable autounlock
+                Dim methodName As String = ""
+                Dim encryptedVolume As EncryptableVolume = GetEncryptedVolumes().FirstOrDefault(Function(encVol) encVol.PersistentVolumeID.Equals(PersistentVolumeId))
+                If encryptedVolume Is Nothing Then Throw New Exception()
+
+                methodName = If(encryptedVolume.DriveLetter = Environment.GetEnvironmentVariable("SYSTEMDRIVE"), "ClearAllAutoUnlockKeys", "DisableAutoUnlock")
+
+                Dim clearResults As ManagementBaseObject = encryptedVolumeInstance.InvokeMethod(methodName, encryptedVolumeInstance.GetMethodParameters(methodName), Nothing)
                 If clearResults Is Nothing Then Throw New Exception()
 
                 Return clearResults("ReturnValue")
