@@ -340,6 +340,7 @@ Public Class MainForm
         SysCheckPage_CCPProgressBar.Style = ProgressBarStyle.Marquee
         SysCheckPage_CCPProgressBar.Value = 0
         SysCheckPage_CCPProgressPanel.Visible = True
+        SysCheckPage_CheckDetailsTLP.Visible = False
         Cursor = Cursors.WaitCursor
         PerformedChecks = Await Task.Run(Function()
                                              Return CompatibilityCheckerHelper.RunChecks(CheckFinishedReporter:=Sub(Check As CompatibilityCheckerProviderStatus)
