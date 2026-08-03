@@ -1,6 +1,7 @@
 if (Test-Path -Path "$((Get-Location).Path)\bin\Debug\SysprepPreparator.exe" -PathType Leaf) {
 	Write-Host "Packing release..."
 	New-Item -Path "$((Get-Location).Path)\out" -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
+	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\BDELib.dll" -Destination "$((Get-Location).Path)\out\BDELib.dll" -Verbose -Force
 	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\Microsoft.Dism.dll" -Destination "$((Get-Location).Path)\out\Microsoft.Dism.dll" -Verbose -Force
 	Copy-Item -Path "$((Get-Location).Path)\bin\Debug\IniFileParser.dll" -Destination "$((Get-Location).Path)\out\IniFileParser.dll" -Verbose -Force
 	New-Item -Path "$((Get-Location).Path)\out\Languages" -ItemType Directory -ErrorAction SilentlyContinue | Out-Null

@@ -19,7 +19,8 @@ Namespace Helpers
             New DismThirdPartyDriverCCP(),
             New ActiveDirectoryDomainJoinCCP(),
             New ThirdPartyAppxCCP(),
-            New WindowsServerRoleCCP()
+            New WindowsServerRoleCCP(),
+            New BitLockerCCP()
         }
 
         ''' <summary>
