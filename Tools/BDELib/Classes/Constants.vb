@@ -32,6 +32,10 @@
         ''' </summary>
         Public Const FVE_E_NOT_ACTIVATED As UInteger = 2150694920
         ''' <summary>
+        ''' Automatic unlocking on the volume is disabled.
+        ''' </summary>
+        Public Const FVE_E_VOLUME_NOT_BOUND As UInteger = 2150694935
+        ''' <summary>
         ''' The operation attempted cannot be performed on an operating system volume.
         ''' </summary>
         Public Const FVE_E_NOT_DATA_VOLUME As UInteger = 2150694937

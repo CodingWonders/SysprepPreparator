@@ -232,6 +232,11 @@ Namespace Helpers
             Return obtainedConversionStatus
         End Function
 
+        ''' <summary>
+        ''' Determines whether a volume contains auto-unlock keys.
+        ''' </summary>
+        ''' <param name="PersistentVolumeId">The persistent volume identifier associated to the encrypted volume</param>
+        ''' <returns>Whether the volume contains auto-unlock keys</returns>
         Private Shared Function IsVolumeAutoUnlockable(PersistentVolumeId As String) As Boolean
             Try
                 Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
@@ -246,6 +251,12 @@ Namespace Helpers
             End Try
         End Function
 
+        ''' <summary>
+        ''' On a data volume, disables auto-unlock capabilities. On a system volume, clears
+        ''' all auto-unlock keys.
+        ''' </summary>
+        ''' <param name="PersistentVolumeId">The persistent volume identifier associated to the encrypted volume</param>
+        ''' <returns>The exit code of the operation</returns>
         Private Shared Function ClearVolumeAutoUnlockKeys(PersistentVolumeId As String) As UInteger
             Try
                 Dim encryptedVolumeInstance As ManagementObject = GetEncryptedVolumeManagementInstance(PersistentVolumeId)
@@ -268,6 +279,12 @@ Namespace Helpers
             End Try
         End Function
 
+        ''' <summary>
+        ''' Initiates decryption for an encrypted volume.
+        ''' </summary>
+        ''' <param name="PersistentVolumeId">The persistent volume identifier associated to the encrypted volume</param>
+        ''' <param name="DecryptionProgressReporter">A progress reporter callback for graphical user interface threads</param>
+        ''' <returns>The exit code of the operation</returns>
         Public Shared Async Function StartVolumeDecryption(PersistentVolumeId As String, Optional DecryptionProgressReporter As Action(Of ConversionStatus) = Nothing) As Task(Of UInteger)
             Try
                 ' If auto-unlock is enabled on the volume, decryption will fail. Clear all keys
