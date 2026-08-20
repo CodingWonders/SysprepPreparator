@@ -59,6 +59,8 @@ Public Class MainForm
 
     Public Event CheckFinished(Check As CompatibilityCheckerProviderStatus)
 
+    Private ReadOnly CodeName As String = "baryl"
+
     ''' <summary>
     ''' Handles the TaskStarted event
     ''' </summary>
@@ -581,7 +583,7 @@ Public Class MainForm
     End Function
 
     Sub InitDynaLog()
-        DynaLog.LogMessage("Sysprep Preparation Tool (Sysprep Preparator) - Version " & My.Application.Info.Version.ToString() & ", build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        DynaLog.LogMessage("Sysprep Preparation Tool (" & CodeName & ") - Version " & My.Application.Info.Version.ToString() & ", build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
