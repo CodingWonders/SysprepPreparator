@@ -59,7 +59,7 @@ Public Class MainForm
 
     Public Event CheckFinished(Check As CompatibilityCheckerProviderStatus)
 
-    Private ReadOnly CodeName As String = "baryl"
+    Private Const CodeName As String = "baryl"
 
     ''' <summary>
     ''' Handles the TaskStarted event
