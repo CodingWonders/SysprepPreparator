@@ -26,7 +26,7 @@ Namespace Helpers.PreparationTasks
                 DismApi.Initialize(DismLogLevel.LogErrors)
 
                 Dim progressCallback As DismProgressCallback = Sub(progress As DismProgress)
-                                                                   ReportSubProcessStatus(String.Format("{0} ({1}%)", GetValueFromLanguageData("DismComponentCleanupPT_SubProcessReporting.SPR_Message1"), progress.Current))
+                                                                   ReportSubProcessStatus(String.Format("{0} ({1}%)", GetValueFromLanguageData("DismComponentCleanupPT_SubProcessReporting.SPR_Message1"), progress.Current / 10))
                                                                End Sub
 
                 Using sysSession As DismSession = DismApi.OpenOnlineSession()
