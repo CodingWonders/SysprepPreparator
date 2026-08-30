@@ -8,9 +8,16 @@ Namespace Helpers.PreparationTasks
     Public Class DTImageCapturePT
         Inherits PreparationTask
 
+        Protected Friend Overrides Property PTWorkDir As String = "SysprepHotInstall"
+
         Private WillPrepareBootImage As Boolean = Environment.GetCommandLineArgs().Contains("/dt_capture")
+
         Private Const DISM_ERR_CANT_UNMOUNT_OPEN_FILE_HANDLES As Integer = -1052638953
-        Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A")
+
+        Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A"),
+                         GUID_WINDOWS_BOOTMGR As New Guid("9DEA862C-5CDD-4E70-ACC1-F32B344D4795")
+
+        Private Const DefaultElementDefinition As String = "23000003"
 
         ''' <summary>
         ''' Gets the information of a given Windows image.
@@ -186,7 +193,7 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <param name="sdiPath">The path of a boot.sdi file used by Windows PE</param>
         ''' <param name="bootImagePath">The path of a Windows PE image</param>
-        Private Sub UpdateBcd(sdiPath As String, bootImagePath As String)
+        Private Sub UpdateBcd(sdiPath As String, bootImagePath As String, rollbackImagePath As String)
             Dim targetGuidOutput As String = "",
                 targetGuid As String = ""
 
@@ -206,7 +213,7 @@ Namespace Helpers.PreparationTasks
             Dim bcdeditCreateBcdEntryProc As New Process() With {
                 .StartInfo = New ProcessStartInfo() With {
                     .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "bcdedit.exe"),
-                    .Arguments = String.Format("/create /d {0} /application osloader", ControlChars.Quote & "Sysprep Preparation Tool -- DISMTools Image Capture" & ControlChars.Quote),
+                    .Arguments = String.Format("/create /d {0} /application osloader", Quote & "Sysprep Preparation Tool -- DISMTools Image Capture" & Quote),
                     .RedirectStandardOutput = True,
                     .RedirectStandardError = True,
                     .UseShellExecute = False,
@@ -227,9 +234,7 @@ Namespace Helpers.PreparationTasks
             DynaLog.LogMessage("Obtained BCD GUID: " & targetGuid)
 
             ' Update our BCD entry
-            Dim osloaderPath As String = If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI",
-                "\Windows\system32\Boot\winload.efi",
-                "\Windows\system32\winload.exe")
+            Dim osloaderPath As String = If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI", "\Windows\system32\Boot\winload.efi", "\Windows\system32\winload.exe")
             RunBCDConfigurator(String.Format("/set {0} device ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath.Replace(Path.GetPathRoot(bootImagePath), "")))
             RunBCDConfigurator(String.Format("/set {0} osdevice ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), bootImagePath.Replace(Path.GetPathRoot(bootImagePath), "")))
             RunBCDConfigurator(String.Format("/set {0} path {1}", targetGuid, osloaderPath))
@@ -238,9 +243,69 @@ Namespace Helpers.PreparationTasks
             RunBCDConfigurator(String.Format("/set {0} detecthal Yes", targetGuid))
             RunBCDConfigurator(String.Format("/set {0} winpe Yes", targetGuid))
 
+            ' Get default BCD object right now before we alter it; we need it for the rollback entry
+            CreateWorkingDirForPT(PTWorkDir)
+            Dim defaultEntryPath As String = String.Format("BCD00000000\Objects\{{{0}}}\Elements\{1}", GUID_WINDOWS_BOOTMGR.ToString(), DefaultElementDefinition),
+                currentEntryInfoFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "current_bcd_entry_guid.txt"),
+                defaultCaptureEntryInfoFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "capture_env_entry_guid.txt"),
+                rollbackEntryInfoFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "rollback_env_entry_guid.txt"),
+                currentBcdGuid As String = ""
+            Dim defEntryRk As RegistryKey = Nothing
+            Dim currentBcdEntryObtained As Boolean
+            Try
+                defEntryRk = Registry.LocalMachine.OpenSubKey(defaultEntryPath, False)
+                currentBcdGuid = defEntryRk.GetValue("Element")
+                File.WriteAllText(currentEntryInfoFile, currentBcdGuid)
+                currentBcdEntryObtained = True
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not get current BCD entry... " & ex.Message)
+            Finally
+                If defEntryRk IsNot Nothing Then defEntryRk.Close()
+            End Try
+
+            Dim bcdGuids As New List(Of String),
+                captureEnvironmentGuid As String = targetGuid,
+                rollbackGuid As String = ""
+
+            Try
+                File.WriteAllText(defaultCaptureEntryInfoFile, captureEnvironmentGuid)
+            Catch ex As Exception
+
+            End Try
+
+            targetGuidOutput = ""
+
+            ' Add rollback boot entry
+            If currentBcdEntryObtained Then
+                DynaLog.LogMessage("Creating rollback entry...")
+                bcdeditCreateBcdEntryProc.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & "Capture Environment System Rollback" & Quote)
+                bcdeditCreateBcdEntryProc.Start()
+                targetGuidOutput = bcdeditCreateBcdEntryProc.StandardOutput.ReadToEnd()
+                bcdeditCreateBcdEntryProc.WaitForExit()
+
+                startIndex = targetGuidOutput.IndexOf("{")
+                endIndex = targetGuidOutput.LastIndexOf("}")
+
+                targetGuid = targetGuidOutput.Substring(startIndex, endIndex - startIndex + 1)
+                DynaLog.LogMessage("Obtained BCD GUID: " & targetGuid)
+
+                RunBCDConfigurator(String.Format("/set {0} device ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), rollbackImagePath.Replace(Path.GetPathRoot(rollbackImagePath), "")))
+                RunBCDConfigurator(String.Format("/set {0} osdevice ramdisk=[{1}]\{2},{{ramdiskoptions}}", targetGuid, Environment.GetEnvironmentVariable("SYSTEMDRIVE"), rollbackImagePath.Replace(Path.GetPathRoot(rollbackImagePath), "")))
+                RunBCDConfigurator(String.Format("/set {0} path {1}", targetGuid, osloaderPath))
+                RunBCDConfigurator(String.Format("/set {0} locale en-US", targetGuid))
+                RunBCDConfigurator(String.Format("/set {0} systemroot \Windows", targetGuid))
+                RunBCDConfigurator(String.Format("/set {0} detecthal Yes", targetGuid))
+                RunBCDConfigurator(String.Format("/set {0} winpe Yes", targetGuid))
+
+                rollbackGuid = targetGuid
+                File.WriteAllText(rollbackEntryInfoFile, rollbackGuid)
+            End If
+
+            bcdGuids.AddRange({captureEnvironmentGuid, rollbackGuid, currentBcdGuid})
+
             ' Modify display order
-            RunBCDConfigurator(String.Format("/displayorder {0} /addfirst", targetGuid))
-            RunBCDConfigurator(String.Format("/default {0}", targetGuid))
+            RunBCDConfigurator(String.Format("/displayorder {0}", String.Join(" ", bcdGuids.Where(Function(bcdGuid) bcdGuid <> ""))))
+            RunBCDConfigurator(String.Format("/default {0}", captureEnvironmentGuid))
         End Sub
 
         Private Function BcdObjectExists(objectId As Guid) As Boolean
@@ -375,12 +440,13 @@ Namespace Helpers.PreparationTasks
             ' Afterwards, the system will be restarted with the image capture script opening immediately.
             ' In this mode, we remove the bootmgr entry and exclude the DT.BT folder so it isn't captured.
 
-            Dim sourceFile As String = Path.Combine(Path.GetPathRoot(Application.StartupPath), "sources", "boot.wim")
-            Dim bootSourceFolder As String = String.Format("{0}\{1}", Path.GetPathRoot(sourceFile), "Boot")
-            Dim destinationFolder As String = String.Format("{0}\$DISMTOOLS.~BT", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
-            Dim destinationFile As String = String.Format("{0}\boot.wim", destinationFolder)
-            Dim bootFileDestinationFolder As String = String.Format("{0}\Boot", destinationFolder)
-            Dim destinationMountDir As String = String.Format("{0}\$DISMTOOLS.~WS", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
+            Dim sourceFile As String = Path.Combine(Path.GetPathRoot(Application.StartupPath), "sources", "boot.wim"),
+                bootSourceFolder As String = String.Format("{0}\{1}", Path.GetPathRoot(sourceFile), "Boot"),
+                destinationFolder As String = String.Format("{0}\$DISMTOOLS.~BT", Environment.GetEnvironmentVariable("SYSTEMDRIVE")),
+                destinationFile As String = String.Format("{0}\boot.wim", destinationFolder),
+                destinationRollbackFile As String = String.Format("{0}\boot_rollback.wim", destinationFolder),
+                bootFileDestinationFolder As String = String.Format("{0}\Boot", destinationFolder),
+                destinationMountDir As String = String.Format("{0}\$DISMTOOLS.~WS", Environment.GetEnvironmentVariable("SYSTEMDRIVE"))
 
             If Not File.Exists(sourceFile) Then
                 DynaLog.LogMessage("Source file " & sourceFile & " does not exist. Stopping...")
@@ -418,14 +484,13 @@ Namespace Helpers.PreparationTasks
                     ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message2"))
                     DynaLog.LogMessage("Sysprep Preparator is not in test mode. Proceeding with BCD update...")
                     ' Update BCD only when we AREN'T in test mode.
-                    UpdateBcd(Path.Combine(bootFileDestinationFolder, "boot.sdi"), destinationFile)
+                    UpdateBcd(Path.Combine(bootFileDestinationFolder, "boot.sdi"), destinationFile, destinationRollbackFile)
                 End If
 
                 DynaLog.LogMessage("Mounting DT PE image...")
                 ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message3"))
                 MountImage(destinationFile, 1, destinationMountDir, False, Sub(progress As DismProgress)
                                                                                If progress.Current > 100 Then Exit Sub
-                                                                               DynaLog.LogMessage("Mount operation progress: " & progress.Current & "%")
                                                                                ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message4"), progress.Current))
                                                                            End Sub)
                 ' Perform modifications to image
@@ -437,11 +502,17 @@ Namespace Helpers.PreparationTasks
                 ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message5"))
                 UnmountImage(destinationMountDir, True, Sub(progress As DismProgress)
                                                             If (progress.Current / 2) > 100 Then Exit Sub
-                                                            DynaLog.LogMessage("Unmount operation progress - reported by API: " & progress.Current & "% - actual progress: " & (progress.Current / 2) & "%")
                                                             ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message6"), Math.Round((progress.Current / 2), 0)))
                                                         End Sub, True)
 
+                ' Prepare the rollback image
+                Try
+                    ReportSubProcessStatus("Creating rollback image...")
+                    File.Copy(destinationFile, destinationRollbackFile, True)
+                    CreateBarylRollbackImage(destinationRollbackFile, destinationMountDir)
+                Catch ex As Exception
 
+                End Try
             Catch ex As Exception
                 DynaLog.LogMessage("An error occurred while preparing the Windows image. Error message: " & ex.Message)
                 DynaLog.LogMessage("Cleaning up files...")
@@ -464,6 +535,7 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <param name="mountDir">The location of the mounted Windows image</param>
         Private Sub ModifyImage(mountDir As String)
+            If Not Directory.Exists(mountDir) Then Exit Sub
             Try
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
                 If PTWorkDirExists("ScsiAdapter") Then
@@ -497,11 +569,50 @@ Namespace Helpers.PreparationTasks
 
                         End Try
                     End Try
-
+                End If
+                Dim rollbackBcdGuidFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "rollback_env_entry_guid.txt")
+                If File.Exists(rollbackBcdGuidFile) Then
+                    File.Copy(rollbackBcdGuidFile, Path.Combine(mountDir, "SysprepPrepTool", "rollback_env_entry_guid.txt"), True)
                 End If
             Catch ex As Exception
                 DynaLog.LogMessage("Could not modify image. Error message: " & ex.Message)
             End Try
+        End Sub
+
+        Private Sub CreateBarylRollbackImage(SourceRollbackImage As String, RollbackMountDirectory As String)
+            DynaLog.LogMessage("Mounting DT PE image...")
+            ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message3"))
+            MountImage(SourceRollbackImage, 1, RollbackMountDirectory, False, Sub(progress As DismProgress)
+                                                                                  If progress.Current > 100 Then Exit Sub
+                                                                                  ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message4"), progress.Current))
+                                                                              End Sub)
+            ' Perform modifications to image
+            DynaLog.LogMessage("Allowing the DT PE to load the image rollback script automatically...")
+            DynaLog.LogMessage("Modifying boot image to load rollback script...")
+
+            Dim captureEnvironmentGuidFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "capture_env_entry_guid.txt"),
+                currentEnvironmentGuidFile As String = Path.Combine(BaseWorkDir, PTWorkDir, "current_bcd_entry_guid.txt"),
+                bootInformationDirectory As String = Path.Combine(RollbackMountDirectory, "bcdinfo"),
+                captureEnvironmentDestFile As String = Path.Combine(bootInformationDirectory, "capture_env_entry_guid.txt"),
+                currentEnvironmentDestFile As String = Path.Combine(bootInformationDirectory, "current_bcd_entry_guid.txt")
+
+            If File.Exists(captureEnvironmentGuidFile) AndAlso File.Exists(currentEnvironmentGuidFile) Then
+                Directory.CreateDirectory(bootInformationDirectory)
+                File.Copy(captureEnvironmentGuidFile, captureEnvironmentDestFile)
+                File.Copy(currentEnvironmentGuidFile, currentEnvironmentDestFile)
+            End If
+
+            ' Make the image invoke the rollback script
+            File.WriteAllText(Path.Combine(RollbackMountDirectory, "BarylRollback"), String.Empty)
+            File.WriteAllText(Path.Combine(RollbackMountDirectory, "BarylRollback_NoRestart"), String.Empty)
+
+            ' Unmount the image
+            DynaLog.LogMessage("Unmounting DT PE image...")
+            ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message5"))
+            UnmountImage(RollbackMountDirectory, True, Sub(progress As DismProgress)
+                                                           If (progress.Current / 2) > 100 Then Exit Sub
+                                                           ReportSubProcessStatus(String.Format(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message6"), Math.Round((progress.Current / 2), 0)))
+                                                       End Sub, True)
         End Sub
     End Class
 
