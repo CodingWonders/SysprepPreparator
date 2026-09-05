@@ -180,7 +180,7 @@ Preparation Tasks can also detect whether specific working directories exist by 
 
 When **all preparation tasks are complete**, the base working directory, plus every working directory inside it, will be removed.
 
-For more information on working directories, please refer to the Preparation Task API documentation that you will find on the bottom of this document. Also refer to [this Preparation Task](../../Helpers/PreparationTasks/SCSIAdapterDriverExportPT.vb) for an example.
+For more information on working directories, please refer to the Preparation Task API documentation that you will find on the bottom of this document. Also refer to [this Preparation Task](../../Helpers/PreparationTasks/EssentialDriverExportPT.vb) for an example.
 
 ### Registering your PT
 

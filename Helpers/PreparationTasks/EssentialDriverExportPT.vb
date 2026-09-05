@@ -3,10 +3,10 @@ Imports Microsoft.Dism
 
 Namespace Helpers.PreparationTasks
 
-    Public Class SCSIAdapterDriverExportPT
+    Public Class EssentialDriverExportPT
         Inherits PreparationTask
 
-        Protected Friend Overrides Property PTWorkDir As String = "ScsiAdapter"
+        Protected Friend Overrides Property PTWorkDir As String = "EssentialDrivers"
 
         ''' <summary>
         ''' Gets the information about the installed drivers of the active Windows installation.
@@ -41,28 +41,28 @@ Namespace Helpers.PreparationTasks
         ''' </summary>
         ''' <returns></returns>
         Public Overrides Function RunPreparationTask() As PreparationTaskStatus
-            ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message1"))
+            ReportSubProcessStatus(GetValueFromLanguageData("EssentialDriverExportPT_SubProcessReporting.SPR_Message1"))
             If Not CreateWorkingDirForPT(PTWorkDir) Then Return PreparationTaskStatus.Failed
-            ReportSubProcessStatus(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message2"))
+            ReportSubProcessStatus(GetValueFromLanguageData("EssentialDriverExportPT_SubProcessReporting.SPR_Message2"))
             Dim installedDrivers As DismDriverPackageCollection = GetSystemDrivers()
-            Dim installedScsiAdapters As IEnumerable(Of DismDriverPackage)
+            Dim installedEssentialDrivers As IEnumerable(Of DismDriverPackage)
             If installedDrivers IsNot Nothing Then
                 ' Filter the drivers. We only want the scsi adapters
-                DynaLog.LogMessage("Getting SCSI Adapters/Storage Controllers from driver list...")
-                installedScsiAdapters = installedDrivers.Where(Function(driver) driver.ClassName = "SCSIAdapter")
+                DynaLog.LogMessage("Getting SCSI Adapters/Storage Controllers and network controllers from driver list...")
+                installedEssentialDrivers = installedDrivers.Where(Function(driver) {"SCSIAdapter", "Net"}.Contains(driver.ClassName))
 
                 ' The driver export operation will export every driver. We don't want this, so we'll intervene
                 ' with our functionality.
-                If installedScsiAdapters Is Nothing Then Return PreparationTaskStatus.Failed
-                DynaLog.LogMessage("SCSI Adapters/Storage Controllers in installation: " & installedScsiAdapters.Count)
+                If installedEssentialDrivers Is Nothing Then Return PreparationTaskStatus.Failed
+                DynaLog.LogMessage("SCSI Adapters/Storage Controllers in installation: " & installedEssentialDrivers.Count)
 
-                For Each scsiAdapter In installedScsiAdapters
+                For Each essentialDriver In installedEssentialDrivers
                     ' Extract the name from the original path
-                    Dim drvName As String = Path.GetFileName(scsiAdapter.OriginalFileName)
+                    Dim drvName As String = Path.GetFileName(essentialDriver.OriginalFileName)
                     Dim destinationAdapterPath As String = Path.Combine(BaseWorkDir, PTWorkDir, drvName)
-                    ReportSubProcessStatus(String.Format(GetValueFromLanguageData("SCSIAdapterDriverExportPT_SubProcessReporting.SPR_Message3"), drvName))
+                    ReportSubProcessStatus(String.Format(GetValueFromLanguageData("EssentialDriverExportPT_SubProcessReporting.SPR_Message3"), drvName))
                     DynaLog.LogMessage("Exporting driver " & drvName & " ...")
-                    CopyRecursive(Path.GetDirectoryName(scsiAdapter.OriginalFileName), destinationAdapterPath)
+                    CopyRecursive(Path.GetDirectoryName(essentialDriver.OriginalFileName), destinationAdapterPath)
                 Next
             Else
                 Return PreparationTaskStatus.Failed

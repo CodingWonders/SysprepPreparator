@@ -538,10 +538,10 @@ Namespace Helpers.PreparationTasks
             If Not Directory.Exists(mountDir) Then Exit Sub
             Try
                 Directory.CreateDirectory(Path.Combine(mountDir, "SysprepPrepTool"))
-                If PTWorkDirExists("ScsiAdapter") Then
+                If PTWorkDirExists("EssentialDrivers") Then
                     ' Install the scsi adapters we had previously exported.
                     ReportSubProcessStatus(GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.SPR_Message7"))
-                    Dim scsiAdapterPaths As String() = Directory.GetFiles(Path.Combine(BaseWorkDir, "ScsiAdapter"), "*.inf", SearchOption.AllDirectories)
+                    Dim scsiAdapterPaths As String() = Directory.GetFiles(Path.Combine(BaseWorkDir, "EssentialDrivers"), "*.inf", SearchOption.AllDirectories)
 
                     Try
                         DynaLog.LogMessage("Initializing API...")

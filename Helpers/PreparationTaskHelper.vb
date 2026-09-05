@@ -20,7 +20,7 @@ Namespace Helpers
             {GetValueFromLanguageData("RegisteredPTs.VssAdminShadowVolumeDeletePT"), New VssAdminShadowVolumeDeletePT()},
             {GetValueFromLanguageData("RegisteredPTs.DismComponentCleanupPT"), New DismComponentCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.WindowsUpdateTempFileCleanupPT"), New WindowsUpdateTempFileCleanupPT()},
-            {GetValueFromLanguageData("RegisteredPTs.SCSIAdapterDriverExportPT"), New SCSIAdapterDriverExportPT()},
+            {GetValueFromLanguageData("RegisteredPTs.EssentialDriverExportPT"), New EssentialDriverExportPT()},
             {GetValueFromLanguageData("RegisteredPTs.DTImageCapturePT"), New DTImageCapturePT()},
             {GetValueFromLanguageData("RegisteredPTs.DiskCleanupPT"), New DiskCleanupPT()},
             {GetValueFromLanguageData("RegisteredPTs.EventLogPT"), New EventLogPT()},
