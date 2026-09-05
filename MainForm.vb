@@ -81,9 +81,9 @@ Public Class MainForm
         Dim translatedTaskStatus As String = ""
         Select Case Task(taskName)
             Case PreparationTasks.PreparationTask.PreparationTaskStatus.Succeeded
-                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Yes")
+                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Succeeded")
             Case PreparationTasks.PreparationTask.PreparationTaskStatus.Failed
-                translatedTaskStatus = GetValueFromLanguageData("Common.Common_No")
+                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Failed")
             Case PreparationTasks.PreparationTask.PreparationTaskStatus.Skipped
                 translatedTaskStatus = GetValueFromLanguageData("Common.Common_Skipped")
         End Select

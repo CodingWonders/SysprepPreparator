@@ -32,6 +32,9 @@ Partial Class MainForm
         Me.BannerPanel = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PageContainerPanel = New System.Windows.Forms.Panel()
+        Me.WelcomePage = New System.Windows.Forms.Panel()
+        Me.WelcomePage_Description = New System.Windows.Forms.Label()
+        Me.WelcomePage_Header = New System.Windows.Forms.Label()
         Me.SystemCheckPanel = New System.Windows.Forms.Panel()
         Me.SysCheckPage_DecryptBtn = New System.Windows.Forms.Button()
         Me.SysCheckPage_RemoveAppxBtn = New System.Windows.Forms.Button()
@@ -52,9 +55,6 @@ Partial Class MainForm
         Me.SysCheckPage_SeverityCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SysCheckPage_Description = New System.Windows.Forms.Label()
         Me.SysCheckPage_Header = New System.Windows.Forms.Label()
-        Me.WelcomePage = New System.Windows.Forms.Panel()
-        Me.WelcomePage_Description = New System.Windows.Forms.Label()
-        Me.WelcomePage_Header = New System.Windows.Forms.Label()
         Me.AdvSettingsPanel = New System.Windows.Forms.Panel()
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_SysprepConfigPanel = New System.Windows.Forms.Panel()
@@ -93,11 +93,11 @@ Partial Class MainForm
         Me.BannerPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PageContainerPanel.SuspendLayout()
+        Me.WelcomePage.SuspendLayout()
         Me.SystemCheckPanel.SuspendLayout()
         Me.SysCheckPage_CCPProgressPanel.SuspendLayout()
         Me.SysCheckPage_CheckDetailsGB.SuspendLayout()
         Me.SysCheckPage_CheckDetailsTLP.SuspendLayout()
-        Me.WelcomePage.SuspendLayout()
         Me.AdvSettingsPanel.SuspendLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.SuspendLayout()
         Me.SettingPreparationPanel.SuspendLayout()
@@ -210,6 +210,41 @@ Partial Class MainForm
         Me.PageContainerPanel.Name = "PageContainerPanel"
         Me.PageContainerPanel.Size = New System.Drawing.Size(888, 681)
         Me.PageContainerPanel.TabIndex = 2
+        '
+        'WelcomePage
+        '
+        Me.WelcomePage.Controls.Add(Me.WelcomePage_Description)
+        Me.WelcomePage.Controls.Add(Me.WelcomePage_Header)
+        Me.WelcomePage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WelcomePage.Location = New System.Drawing.Point(0, 0)
+        Me.WelcomePage.Name = "WelcomePage"
+        Me.WelcomePage.Size = New System.Drawing.Size(888, 681)
+        Me.WelcomePage.TabIndex = 0
+        '
+        'WelcomePage_Description
+        '
+        Me.WelcomePage_Description.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WelcomePage_Description.AutoEllipsis = True
+        Me.WelcomePage_Description.Location = New System.Drawing.Point(17, 64)
+        Me.WelcomePage_Description.Name = "WelcomePage_Description"
+        Me.WelcomePage_Description.Size = New System.Drawing.Size(857, 437)
+        Me.WelcomePage_Description.TabIndex = 1
+        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" &
+    "xt."
+        '
+        'WelcomePage_Header
+        '
+        Me.WelcomePage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WelcomePage_Header.AutoEllipsis = True
+        Me.WelcomePage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WelcomePage_Header.Location = New System.Drawing.Point(14, 12)
+        Me.WelcomePage_Header.Name = "WelcomePage_Header"
+        Me.WelcomePage_Header.Size = New System.Drawing.Size(860, 45)
+        Me.WelcomePage_Header.TabIndex = 0
+        Me.WelcomePage_Header.Text = "Welcome to the wizard"
         '
         'SystemCheckPanel
         '
@@ -448,41 +483,6 @@ Partial Class MainForm
         Me.SysCheckPage_Header.Size = New System.Drawing.Size(860, 45)
         Me.SysCheckPage_Header.TabIndex = 0
         Me.SysCheckPage_Header.Text = "System Checks"
-        '
-        'WelcomePage
-        '
-        Me.WelcomePage.Controls.Add(Me.WelcomePage_Description)
-        Me.WelcomePage.Controls.Add(Me.WelcomePage_Header)
-        Me.WelcomePage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WelcomePage.Location = New System.Drawing.Point(0, 0)
-        Me.WelcomePage.Name = "WelcomePage"
-        Me.WelcomePage.Size = New System.Drawing.Size(888, 681)
-        Me.WelcomePage.TabIndex = 0
-        '
-        'WelcomePage_Description
-        '
-        Me.WelcomePage_Description.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WelcomePage_Description.AutoEllipsis = True
-        Me.WelcomePage_Description.Location = New System.Drawing.Point(17, 64)
-        Me.WelcomePage_Description.Name = "WelcomePage_Description"
-        Me.WelcomePage_Description.Size = New System.Drawing.Size(857, 437)
-        Me.WelcomePage_Description.TabIndex = 1
-        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" &
-    "xt."
-        '
-        'WelcomePage_Header
-        '
-        Me.WelcomePage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WelcomePage_Header.AutoEllipsis = True
-        Me.WelcomePage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WelcomePage_Header.Location = New System.Drawing.Point(14, 12)
-        Me.WelcomePage_Header.Name = "WelcomePage_Header"
-        Me.WelcomePage_Header.Size = New System.Drawing.Size(860, 45)
-        Me.WelcomePage_Header.TabIndex = 0
-        Me.WelcomePage_Header.Text = "Welcome to the wizard"
         '
         'AdvSettingsPanel
         '
@@ -730,7 +730,7 @@ Partial Class MainForm
         '
         'SettingPreparationPage_SuccessfulCH
         '
-        Me.SettingPreparationPage_SuccessfulCH.Text = "Successful?"
+        Me.SettingPreparationPage_SuccessfulCH.Text = "Status"
         Me.SettingPreparationPage_SuccessfulCH.Width = 128
         '
         'SettingPreparationPage_SubProcessProgressLabel
@@ -882,12 +882,12 @@ Partial Class MainForm
         Me.BannerPanel.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PageContainerPanel.ResumeLayout(False)
+        Me.WelcomePage.ResumeLayout(False)
         Me.SystemCheckPanel.ResumeLayout(False)
         Me.SysCheckPage_CCPProgressPanel.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsGB.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsTLP.ResumeLayout(False)
         Me.SysCheckPage_CheckDetailsTLP.PerformLayout()
-        Me.WelcomePage.ResumeLayout(False)
         Me.AdvSettingsPanel.ResumeLayout(False)
         Me.AdvSettingsPanel.PerformLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.ResumeLayout(False)
