@@ -332,9 +332,8 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Private Async Sub CheckComputer()
-        If IsComputerChecked Then
-            Exit Sub
-        End If
+        If IsComputerChecked Then Exit Sub
+
         SysCheckPage_ChecksLv.Items.Clear()
         Refresh()
         SysCheckPage_CheckAgainBtn.Enabled = False
@@ -364,6 +363,7 @@ Public Class MainForm
     ''' <remarks></remarks>
     Private Async Sub PrepareComputer()
         Refresh()
+        PowerManagementHelper.DisableSystemSleepMode()
         Await Task.Run(Function()
                            Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)
                                                                                             ReportTaskStart(task)
@@ -375,6 +375,7 @@ Public Class MainForm
                                                                                                  ReportSubProcessStatusUpdate(Status)
                                                                                              End Sub)
                        End Function)
+        PowerManagementHelper.EnableSystemSleepMode()
         ButtonPanel.Visible = True
         Next_Button.PerformClick()
     End Sub
