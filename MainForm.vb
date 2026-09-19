@@ -61,13 +61,16 @@ Public Class MainForm
 
     Private Const CodeName As String = "baryl"
 
+    Private TaskNames As New List(Of String)
+
     ''' <summary>
     ''' Handles the TaskStarted event
     ''' </summary>
     ''' <param name="taskName">The name of the task</param>
     ''' <remarks></remarks>
     Private Sub OnTaskStarted(taskName As String) Handles Me.TaskStarted
-        SettingPreparationPage_ProgressLabel.Text = String.Format(GetValueFromLanguageData("MainForm.PreparationPanel_CurrentTaskField"), taskName)
+        Dim ControlIndex As Integer = TaskNames.FindIndex(Function(tn) tn = taskName)
+        If ControlIndex > -1 Then flpTasks.Controls.Cast(Of PTActivityReporterControl)()(ControlIndex).SetActive()
     End Sub
 
     ''' <summary>
@@ -79,20 +82,12 @@ Public Class MainForm
     Private Sub OnTaskReported(Task As Dictionary(Of String, PreparationTasks.PreparationTask.PreparationTaskStatus), progressPercentage As Double) Handles Me.TaskReported
         Dim taskName As String = Task.Keys(0)
         Dim translatedTaskStatus As String = ""
-        Select Case Task(taskName)
-            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Succeeded
-                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Succeeded")
-            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Failed
-                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Failed")
-            Case PreparationTasks.PreparationTask.PreparationTaskStatus.Skipped
-                translatedTaskStatus = GetValueFromLanguageData("Common.Common_Skipped")
-        End Select
-        SettingPreparationPanel_TaskLv.Items.Add(New ListViewItem(New String() {taskName, translatedTaskStatus}))
-        ' do some value checking
-        If progressPercentage < SettingPreparationPanel_TaskProgressBar.Minimum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Minimum
-        If progressPercentage > SettingPreparationPanel_TaskProgressBar.Maximum Then progressPercentage = SettingPreparationPanel_TaskProgressBar.Maximum
 
-        SettingPreparationPanel_TaskProgressBar.Value = progressPercentage
+        Dim ControlIndex As Integer = TaskNames.FindIndex(Function(tn) tn = taskName)
+        If ControlIndex > -1 Then
+            flpTasks.Controls.Cast(Of PTActivityReporterControl)()(ControlIndex).SetInactive()
+            flpTasks.Controls.Cast(Of PTActivityReporterControl)()(ControlIndex).TaskStatus = Task(taskName)
+        End If
     End Sub
 
     ''' <summary>
@@ -248,15 +243,13 @@ Public Class MainForm
             AdvSettingsPage_ShutdownOptionsCBox.ForeColor = currentTheme.ForegroundColor
             AdvSettingsPage_SysprepUnatt_AnswerFileText.BackColor = currentTheme.SectionBackgroundColor
             AdvSettingsPage_SysprepUnatt_AnswerFileText.ForeColor = currentTheme.ForegroundColor
-            SettingPreparationPanel_TaskLv.BackColor = currentTheme.SectionBackgroundColor
-            SettingPreparationPanel_TaskLv.ForeColor = currentTheme.ForegroundColor
 
             OnlineAppxRemovalDialog.BackColor = currentTheme.SectionBackgroundColor
             OnlineAppxRemovalDialog.ForeColor = currentTheme.ForegroundColor
             OnlineAppxRemovalDialog.ListView1.BackColor = currentTheme.SectionBackgroundColor
             OnlineAppxRemovalDialog.ListView1.ForeColor = currentTheme.ForegroundColor
 
-
+            ThemeHelper.CurrentTheme = currentTheme
         End If
     End Sub
 
@@ -299,8 +292,6 @@ Public Class MainForm
         AdvSettingsPage_SysprepPrepToolDeploySteps.Text = GetValueFromLanguageData("MainForm.AdvancedSettingsPanel_ExplanationField")
         SettingPreparationPage_Header.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Header")
         SettingPreparationPage_Description.Text = GetValueFromLanguageData("MainForm.PreparationPanel_Description")
-        SettingPreparationPage_TaskCH.Text = GetValueFromLanguageData("MainForm.PreparationPanel_TaskField")
-        SettingPreparationPage_SuccessfulCH.Text = GetValueFromLanguageData("MainForm.PreparationPanel_TaskSuccessField")
         FinishPage_Header.Text = GetValueFromLanguageData("MainForm.FinishPanel_Header")
         FinishPage_Description.Text = GetValueFromLanguageData("MainForm.FinishPanel_Description")
         FinishPage_CloseBtn.Text = GetValueFromLanguageData("MainForm.FinishPanel_CloseBtn")
@@ -363,6 +354,22 @@ Public Class MainForm
     ''' <remarks></remarks>
     Private Async Sub PrepareComputer()
         Refresh()
+        ' Get PT names so we can pre-populate the new controls
+        TaskNames = PreparationTaskHelper.GetPreparationTaskNames()
+        Dim PTControls As New List(Of Control)
+
+        flpTasks.Controls.Clear()
+        For Each TaskName In TaskNames
+            Dim PTControl As New PTActivityReporterControl With {
+                .TaskName = TaskName
+            }
+            PTControl.SetColors()
+            PTControl.SetInactive()
+
+            PTControls.Add(PTControl)
+        Next
+        flpTasks.Controls.AddRange(PTControls.ToArray())
+
         PowerManagementHelper.DisableSystemSleepMode()
         Await Task.Run(Function()
                            Return PreparationTaskHelper.RunTasks(ProgressStartReporter:=Sub(task As String)
@@ -633,8 +640,6 @@ Public Class MainForm
         SysCheckPage_CheckCH.Width = WindowHelper.ScaleLogical(376)
         SysCheckPage_CompatibleCH.Width = WindowHelper.ScaleLogical(96)
         SysCheckPage_SeverityCH.Width = WindowHelper.ScaleLogical(128)
-        SettingPreparationPage_TaskCH.Width = WindowHelper.ScaleLogical(512)
-        SettingPreparationPage_SuccessfulCH.Width = WindowHelper.ScaleLogical(128)
 
         If Environment.GetCommandLineArgs().Contains("/copyprofile") Then
             AdvSettingsPage_CopyProfile.Checked = True

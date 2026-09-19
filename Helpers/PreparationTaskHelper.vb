@@ -28,6 +28,10 @@ Namespace Helpers
             {GetValueFromLanguageData("RegisteredPTs.UserProfilePT"), New UserProfilePT()}
         }
 
+        Public Function GetPreparationTaskNames() As List(Of String)
+            Return PreparationTaskModules.Keys.ToList()
+        End Function
+
         ''' <summary>
         ''' Performs the tasks of all the registered Preparation Tasks (PTs)
         ''' </summary>

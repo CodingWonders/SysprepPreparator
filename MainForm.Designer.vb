@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class MainForm
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar usando el Diseñador de Windows Forms.  
     'No lo modifique con el editor de código.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.ButtonPanel = New System.Windows.Forms.Panel()
@@ -32,6 +32,11 @@ Partial Class MainForm
         Me.BannerPanel = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PageContainerPanel = New System.Windows.Forms.Panel()
+        Me.SettingPreparationPanel = New System.Windows.Forms.Panel()
+        Me.SettingPreparationPage_SubProcessProgressLabel = New System.Windows.Forms.Label()
+        Me.SettingPreparationPage_Description = New System.Windows.Forms.Label()
+        Me.SettingPreparationPage_Header = New System.Windows.Forms.Label()
+        Me.flpTasks = New System.Windows.Forms.FlowLayoutPanel()
         Me.WelcomePage = New System.Windows.Forms.Panel()
         Me.WelcomePage_Description = New System.Windows.Forms.Label()
         Me.WelcomePage_Header = New System.Windows.Forms.Label()
@@ -72,15 +77,6 @@ Partial Class MainForm
         Me.AdvSettingsPage_ConfigSysprepSettings = New System.Windows.Forms.CheckBox()
         Me.AdvSettingsPage_Description = New System.Windows.Forms.Label()
         Me.AdvSettingsPage_Header = New System.Windows.Forms.Label()
-        Me.SettingPreparationPanel = New System.Windows.Forms.Panel()
-        Me.SettingPreparationPanel_TaskProgressBar = New System.Windows.Forms.ProgressBar()
-        Me.SettingPreparationPanel_TaskLv = New System.Windows.Forms.ListView()
-        Me.SettingPreparationPage_TaskCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.SettingPreparationPage_SuccessfulCH = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.SettingPreparationPage_SubProcessProgressLabel = New System.Windows.Forms.Label()
-        Me.SettingPreparationPage_ProgressLabel = New System.Windows.Forms.Label()
-        Me.SettingPreparationPage_Description = New System.Windows.Forms.Label()
-        Me.SettingPreparationPage_Header = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.FinishPage_RestartBtn = New System.Windows.Forms.Button()
         Me.FinishPage_ResysprepBtn = New System.Windows.Forms.Button()
@@ -93,6 +89,7 @@ Partial Class MainForm
         Me.BannerPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PageContainerPanel.SuspendLayout()
+        Me.SettingPreparationPanel.SuspendLayout()
         Me.WelcomePage.SuspendLayout()
         Me.SystemCheckPanel.SuspendLayout()
         Me.SysCheckPage_CCPProgressPanel.SuspendLayout()
@@ -100,7 +97,6 @@ Partial Class MainForm
         Me.SysCheckPage_CheckDetailsTLP.SuspendLayout()
         Me.AdvSettingsPanel.SuspendLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.SuspendLayout()
-        Me.SettingPreparationPanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -199,10 +195,10 @@ Partial Class MainForm
         'PageContainerPanel
         '
         Me.PageContainerPanel.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.PageContainerPanel.Controls.Add(Me.SettingPreparationPanel)
         Me.PageContainerPanel.Controls.Add(Me.WelcomePage)
         Me.PageContainerPanel.Controls.Add(Me.SystemCheckPanel)
         Me.PageContainerPanel.Controls.Add(Me.AdvSettingsPanel)
-        Me.PageContainerPanel.Controls.Add(Me.SettingPreparationPanel)
         Me.PageContainerPanel.Controls.Add(Me.FinishPanel)
         Me.PageContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PageContainerPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -210,6 +206,66 @@ Partial Class MainForm
         Me.PageContainerPanel.Name = "PageContainerPanel"
         Me.PageContainerPanel.Size = New System.Drawing.Size(888, 681)
         Me.PageContainerPanel.TabIndex = 2
+        '
+        'SettingPreparationPanel
+        '
+        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_SubProcessProgressLabel)
+        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Description)
+        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Header)
+        Me.SettingPreparationPanel.Controls.Add(Me.flpTasks)
+        Me.SettingPreparationPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SettingPreparationPanel.Location = New System.Drawing.Point(0, 0)
+        Me.SettingPreparationPanel.Name = "SettingPreparationPanel"
+        Me.SettingPreparationPanel.Size = New System.Drawing.Size(888, 681)
+        Me.SettingPreparationPanel.TabIndex = 3
+        Me.SettingPreparationPanel.Visible = False
+        '
+        'SettingPreparationPage_SubProcessProgressLabel
+        '
+        Me.SettingPreparationPage_SubProcessProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPage_SubProcessProgressLabel.AutoEllipsis = True
+        Me.SettingPreparationPage_SubProcessProgressLabel.Location = New System.Drawing.Point(40, 572)
+        Me.SettingPreparationPage_SubProcessProgressLabel.Name = "SettingPreparationPage_SubProcessProgressLabel"
+        Me.SettingPreparationPage_SubProcessProgressLabel.Size = New System.Drawing.Size(808, 26)
+        Me.SettingPreparationPage_SubProcessProgressLabel.TabIndex = 4
+        '
+        'SettingPreparationPage_Description
+        '
+        Me.SettingPreparationPage_Description.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPage_Description.AutoEllipsis = True
+        Me.SettingPreparationPage_Description.Location = New System.Drawing.Point(17, 64)
+        Me.SettingPreparationPage_Description.Name = "SettingPreparationPage_Description"
+        Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(857, 45)
+        Me.SettingPreparationPage_Description.TabIndex = 1
+        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." &
+    ""
+        '
+        'SettingPreparationPage_Header
+        '
+        Me.SettingPreparationPage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SettingPreparationPage_Header.AutoEllipsis = True
+        Me.SettingPreparationPage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SettingPreparationPage_Header.Location = New System.Drawing.Point(14, 12)
+        Me.SettingPreparationPage_Header.Name = "SettingPreparationPage_Header"
+        Me.SettingPreparationPage_Header.Size = New System.Drawing.Size(860, 45)
+        Me.SettingPreparationPage_Header.TabIndex = 0
+        Me.SettingPreparationPage_Header.Text = "Preparing your computer..."
+        '
+        'flpTasks
+        '
+        Me.flpTasks.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.flpTasks.AutoScroll = True
+        Me.flpTasks.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.flpTasks.Location = New System.Drawing.Point(40, 123)
+        Me.flpTasks.Name = "flpTasks"
+        Me.flpTasks.Padding = New System.Windows.Forms.Padding(12, 0, 0, 0)
+        Me.flpTasks.Size = New System.Drawing.Size(808, 442)
+        Me.flpTasks.TabIndex = 7
         '
         'WelcomePage
         '
@@ -682,103 +738,6 @@ Partial Class MainForm
         Me.AdvSettingsPage_Header.TabIndex = 0
         Me.AdvSettingsPage_Header.Text = "Advanced Preparation Settings"
         '
-        'SettingPreparationPanel
-        '
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPanel_TaskProgressBar)
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPanel_TaskLv)
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_SubProcessProgressLabel)
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_ProgressLabel)
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Description)
-        Me.SettingPreparationPanel.Controls.Add(Me.SettingPreparationPage_Header)
-        Me.SettingPreparationPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SettingPreparationPanel.Location = New System.Drawing.Point(0, 0)
-        Me.SettingPreparationPanel.Name = "SettingPreparationPanel"
-        Me.SettingPreparationPanel.Size = New System.Drawing.Size(888, 681)
-        Me.SettingPreparationPanel.TabIndex = 3
-        Me.SettingPreparationPanel.Visible = False
-        '
-        'SettingPreparationPanel_TaskProgressBar
-        '
-        Me.SettingPreparationPanel_TaskProgressBar.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPanel_TaskProgressBar.Location = New System.Drawing.Point(18, 187)
-        Me.SettingPreparationPanel_TaskProgressBar.Name = "SettingPreparationPanel_TaskProgressBar"
-        Me.SettingPreparationPanel_TaskProgressBar.Size = New System.Drawing.Size(852, 23)
-        Me.SettingPreparationPanel_TaskProgressBar.TabIndex = 6
-        '
-        'SettingPreparationPanel_TaskLv
-        '
-        Me.SettingPreparationPanel_TaskLv.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPanel_TaskLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SettingPreparationPage_TaskCH, Me.SettingPreparationPage_SuccessfulCH})
-        Me.SettingPreparationPanel_TaskLv.FullRowSelect = True
-        Me.SettingPreparationPanel_TaskLv.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
-        Me.SettingPreparationPanel_TaskLv.HideSelection = False
-        Me.SettingPreparationPanel_TaskLv.Location = New System.Drawing.Point(18, 216)
-        Me.SettingPreparationPanel_TaskLv.MultiSelect = False
-        Me.SettingPreparationPanel_TaskLv.Name = "SettingPreparationPanel_TaskLv"
-        Me.SettingPreparationPanel_TaskLv.Size = New System.Drawing.Size(852, 442)
-        Me.SettingPreparationPanel_TaskLv.TabIndex = 5
-        Me.SettingPreparationPanel_TaskLv.UseCompatibleStateImageBehavior = False
-        Me.SettingPreparationPanel_TaskLv.View = System.Windows.Forms.View.Details
-        '
-        'SettingPreparationPage_TaskCH
-        '
-        Me.SettingPreparationPage_TaskCH.Text = "Task"
-        Me.SettingPreparationPage_TaskCH.Width = 461
-        '
-        'SettingPreparationPage_SuccessfulCH
-        '
-        Me.SettingPreparationPage_SuccessfulCH.Text = "Status"
-        Me.SettingPreparationPage_SuccessfulCH.Width = 128
-        '
-        'SettingPreparationPage_SubProcessProgressLabel
-        '
-        Me.SettingPreparationPage_SubProcessProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPage_SubProcessProgressLabel.AutoEllipsis = True
-        Me.SettingPreparationPage_SubProcessProgressLabel.Location = New System.Drawing.Point(39, 150)
-        Me.SettingPreparationPage_SubProcessProgressLabel.Name = "SettingPreparationPage_SubProcessProgressLabel"
-        Me.SettingPreparationPage_SubProcessProgressLabel.Size = New System.Drawing.Size(831, 26)
-        Me.SettingPreparationPage_SubProcessProgressLabel.TabIndex = 4
-        '
-        'SettingPreparationPage_ProgressLabel
-        '
-        Me.SettingPreparationPage_ProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPage_ProgressLabel.AutoEllipsis = True
-        Me.SettingPreparationPage_ProgressLabel.Location = New System.Drawing.Point(17, 124)
-        Me.SettingPreparationPage_ProgressLabel.Name = "SettingPreparationPage_ProgressLabel"
-        Me.SettingPreparationPage_ProgressLabel.Size = New System.Drawing.Size(852, 26)
-        Me.SettingPreparationPage_ProgressLabel.TabIndex = 4
-        Me.SettingPreparationPage_ProgressLabel.Text = "Progress:"
-        '
-        'SettingPreparationPage_Description
-        '
-        Me.SettingPreparationPage_Description.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPage_Description.AutoEllipsis = True
-        Me.SettingPreparationPage_Description.Location = New System.Drawing.Point(17, 64)
-        Me.SettingPreparationPage_Description.Name = "SettingPreparationPage_Description"
-        Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(857, 45)
-        Me.SettingPreparationPage_Description.TabIndex = 1
-        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." &
-    ""
-        '
-        'SettingPreparationPage_Header
-        '
-        Me.SettingPreparationPage_Header.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SettingPreparationPage_Header.AutoEllipsis = True
-        Me.SettingPreparationPage_Header.Font = New System.Drawing.Font("Segoe UI", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SettingPreparationPage_Header.Location = New System.Drawing.Point(14, 12)
-        Me.SettingPreparationPage_Header.Name = "SettingPreparationPage_Header"
-        Me.SettingPreparationPage_Header.Size = New System.Drawing.Size(860, 45)
-        Me.SettingPreparationPage_Header.TabIndex = 0
-        Me.SettingPreparationPage_Header.Text = "Preparing your computer..."
-        '
         'FinishPanel
         '
         Me.FinishPanel.Controls.Add(Me.FinishPage_RestartBtn)
@@ -882,6 +841,7 @@ Partial Class MainForm
         Me.BannerPanel.ResumeLayout(False)
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PageContainerPanel.ResumeLayout(False)
+        Me.SettingPreparationPanel.ResumeLayout(False)
         Me.WelcomePage.ResumeLayout(False)
         Me.SystemCheckPanel.ResumeLayout(False)
         Me.SysCheckPage_CCPProgressPanel.ResumeLayout(False)
@@ -892,7 +852,6 @@ Partial Class MainForm
         Me.AdvSettingsPanel.PerformLayout()
         Me.AdvSettingsPage_SysprepConfigPanel.ResumeLayout(False)
         Me.AdvSettingsPage_SysprepConfigPanel.PerformLayout()
-        Me.SettingPreparationPanel.ResumeLayout(False)
         Me.FinishPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -940,12 +899,8 @@ Partial Class MainForm
     Friend WithEvents AdvSettingsPage_VMModeExplanationLink As System.Windows.Forms.LinkLabel
     Friend WithEvents AdvSettingsPage_SysprepUnatt_OFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SettingPreparationPanel As System.Windows.Forms.Panel
-    Friend WithEvents SettingPreparationPage_ProgressLabel As System.Windows.Forms.Label
     Friend WithEvents SettingPreparationPage_Description As System.Windows.Forms.Label
     Friend WithEvents SettingPreparationPage_Header As System.Windows.Forms.Label
-    Friend WithEvents SettingPreparationPanel_TaskLv As System.Windows.Forms.ListView
-    Friend WithEvents SettingPreparationPage_TaskCH As System.Windows.Forms.ColumnHeader
-    Friend WithEvents SettingPreparationPage_SuccessfulCH As System.Windows.Forms.ColumnHeader
     Friend WithEvents FinishPanel As System.Windows.Forms.Panel
     Friend WithEvents FinishPage_Description As System.Windows.Forms.Label
     Friend WithEvents FinishPage_Header As System.Windows.Forms.Label
@@ -955,11 +910,11 @@ Partial Class MainForm
     Friend WithEvents SysCheckPage_CheckDetails_ResolutionValue As System.Windows.Forms.TextBox
     Friend WithEvents AboutBtn As Button
     Friend WithEvents SettingPreparationPage_SubProcessProgressLabel As Label
-    Friend WithEvents SettingPreparationPanel_TaskProgressBar As ProgressBar
     Friend WithEvents SysCheckPage_CCPProgressPanel As Panel
     Friend WithEvents SysCheckPage_ProgressLabel As Label
     Friend WithEvents SysCheckPage_CCPProgressBar As ProgressBar
     Friend WithEvents AdvSettingsPage_CopyProfile As CheckBox
     Friend WithEvents SysCheckPage_RemoveAppxBtn As Button
     Friend WithEvents SysCheckPage_DecryptBtn As Button
+    Friend WithEvents flpTasks As FlowLayoutPanel
 End Class

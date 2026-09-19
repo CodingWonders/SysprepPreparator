@@ -164,6 +164,12 @@
     <Compile Include="SysvolBDEDecryptDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserControls\PTActivityReporterControl.Designer.vb">
+      <DependentUpon>PTActivityReporterControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PTActivityReporterControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\LanguageFileParser.vb" />
@@ -192,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SysvolBDEDecryptDialog.resx">
       <DependentUpon>SysvolBDEDecryptDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PTActivityReporterControl.resx">
+      <DependentUpon>PTActivityReporterControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +252,12 @@
     <Content Include="docs\res\sptest_snapshot.png" />
     <Content Include="docs\res\sptest_sysprep.png" />
     <Content Include="logo.ico" />
+    <Content Include="Resources\ptstatus\failed_dark.png" />
+    <Content Include="Resources\ptstatus\failed_light.png" />
+    <Content Include="Resources\ptstatus\skipped_dark.png" />
+    <Content Include="Resources\ptstatus\skipped_light.png" />
+    <Content Include="Resources\ptstatus\succeeded_dark.png" />
+    <Content Include="Resources\ptstatus\succeeded_light.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Tools\BDELib\BDELib.vbproj">
