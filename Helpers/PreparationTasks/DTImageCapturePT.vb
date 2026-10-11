@@ -213,7 +213,7 @@ Namespace Helpers.PreparationTasks
             Dim bcdeditCreateBcdEntryProc As New Process() With {
                 .StartInfo = New ProcessStartInfo() With {
                     .FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "bcdedit.exe"),
-                    .Arguments = String.Format("/create /d {0} /application osloader", Quote & "Sysprep Preparation Tool -- DISMTools Image Capture" & Quote),
+                    .Arguments = String.Format("/create /d {0} /application osloader", Quote & GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.BCD_MainBootEntryName") & Quote),
                     .RedirectStandardOutput = True,
                     .RedirectStandardError = True,
                     .UseShellExecute = False,
@@ -278,7 +278,7 @@ Namespace Helpers.PreparationTasks
             ' Add rollback boot entry
             If currentBcdEntryObtained Then
                 DynaLog.LogMessage("Creating rollback entry...")
-                bcdeditCreateBcdEntryProc.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & "Capture Environment System Rollback" & Quote)
+                bcdeditCreateBcdEntryProc.StartInfo.Arguments = String.Format("/create /d {0} /application osloader", Quote & GetValueFromLanguageData("DTImageCapturePT_SubProcessReporting.BCD_RollbackEntryName") & Quote)
                 bcdeditCreateBcdEntryProc.Start()
                 targetGuidOutput = bcdeditCreateBcdEntryProc.StandardOutput.ReadToEnd()
                 bcdeditCreateBcdEntryProc.WaitForExit()
