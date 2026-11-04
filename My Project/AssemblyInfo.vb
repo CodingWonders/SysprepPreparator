@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("The Sysprep Prep Tool prepares your computer for sysprep generalization and image capture")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Sysprep Preparation Tool")>
-<Assembly: AssemblyCopyright("© 2025-2026 CodingWonders Software")>
+<Assembly: AssemblyCopyright("© 2025-2027 CodingWonders Software")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.8.2.0")>
-<Assembly: AssemblyFileVersion("0.8.2.0")>
+<Assembly: AssemblyVersion("0.9.0.0")>
+<Assembly: AssemblyFileVersion("0.9.0.0")>
